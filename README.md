@@ -368,6 +368,11 @@ socket.on('focus', (hasFocus) => {
 
 ---
 
+## Prototype
+![location](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-7.png)
+
+
+
 ## Sources
 * https://www.npmjs.com/package/nodemon 
 * https://fonts.adobe.com/fonts/interstate 
