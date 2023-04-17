@@ -157,6 +157,7 @@ io.on('connection', (socket) => {
 
 ---
 
+## Process
 ### Trying to display a username
 One of our features is that the user can choose a username and this gets displayed with each message.
 
