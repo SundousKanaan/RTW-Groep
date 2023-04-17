@@ -269,7 +269,8 @@ http.listen(port, () => {
 * io.on('connection', (socket) => { ... }): Handles socket connections. This event listener logs a "connected" message when a new user connects, broadcasts chat messages to all connected clients, and logs a "user disconnected" message when a user disconnects.
 * app.get('/', (request, response) => { ... }): Handles another GET request to the root URL of the server. * This route renders the "index" template using EJS.
 * http.listen(port, () => { ... }): Starts the server listening on the specified port.
-* Overall, this code sets up a basic server with Socket.io integration to allow real-time communication between clients. It also uses the Express framework and EJS templating engine to serve static files and render HTML templates.
+
+Overall, this code sets up a basic server with Socket.io integration to allow real-time communication between clients. It also uses the Express framework and EJS templating engine to serve static files and render HTML templates.
 
 --- 
 
@@ -348,8 +349,23 @@ socket.on('focus', (hasFocus) => {
 });
 ```
 
----
+### Breakdown of the code:
+* const messages = document.querySelector('section ul'); selects the <ul> element that contains the chat messages.
+* const input = document.querySelector('#message-input'); selects the <input> element where the user types their message.
+* const sendMessage = document.querySelector('#message-button'); selects the button that sends the message to the chat.
+* const usernameInput = document.querySelector('#username-input'); selects the <input> element where the user types their username.
+* const loggin= document.querySelector('main section:first-of-type') selects the first <section> element inside the <main> element, which contains the login form.
+* const chatScreen= document.querySelector('main section:last-of-type') selects the last <section> element inside the <main> element, which contains the chat screen.
+* const logginButton = document.querySelector('main section:first-of-type > button') selects the button inside the login form that submits the form.
+* chatScreen.classList.add("hidden"); hides the chat screen when the page is first loaded.
+* usernameInput.addEventListener('keydown', (event) => {...}) listens for the 'keydown' event on the username input field. If the user presses the Enter key, the event is prevented and the send message button is clicked.
+* logginButton.addEventListener('click' , () => {...}) listens for the 'click' event on the login button. When the button is clicked, the login form is hidden and the chat screen is shown. A socket.io event is emitted to inform other clients that this client has focused on the chat.
+* input.addEventListener('input', () => {...}) listens for the 'input' event on the message input field. * * When the user types something in the field, the chat screen is given the 'focus' class, and a socket.io event is emitted to inform other clients that this client has focused on the chat.
+* sendMessage.addEventListener('click', (event) => {...}) listens for the 'click' event on the send message button. When the button is clicked, the chat screen loses the 'focus' class, a socket.io event is emitted to inform other clients that this client has unfocused from the chat, and the message is sent to the server via a socket.io event.
+* socket.on('chat message', (msg) => {...}) listens for the 'chat message' event emitted by the server when a new message is received. The message is added to the <ul> element containing the chat messages, and the element is scrolled to the bottom.
+* socket.on('focus', (hasFocus) => {...}) listens for the 'focus' event emitted by the server when a client focuses or unfocuses from the chat. The chat screen is given or loses the 'focus' class accordingly.
 
+---
 
 ## Sources
 * https://www.npmjs.com/package/nodemon 
@@ -357,7 +373,7 @@ socket.on('focus', (hasFocus) => {
 * https://www.git-tower.com/learn/git/faq/git-pull-origin-master
 * https://adaptable.io/ 
 * https://railway.app/ 
-
+* https://socket.io/get-started/chat/ 
 
 <!-- Here are some hints for your projects Readme.md! -->
 
