@@ -369,7 +369,12 @@ socket.on('focus', (hasFocus) => {
 ---
 
 ## Prototype
-![location](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-7.png)
+### Log in page
+![proto](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/prototype.png)
+
+### Chat area
+![proto](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/prototype-1.png)
+
 
 
 
