@@ -255,6 +255,22 @@ http.listen(port, () => {
 })
 ```
 
+### Breakdown of the code:
+
+* const express = require('express'): Imports the Express framework.
+* const app = express(): Creates a new instance of the Express application.
+* const http = require('http').createServer(app): Creates an HTTP server instance with the Express application.
+* const io = require('socket.io')(http): Initializes a Socket.io instance using the HTTP server.
+* const port = process.env.PORT || 4242: Sets the port number for the server to listen to, using the environment variable PORT or the default port 4242.
+* app.set('views', 'views');: Sets the folder for the views (HTML templates).
+* app.set('view engine', 'ejs');: Sets the view engine to EJS (Embedded JavaScript).
+* app.use(express.static("public")): Specifies that the server should serve static files from the "public" folder.
+* app.get('/', async (req, res) => { ... }): Handles GET requests to the root URL of the server. This route renders the "index" template using EJS.
+* io.on('connection', (socket) => { ... }): Handles socket connections. This event listener logs a "connected" message when a new user connects, broadcasts chat messages to all connected clients, and logs a "user disconnected" message when a user disconnects.
+* app.get('/', (request, response) => { ... }): Handles another GET request to the root URL of the server. * This route renders the "index" template using EJS.
+* http.listen(port, () => { ... }): Starts the server listening on the specified port.
+* Overall, this code sets up a basic server with Socket.io integration to allow real-time communication between clients. It also uses the Express framework and EJS templating engine to serve static files and render HTML templates.
+
 --- 
 
 ## Client Side Code
