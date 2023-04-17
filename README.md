@@ -1,28 +1,73 @@
 # Real-Time Web @cmda-minor-web 2022 - 2023
+During this course we will learn how to build a real-time application. We will learn techniques to setup an open connection between the client and the server. This will enable us to send data in real-time both ways, at the same time.
 
 ## 👁️ Demo Link! 👁️
 rtw-groep-production.up.railway.app
+
+---
 
 ## 💻 Participants 💻 
 * Sundous Kanaan
 * Hilal Tapan
 
+---
+
 ## 🖊 Concept 🖊
 Chat.app is an environment where users can chat with each other. It is a project based on the course real time web course from the minor web, University of Amsterdam.
 
+---
+
+## 📖 Job Story 📖
+As a social media user, I want to connect with my friends and family through a secure chatting app, so that I can easily communicate with them.
+
+---
+
+## 💻 Intallation Guide 💻
+### Install nvm
+1. To install the server you need node and express. You can do that with nvm. Nvm is package installer where you can install different packages. With this code you can install the latest versions of npm and node in your terminal:
+```
+nvm install 19.8.1
+```
+
+### Clone repo
+2. Clone this repository by running:
+```
+git clone https://github.com/SundousKanaan/RTW-Groep.git
+```
+
+### NPM install
+3. Install the dependencies by running:
+```
+npm install 
+```
+
+### Start server 
+Run the following code to start the server: 
+```
+node app.js
+```
+
+---
+
+## 🛠️ Features Combined 🛠️
+* Users can chat together online
+* Can see if someone is typing
+* Can choose a username and which gets displayed with each message
+
+---
+
+## 💾 Used Technologies 💾
+* EJS templating engine
+* Node.js
+* Express
+* Socket.io
+
+---
+
+## Process
 
 
 
-## Synopsis
-- Course: Real-Time Web
-- Course Coordinator: Justus Sturkenboom ([@ju5tu5](https://github.com/ju5tu5))
-- Minor Coordinator(s): Robert Spier ([@roberrrt-s](https://github.com/roberrrt-s)) & Vasilis van Gemert ([@vasilisvg](https://github.com/vasilisvg))
-- Lecturers: Shyanta Vleugel ([@shyanta](https://github.com/shyanta)) & Justus Sturkenboom ([@ju5tu5](https://github.com/ju5tu5))
-- Student Assistants: 
-- Credit: 3 ECTS credits
-- Academic year: 2022-2023
-- Programme: Communication and Multimedia Design (full time bachelor)
-- Language: Dutch instructions and English resources
 
 ## Description
 During this course you will learn how to build a real-time application. You will learn techniques to setup an open connection between the client and the server. This will enable you to send data in real-time both ways, at the same time.
