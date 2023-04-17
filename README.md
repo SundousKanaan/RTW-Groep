@@ -161,7 +161,7 @@ io.on('connection', (socket) => {
 One of our features is that the user can choose a username and this gets displayed with each message.
 
 #### Attempt 1
-This was our first attempt and it was a good start since it was quite complex. The thing here was that each user only saw their own name input displayed. So Sundous only saw the name sundous being displayed and Hilal only saw Hilal being displayed. 
+This was our first attempt and it was a good start since it was quite complex. The thing here was that each user only saw their own username displayed. So Sundous only saw the name Sundous being displayed and Hilal only saw the name Hilal being displayed. 
 
 ![attempt1](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten.png)
 
@@ -202,6 +202,138 @@ We thought it was important to display yourself on the right, and all the other 
 ![location](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-7.png)
 
 ---
+
+## Server Side Code
+```js
+const express = require('express')
+const app = express()
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
+const port = process.env.PORT || 4242
+
+app.set('views', 'views');
+app.set('view engine', 'ejs');
+app.use(express.static("public"))
+
+// home page
+app.get('/', async (req, res) => {
+    try {
+        res.render('index');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+})
+
+// We passen het server script aan om een console bericht te loggen zodra 
+// er een gebruiker verbinding maakt met via socket.io, dat zie je aan het connection event.
+io.on('connection', (socket) => {
+    console.log('connected');
+
+    socket.on('chat message', (chat) => {
+        // console.log(`${username}: ${message}`);
+        io.emit('chat message', chat); // broadcast the message to all clients
+      });
+
+    // Als een gebruiker connectie maakt zie je de log message die we ingesteld hebben, 
+    // misschien willen we ook zien wanneer een gebruiker disconnect.
+    socket.on('disconnect', () => {
+        console.log('user disconnected')
+    })
+
+    socket.on('focus', (hasFocus) => {
+        socket.broadcast.emit('focus', hasFocus);
+      });
+});
+
+app.get('/', (request, response) => {
+    //   response.send('<h1>Hallo wereld! LOL</h1>')
+    response.render('index')
+})
+
+http.listen(port, () => {
+    console.log('listening on port:', port)
+})
+```
+
+--- 
+
+## Client Side Code
+```js
+const messages = document.querySelector('section ul');
+
+const input = document.querySelector('#message-input');
+const sendMessage = document.querySelector('#message-button');
+const usernameInput = document.querySelector('#username-input');
+const loggin= document.querySelector('main section:first-of-type')
+const chatScreen= document.querySelector('main section:last-of-type')
+const logginButton = document.querySelector('main section:first-of-type > button')
+
+chatScreen.classList.add("hidden");
+
+// // Annuleer the enter event on the input
+usernameInput.addEventListener('keydown', (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      sendMessage.click();
+    }
+});
+
+logginButton.addEventListener('click' , () => {
+    loggin.classList.add("hidden");
+    chatScreen.classList.remove("hidden");
+    socket.emit('focus', true); // Verzend de focus class naar andere clients
+});
+
+input.addEventListener('input', () => {
+    const inputValue = input.value;
+    // Doe hier iets met de waarde van het invoerveld
+    console.log(inputValue);
+    chatScreen.classList.add('focus');
+    socket.emit('focus', true); // Verzend de focus class naar andere clients
+});
+
+sendMessage.addEventListener('click', (event) => {
+    chatScreen.classList.remove('focus')
+    socket.emit('focus', false); // Verzend de focus class naar andere clients
+
+    event.preventDefault();
+    if (input.value) {
+
+        const chat ={
+            username: usernameInput.value,
+            message: input.value
+        }
+
+        socket.emit('chat message', chat);
+        input.value = '';
+    }
+});
+
+socket.on('chat message', (msg) => {
+    console.log('chat message: ', msg.message);
+    console.log(chatScreen);
+
+    const element = document.createElement('li');
+    element.textContent = ` ${msg.username}: ${msg.message} `;
+    messages.appendChild(element);
+    messages.scrollTop = messages.scrollHeight;
+
+    if (msg.username === usernameInput.value) {
+        element.classList.add('message');
+    }
+});
+
+socket.on('focus', (hasFocus) => {
+    if (hasFocus) {
+        chatScreen.classList.add('focus');
+    } else {
+        chatScreen.classList.remove('focus');
+    }
+});
+```
+
+---
+
 
 ## Sources
 * https://www.npmjs.com/package/nodemon 
