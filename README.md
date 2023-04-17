@@ -161,30 +161,44 @@ io.on('connection', (socket) => {
 One of our features is that the user can choose a username and this gets displayed with each message.
 
 #### Attempt 1
+This was our first attempt and it was a good start since it was quite complex. The thing here was that each user only saw their own name input displayed. So Sundous only saw the name sundous being displayed and Hilal only saw Hilal being displayed. 
+
 ![attempt1](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten.png)
 
 #### Attempt 2
+After many tries we still had the same issue. 
+
 ![attempt2](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-2.png)
 
 #### Attempt 3
+Okay, improvement! It is working! The next step here was to put the username input field in another section and make a "log in" type of page.
+
 ![attempt3](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-3.png)
 
 #### Attempt 4
+After doing that the user gets in this chat environment where they only see the messages being displayed together with the usernames. So cool!
+
 ![attempt4](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-4.png)
 
 --- 
 
 ### Is typing feature
+We thought it would be cool if the user would get information about when someone is typing, so we added this feature!
+
 ![is-typing](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-5.png)
 
 ---
 
 ### Different colors for each user
+When there are many people in the chatting area, it is hard to seperate each user. So we added different colors to each user.
+
 ![colors](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-6.png)
 
 ---
 
 ### Position of each user
+We thought it was important to display yourself on the right, and all the other users on the left, to fit the chatroom User Experience (UX). This really improved the chatting experience. 
+
 ![location](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-7.png)
 
 ---
