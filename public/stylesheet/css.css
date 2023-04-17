@@ -54,12 +54,7 @@ main {
 
     background-color: var(--purpel);
     border-radius: 8% 8% 8% 8% / 8% 8% 8% 8%;
-}
-
-@media(min-width: 500px){
-    main{
-        width: 30em;
-    }
+    box-shadow: 0 0 .5em .5em var(--brouwn);
 }
 
 main h1 {
@@ -72,9 +67,19 @@ main h1 {
     justify-content: center;
 }
 
+@media(min-width: 500px){
+    main{
+        width: 30em;
+    }
+
+    main h1{
+        font-size: 1.3em;
+    }
+}
+
 main section:first-of-type {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 7%);
     background-color: var(--white);
 
     position: absolute;
@@ -169,6 +174,9 @@ main section:last-of-type ul{
     overflow-y: scroll;
     scroll-behavior: smooth;
     margin-bottom: .5em;
+
+    display: flex;
+    flex-direction: column;
 }
 
 main section:last-of-type ul::-webkit-scrollbar{
@@ -193,6 +201,11 @@ main section:last-of-type ul li{
     background-color: var(--yellow);
     border-radius: 1em ;
     word-wrap:break-word;
+}
+
+main section:last-of-type ul li.message{
+    background-color: var(--green);
+    align-self: end;
 }
 
 main section:last-of-type ul li::first-letter{
