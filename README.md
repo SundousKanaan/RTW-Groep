@@ -55,17 +55,20 @@ node app.js
 ---
 
 ## 🛠️ Features Combined 🛠️
-* Users can chat together online
-* Can see if someone is typing
-* Can choose a username and which gets displayed with each message
+* Make your own room for your group ✅
+* Users can chat together online ✅
+* Can see if someone is typing ✅
+* Can choose a username and which gets displayed with each message ✅
+* watch or listen to somthing together online via youtube video link
+* Watch series via the website link
 
 ---
 
 ## 💾 Used Technologies 💾
 * EJS templating engine
-* Node.js
 * Express
 * Socket.io
+* [Gfycat’s API](Gfycat’s API) 🔗
 
 ---
 
