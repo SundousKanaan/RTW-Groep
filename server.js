@@ -1,10 +1,9 @@
-const { log } = require("console");
-const express = require("express");
-const { disconnect } = require("process");
-const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
-const port = process.env.PORT || 4444;
+const express = require('express')
+const app = express()
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
+const path = require('path')
+const port = process.env.PORT || 4444
 
 app.set("views", "views");
 app.set("view engine", "ejs");
