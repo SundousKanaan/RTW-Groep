@@ -1,14 +1,10 @@
-# 🔗 [Sundous individuele opdracht is Sundous branche van dit repo.](https://github.com/SundousKanaan/RTW-Groep/tree/sundous)
-
----
----
-
-# Chat.App
+# Real time web
 During this course we will learn how to build a real-time application. We will learn techniques to setup an open connection between the client and the server. This will enable us to send data in real-time both ways, at the same time.
 
 ## 👁️ Demo Link! 👁️
 
-* live demo door [aptable.io](https://streamychan.adaptable.app/)
+* live demo door [aptable.io](https://streamy-chan.adaptable.app)
+
 ---
 
 ## 💻 Participants 💻 
@@ -68,7 +64,7 @@ node app.js
 * EJS templating engine
 * Express
 * Socket.io
-* [Gfycat’s API](Gfycat’s API) 🔗
+* [Gfycat’s API](https://developers.gfycat.com/api/#updating-gfycats) 🔗
 
 ---
 
