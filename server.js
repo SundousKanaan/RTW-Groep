@@ -18,11 +18,11 @@ app.get("/", async (req, res) => {
   }
 });
 
-const rooms = {};
-const usersarray = [];
+const rooms = {};         // object om de open kamer te bewaren, key is de kamer naam, value is true
+const roomsArray = [];
 
 
-// room
+// room path
 app.get("/:room", (req, res) => {
   const roomName = req.query.room;
   res.render("room", { roomID: roomName });
@@ -32,16 +32,20 @@ io.on("connection", (socket) => {
   console.log("connected");
 
   socket.on('checkRoom', (openRoom) => {
-    console.log("AAD", openRoom);
+    console.log("client data", openRoom);
 
     const openRoomName = openRoom.roomname;
-    const roomsArray = openRoom.openRoom
+    const roomName = openRoom.openRoom
 
-    console.log("checkRoom", roomsArray);
-    io.emit('checkRoom', {openRoomName, roomsArray});
+    roomsArray.push(openRoomName)
+    console.log("roomsArray" , roomsArray);
+    
+    console.log("checkRoom Array", roomName);
+    
+    io.emit('checkRoom', { openRoomName, roomName, roomsArray });
   })
 
-  // Join room
+  // Join room scriptindex.js
   socket.on('addRoom', (data) => {
     socket.join(data.room);
     socket.room = data.room;
