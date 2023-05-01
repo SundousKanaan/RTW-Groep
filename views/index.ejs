@@ -1,42 +1,28 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <%- include("./partials/head.ejs") -%>
 
     <body>
-        <header>
-        </header>
-        <main>
-            <h1>CHAT.APP</h1>
-
+        <main class="loggin">
             <section>
-                <h2>
-                    Choose your username
-                </h2>
+                <h2>Choose your room name</h2>
                 <form>
-                    <input type="text" id="username-input" placeholder="Enter your username" required>
+                    <input type="text" id="roomname-input" placeholder="Enter your room name" required />
                 </form>
+                <a href="">Start room</a>
 
-                <button>Start chatting</button>
-            </section>
-            
-            <section>
-                <ul>
+                <p>The room is all open. Choose another room name</p>
 
-                </ul>
-                <form>
-                    <input type="text" name="message" id="message-input" placeholder="Chatting ..."  required>
-                    <button type="submit" id="message-button"></button>
-                </form>
+                <p>saca hi tesst</p>
+                <button>Check room</button>
             </section>
         </main>
+
         <%- include("./partials/footer.ejs") -%>
 
-        <script src="/socket.io/socket.io.js"></script>
-       
+        
+  <script src="./script/scriptIndex.js"></script>
+
     </body>
 
 </html>

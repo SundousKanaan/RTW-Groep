@@ -1,283 +1,552 @@
-@import url("https://use.typekit.net/edf1wmn.css");
+/* @import url("https://use.typekit.net/edf1wmn.css"); */
 
 *,
 *::after,
 *::before {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    caret-color: transparent;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  caret-color: transparent;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 :root {
-    --rosy: #fbb4ae;
-    --blue: #b3cde3;
-    --green: #ccebc5;
-    --purpel: #decbe4;
-    --sand: #fed9a6;
-    --yellow: #ffffcc;
-    --brouwn: #e5d8bd;
-    --pink: #faddec;
-    --white: #f2f2f2;
+  --bg: #292929;
+  /* --rosy: #ff4f81; */
+  --light-blue: #B4E4FF;
+  --green: #DFFFD8;
+  --blue: #95BDFF;
+  --pink: #F7C8E0;
+  --sand:#fff5d4;
+  --white: #f2f2f2;
 }
 
 body,
 input,
 button {
-    font-family: "interstate", sans-serif;
+  font-family: "interstate", sans-serif;
 }
 
 body {
-    background-color: var(--yellow);
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  background-color: var(--bg);
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
 }
 
 header {
-    background-color: var(--blue);
-
-    width: 50vw;
+  width: 100%;
+  height: 30vh;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
-main {
-    width: 80vw;
-    height: 70vh;
-    position: relative;
+header section {
+  width: 100%;
+  height: 3em;
+  padding: 0.5em 0;
 
-    background-color: var(--purpel);
-    border-radius: 8% 8% 8% 8% / 8% 8% 8% 8%;
-    box-shadow: 0 0 .5em .5em var(--brouwn);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  background-color: var(--blue);
 }
 
-main h1 {
-    width: 100%;
-    height: 7%;
-    font-size: 2.5vw;
+header section h1 {
+  width: fit-content;
+  height: 100%;
+  font-size: 1em;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media(min-width: 500px){
-    main{
-        width: 30em;
-    }
+header section form {
+    width: 50%;
+  height: 100%;
 
-    main h1{
-        font-size: 1.3em;
-    }
+  display: flex;
+  flex-wrap: nowrap;
 }
 
-main section:first-of-type {
-    width: 100%;
-    height: calc(100% - 7%);
-    background-color: var(--white);
-
-    position: absolute;
-
-    border-radius: 8% 8% 8% 8% / 8% 8% 8% 8%;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-main section:last-of-type.hidden,
-main section:first-of-type.hidden {
-    display: none;
-}
-
-main section:first-of-type h2 {
-    height: 3em;
-    display: flex;
-    align-items: center;
-}
-
-main section:first-of-type form {
-    width: 80%;
-    height: 3em;
-    margin-bottom: 2em;
-}
-
-main section:first-of-type form input {
-    appearance: none;
-    -webkit-appearance: none;
-
-    width: 100%;
-    height: 100%;
-    border-radius: 3em;
-    padding-left: 1em;
-    border: none;
-}
-
-main section:first-of-type>button {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 40%;
-    height: 10%;
+header section form input{
+    width: 40vw;
+    height: 90%;
+    padding-left: .5em;
+    margin-right: 1em;
     border: none;
     border-radius: 5em;
-    background-color: var(--blue);
-    cursor: pointer;
-    transition: .5s;
-
-    visibility: hidden;
 }
 
-main section:first-of-type:has(form:valid)>button {
-    visibility: visible;
-}
-
-main section:first-of-type>button:hover {
-    background-color: var(--brouwn);
-}
-
-main section:first-of-type>button:active {
-    transform: scale(.8);
-}
-
-
-
-/* Chat page */
-
-main section:last-of-type{
-    width: 100%;
-    height: 93%;
-    padding: 1em 0;
-
-    background-image: linear-gradient(to top, transparent, var(--white));
-    border-radius: 8% 8% 8% 8% / 8% 8% 8% 8% ;
-
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-main section:last-of-type ul{
-    width: 95%;
+header section form button{
     height: 100%;
-
-    list-style: none;
-
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-    margin-bottom: .5em;
-
-    display: flex;
-    flex-direction: column;
-}
-
-main section:last-of-type ul::-webkit-scrollbar{
-    border-radius: 5em;
-    width: .5em;
-
-    display: none;
-}
-
-/* main section:last-of-type ul::-webkit-scrollbar-thumb{
-    background-color: var(--blue);
-    border-radius: 5em;
-    opacity: 0;
-} */
-
-main section:last-of-type ul li{
-    width: fit-content;
-    max-width: 90%;
-    height: fit-content;
-    padding: .5em;
-    margin-top:.5em;
-    background-color: var(--yellow);
-    border-radius: 1em ;
-    word-wrap:break-word;
-}
-
-main section:last-of-type ul li.message{
-    background-color: var(--green);
-    align-self: end;
-}
-
-main section:last-of-type ul li::first-letter{
-    text-transform:uppercase;
-}
-
-main section:last-of-type form {
-    width: 95%;
-    height: 3em;
-
-    position: sticky;
-    bottom: .5em;
-
-    display: flex;
-    justify-content: space-around;
-}
-
-
-main section:last-of-type.focus form::after{
-    content: "writing...";
-    padding: .2em;
-    position: absolute;
-    color: rgb(56, 56, 56);
-    top: -1.7em;
-    left: 2em;
-
-    animation: writing 1s infinite both alternate;
-}
-
-@keyframes writing {
-    form{
-        color: rgb(56, 56, 56);
-    }
-    to{
-        color: var(--rosy);
-    }
-}
-
-main section:last-of-type form input {
-    appearance: none;
-    -webkit-appearance: none;
-
-    width: 85%;
-    height: 100%;
-    border-radius: 3em;
-    padding-left: 1em;
-    border: none;
-}
-
-main section form button:focus,
-main section form input:focus{
-    outline-color: var(--rosy);
-    border:.5px solid var(--rosy);
-}
-
-main section:last-of-type form button {
-    appearance: none;
-    -webkit-appearance: none;
-
-    width: 3.5em;
-    height: 3.5em;
-
+    aspect-ratio: 1/1;
     border: none;
     border-radius: 50%;
+    cursor: pointer;
 
     background-color: var(--white);
     background-image: url(https://icons.veryicon.com/png/o/miscellaneous/utility/send-26.png);
     background-position: 70% 50%;
     background-repeat: no-repeat;
     background-size: 70%;
+    transform: rotate(-90deg);
+    transition: .5s;
 }
 
-main section:last-of-type form button:active{
-    background-color: var(--rosy);
+header section form button:hover{
+  background-color: var(--pink);
+  background-size: 80%;
+}
+
+header div {
+  width: 100%;
+  height: 30%;
+
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+}
+
+header div iframe {
+  width: 100%;
+  /* height: 100%; */
+  aspect-ratio: 16/9;
+}
+
+@media (min-width: 500px) {
+  header div {
+    height: 20em;
+  }
+
+  header div iframe {
+    width: auto;
+    height: 100%;
+    aspect-ratio: 16/9;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* index main */
+
+main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  background-color: var(--light-blue);
+}
+
+main.loggin section,
+main.room section:first-of-type {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--white);
+
+  position: fixed;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+main.room section:last-of-type.hidden,
+main.room section:first-of-type.hidden {
+  display: none;
+}
+
+main.room section:first-of-type h2 {
+  height: 3em;
+  display: flex;
+  align-items: center;
+}
+
+main.loggin section form,
+main.room section:first-of-type form {
+  width: 80%;
+  height: 3em;
+  margin-bottom: 1em;
+}
+
+main.loggin section:first-of-type form input,
+main.room section:first-of-type form input {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 3em;
+  padding-left: 1em;
+  border: none;
+}
+
+main.loggin section > button,
+main.loggin section:first-of-type > a,
+main.room section:first-of-type > button {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 40%;
+  height: 10%;
+
+  border: none;
+  border-radius: 5em;
+
+  background-color: var(--blue);
+  cursor: pointer;
+  transition: 0.5s;
+
+  text-decoration: none;
+  color: var(--bg);
+  /* display: grid; */
+  place-content: center;
+
+  display: none;
+  /* visibility: hidden; */
+}
+
+main.loggin section > button{
+  /* visibility: visible; */
+  display: grid;
+
+  /* margin-bottom: 1em; */
+}
+
+main.loggin section > button.startRoom{
+  /* visibility: hidden; */
+  display: none;
+
+}
+
+main.loggin section:first-of-type > a.startRoom{
+  /* visibility: visible; */
+  display: grid;
+
+}
+
+main.room section:first-of-type:has(form:valid) > button {
+  /* visibility: visible; */
+  display: grid;
+
+}
+
+main.loggin section:first-of-type > a:hover,
+main.room section:first-of-type > button:hover {
+  background-color: var(--sand);
+}
+
+main.loggin section:first-of-type > a:active,
+main.room section:first-of-type > button:active {
+  transform: scale(0.8);
+}
+
+
+main.loggin section > p{
+  padding: 0 .5em;
+  margin-bottom: 1em;
+  text-align: center;
+  display: none;
+}
+
+main.loggin section > p.check{
+  display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Chat page */
+
+main.room {
+  height: 70vh;
+}
+main.room section:last-of-type {
+  width: 100%;
+  height: 100%;
+  padding: 1em 0;
+
+  background-image: linear-gradient(to top, transparent, var(--white));
+  /* border-radius: 8% 8% 8% 8% / 8% 8% 8% 8% ; */
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main.room section:last-of-type>ul {
+  width: 95%;
+  height: 85%;
+
+  list-style: none;
+
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  margin-bottom: 0.5em;
+
+  display: flex;
+  flex-direction: column;
+}
+
+main.room section:last-of-type>ul::-webkit-scrollbar {
+  border-radius: 5em;
+  width: 0.5em;
+
+  display: none;
+}
+
+main.room section:last-of-type>ul li {
+  width: fit-content;
+  max-width: 90%;
+  height: fit-content;
+  padding: 0.5em;
+  margin-top: 1.5em;
+  background-color: var(--sand);
+  border-radius: 1em;
+  word-wrap: break-word;
+
+  position: relative;
+}
+
+main.room section:last-of-type>ul li::before{
+  content: attr(data-username);
+  width: fit-content;
+  height: fit-content;
+  font-size: .7em;
+  height: 1em;
+  position: absolute;
+  top: -1em;
+  left: 0;
+}
+
+main.room section:last-of-type>ul li.message {
+  background-color: var(--green);
+  align-self: end;
+}
+
+main.room section:last-of-type>ul li.message::before{
+  right: 0;
+  left: auto;
+}
+
+main.room section:last-of-type>ul li::first-letter {
+  text-transform: uppercase;
+}
+
+main.room section:last-of-type>ul li img{
+  width: 40vw;
+}
+
+main.room section:last-of-type form {
+  width: 95%;
+  height: 3em;
+
+  position: absolute;
+  bottom: 0.5em;
+
+  display: flex;
+  justify-content: space-around;
+}
+
+main.room section:last-of-type form:last-of-type{
+  width: 100vw;
+  height: 7em;
+  bottom: 4.2em;
+  
+  display: flex;
+  flex-direction: column;
+
+  overflow-x: hidden;
+
+  visibility: hidden;
+}
+
+main.room section:last-of-type form:last-of-type.search{
+  visibility: visible;
+}
+
+main.room section:last-of-type.focus form:first-of-type::after {
+  content: "writing...";
+  padding: 0.2em;
+  position: absolute;
+  color: rgb(56, 56, 56);
+  top: -1.7em;
+  left: 2em;
+
+  animation: writing 1s infinite both alternate;
+}
+
+@keyframes writing {
+  form {
+    color: rgb(56, 56, 56);
+  }
+  to {
+    color: var(--rosy);
+  }
+}
+
+main.room section:last-of-type form:last-of-type label input,
+main.room section:last-of-type form:first-of-type input {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 3em;
+  padding-left: 1em;
+  border: none;
+}
+
+main.room section:last-of-type form:last-of-type label input{
+  width: 100%;
+  height: 2.5em;
+  align-self: center;
+}
+
+main section form button:focus,
+main section form input:focus {
+  outline-color: var(--rosy);
+  border: 0.5px solid var(--rosy);
+}
+
+main.room section:last-of-type > button{
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 3em;
+  aspect-ratio: 1/1;
+
+  border: none;
+  border-radius: 2em;
+
+  position: fixed;
+  right: 5em;
+  bottom: 1em;
+
+  cursor: pointer;
+}
+
+main.room section:last-of-type form:first-of-type>button {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 3.5em;
+  height: 3.5em;
+
+  border: none;
+  border-radius: 50%;
+
+  background-color: var(--white);
+  background-image: url(https://icons.veryicon.com/png/o/miscellaneous/utility/send-26.png);
+  background-position: 70% 50%;
+  background-repeat: no-repeat;
+  background-size: 70%;
+}
+
+main.room section:last-of-type form:first-of-type>button:active {
+  background-color: var(--rosy);
+}
+
+main.room section:last-of-type form:last-of-type ul{
+  height: 5em;
+  list-style: none;
+  padding: .5em 0 0 0;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+  visibility: hidden;
+}
+
+main.room section:last-of-type form:last-of-type ul.search{
+  visibility: visible;
+}
+
+main.room section:last-of-type form:last-of-type ul::-webkit-scrollbar{
+  display: none;
+}
+
+main.room section:last-of-type form:last-of-type ul li{
+  width: fit-content;
+  height: 100%;
+  margin-left: .5em;
+}
+
+main.room section:last-of-type form:last-of-type ul li button{
+  appearance: none;
+  -webkit-appearance: none;
+
+  height: 5em;
+  width: fit-content;
+
+  border: none;
+  border-radius: .5em;
+
+  overflow: hidden;
+
+  cursor: pointer;
+}
+
+main.room section:last-of-type form:last-of-type ul li button:hover img{
+transform: scale(1.3);
+}
+
+main.room section:last-of-type form:last-of-type ul li button img{
+  display: block;
+  width: auto;
+  height: 100%;
+  transition: .5s
+}
+
+main.room section:last-of-type form:last-of-type label{
+  padding: 0 .5em;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+main.room section:last-of-type form:last-of-type label button{
+  width: 2em;
+  aspect-ratio: 1/1;
+
+  border: none;
+  border-radius: 2em;
+
+  position: absolute;
+  right: 2em;
+
+  background-color: transparent;
+  background-image: url(https://cdn-icons-png.flaticon.com/512/45/45301.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90%;
+
+  cursor: pointer;
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("./partials/head.ejs") -%>
+
+    <body>
+        <header>
+            <section>
+                <h1>Streamy-Chan</h1>
+                <form>
+                    <input type="text" name="url" id="url" placeholder="link..." required />
+                    <button type="button"></button>
+                </form>
+            </section>
+
+            <div>
+                <iframe src="" frameborder="0"></iframe>
+            </div>
+        </header>
+
+        <main class="room">
+            <section>
+                <h2>Choose your username</h2>
+                <form>
+                    <input type="text" id="username-input" placeholder="Enter your username" pattern="[^\s]+" minlength="3" maxlength="10" required />
+                </form>
+                <button>Start chatting</button>
+            </section>
+
+            <section>
+                <ul data-room=" <%- roomID %> "></ul>
+                <form>
+                    <input type="text" name="message" id="message-input" placeholder="Chatting ..." required />
+                    <button type="submit" id="message-button"></button>
+                </form>
+
+                <button>gif</button>
+
+                <form>
+                    <ul>
+                        <li>
+                            <button>
+                                <img src="https://thumbs.gfycat.com/WelllitAshamedArthropods-small.gif" alt="">
+                            </button>
+                        </li>
+                    </ul>
+                    <label for="">
+                    <input type="text" name="gifsearch" id="gifsearch" placeholder="search gifs ...">
+                    <button id="gif-button"></button>
+                </label>
+                </form>
+            </section>
+        </main>
+        <%- include("./partials/footer.ejs") -%>
+        <script src="./script/script.js"></script>
+
+            <!-- <script src="/socket.io/socket.io.js"></script> -->
+    </body>
+
+</html>
