@@ -8,23 +8,21 @@ During this course we will learn how to build a real-time application. We will l
 
 ## 👁️ Demo Link! 👁️
 
-* live demo door [aptable.io](https://groepschatapp.adaptable.app/)
-* live demo door [railway.app](rtw-groep-production.up.railway.app)
+* live demo door [aptable.io](https://streamychan.adaptable.app/)
 ---
 
 ## 💻 Participants 💻 
 * Sundous Kanaan
-* Hilal Tapan
 
 ---
 
 ## 🖊 Concept 🖊
-Chat.app is an environment where users can chat with each other. It is a project based on the course real time web course from the minor web, University of Amsterdam.
+Streamy-Chan is an app where the users can open their own room and chat with their friends and watch something on youtube or websites by forming a link.
 
 ---
 
 ## 📖 Job Story 📖
-As a social media user, I want to connect with my friends and family through a secure chatting app, so that I can easily communicate with them.
+As a social media user, I want to connect with my faraway friends and family through a secure chatting app, so that I can easily communicate with them and watch videos or listen to music while chatting together.
 
 ---
 
