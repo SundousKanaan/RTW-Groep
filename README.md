@@ -25,6 +25,7 @@ Streamy-Chan is an app where the users can open their own room and chat with the
 As a social media user, I want to connect with my faraway friends and family through a secure chatting app, so that I can easily communicate with them and watch videos or listen to music while chatting together.
 
 ---
+---
 
 ## 💻 Intallation Guide 💻
 ### Install nvm
