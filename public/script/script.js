@@ -1,10 +1,23 @@
 const messages = document.querySelector("section ul");
-const input = document.querySelector("#message-input");
+const messageInput = document.querySelector("#message-input");
 const sendMessage = document.querySelector("#message-button");
 const usernameInput = document.querySelector("#username-input");
 const loggin = document.querySelector(".room section:first-of-type");
 const chatScreen = document.querySelector(".room section:last-of-type");
 const logginButton = document.querySelector(".room section:first-of-type > button");
+
+// ***********************
+//     iframe code
+// ***********************
+
+const h1 = document.querySelector("header section h1")
+let videoForm = document.querySelector("header section form")
+let videoLinkInput = document.querySelector("header section form input");
+const videoSendLinkbutton = document.querySelector("header section form button");
+const iframe = document.querySelector("header div iframe");
+const span = document.querySelector("header div span");
+const streamStart = document.querySelector("header div button");
+
 
 const socket = io();
 
@@ -30,7 +43,7 @@ if (clientName !== null) {
 // *******************
 // *******************
 
-let roomUsers = [];
+// let roomUsers = [];
 
 const searchParams = new URLSearchParams(window.location.search);
 const roomID = searchParams.get("room");
@@ -43,40 +56,60 @@ logginButton.addEventListener("click", () => {
 
   localStorage.setItem("room-name", usernameInput.value);
 
-  roomUsers.push(usernameInput.value);
-
   // Stuur de lijst van gebruikers naar de server
-  const data ={
+  const data = {
     room: roomID,
     user: usernameInput.value,
-    roomUsers: roomUsers
   }
-  socket.emit("addRoom", {data} );
 
-  console.log("user name", data);
+  socket.emit("joinRoom", data);
+  socket.emit("roomAdmin", roomID);
+
 });
 
-const Rooms = []
-socket.on("addRoom", (Room) => {
-console.log("data",Room);
+
+socket.on("joinRoom", (data) => {
+  const Room = data.Room;
+  const roomUser = data.roomUser;
+  const roomUsers = data.roomUsers;
+
+  roomAdmin(roomUsers);
+
+  console.log("data", Room, roomUser, roomUsers);
 })
 
 
-// Room admin Name
-function adminName() {
-  const Admin = usernameInput.value
-  socket.emit("addAdmin", Admin );
+// Room admin
+
+// let currentRoom;
+
+function roomAdmin(roomUsers) {
+  const room = roomUsers.find(room => room.ID === roomID);
+
+  const currentAdmin = room.users[0];
+
+  h1.textContent = `Admin ${currentAdmin}`;
+  
+  socket.emit("roomAdmin", {currentAdmin , roomID });
 }
 
-adminName();
+socket.on("roomAdmin", (roomData) => {
+  console.log("roomData",roomData.users);
+  console.log("roomData id",roomData.ID);
+  
+  const room = messages.getAttribute("data-room");
 
-socket.on("addAdmin", (currentAdmin)=>{
-  console.log("Room admin", currentAdmin);
+  if (roomData.ID === room) {
+    if (roomData.users[0] === usernameInput.value) {
+      videoForm.classList.add("admin");
+      span.classList.add("admin");
+    }
+  }
 })
 
 
-input.addEventListener("input", () => {
-  const inputValue = input.value;
+messageInput.addEventListener("input", () => {
+  const inputValue = messageInput.value;
   // Doe hier iets met de waarde van het invoerveld
   console.log(inputValue);
   chatScreen.classList.add("focus");
@@ -88,17 +121,17 @@ sendMessage.addEventListener("click", (event) => {
   socket.emit("focus", false); // Verzend de focus class naar andere clients
 
   event.preventDefault();
-  if (input.value) {
+  if (messageInput.value) {
     const chat = {
       username: usernameInput.value,
-      message: input.value,
+      message: messageInput.value,
       room: roomID
     };
 
     console.log(chat);
 
     socket.emit("chatmessage", chat);
-    input.value = "";
+    messageInput.value = "";
   }
 });
 
@@ -216,12 +249,12 @@ gifSearch.addEventListener('click', (event) => {
         });
       }
 
-      if(searchKey === ""){
+      if (searchKey === "") {
         gifList.classList.remove('search')
-        console.log("no",gifList);
-      } else{
+        console.log("no", gifList);
+      } else {
         gifList.classList.add('search')
-        console.log("yes",gifList);
+        console.log("yes", gifList);
       }
 
     })
@@ -235,7 +268,7 @@ gifSearch.addEventListener('click', (event) => {
 socket.on("gifmessage", (msg) => {
   console.log("imgSrc", msg);
 
-  console.log("roomID" , roomID);
+  console.log("roomID", roomID);
   const room = messages.getAttribute("data-room");
 
   // create li element with gif image
@@ -271,34 +304,65 @@ socket.on("gifmessage", (msg) => {
 // ***********************
 //     iframe code
 // ***********************
+videoLinkInput.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    videoSendLinkbutton.click();
+  }
+});
 
-let videoLink = document.querySelector("header section form input");
-const videoStart = document.querySelector("header section form button");
-const iframe = document.querySelector("header div iframe");
 
-videoStart.addEventListener("click", () => {
-  if (videoLink.value.includes("embed")) {
-    iframe.src = videoLink.value;
-  } else if (videoLink.value.includes("https://www.youtube.com/")) {
-    console.log(videoLink.value);
-    let newURL = new URL(videoLink.value);
+videoSendLinkbutton.addEventListener("click", () => {
+
+  if (videoLinkInput.value.includes("embed")) {
+    iframe.src = videoLinkInput.value + "?controls=0";
+    const link = iframe.src
+    console.log("iframeSRC", {link, roomID});
+
+    socket.emit('streamLink', {link, roomID});
+  }
+
+  else if (videoLinkInput.value.includes("https://www.youtube.com/")) {
+    console.log(videoLinkInput.value);
+    let newURL = new URL(videoLinkInput.value);
     console.log(newURL);
     let urlSearch = newURL.search;
     let searchID = urlSearch.substring(3);
     console.log("newStr", searchID);
-    let iframeSRC = newURL.origin + "/embed/" + searchID;
+    let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
     iframe.src = iframeSRC;
-    console.log("iframeSRC", iframeSRC);
     // ?controls=0
-  } else {
-    console.log("no");
+    const link = iframe.src
+    console.log("iframeSRC", link, roomID);
+    socket.emit('streamLink', {link, roomID});
   }
 });
 
-videoLink.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    videoStart.click();
+socket.on("streamLink", (data) => {
+  const room = messages.getAttribute("data-room");
+
+  if (data.roomID === room) {
+    iframe.src = data.link;
   }
+})
+
+// "&autoplay=1"
+streamStart.addEventListener("click", () => {
+  iframe.src = iframe.src + "&autoplay=1";
+  
+  const iframeLink = iframe.src
+  console.log("iframe", iframeLink);
+  streamStart.classList.add("admin")
+
+  socket.emit('startStream', {iframeLink, roomID});
 });
 
+socket.on("startStream", (data) => {
+  console.log("startStream",data);
+  const room = messages.getAttribute("data-room");
+
+  if (data.roomID === room) {
+    iframe.src = data.iframeLink;
+    console.log(iframe);
+  }
+})

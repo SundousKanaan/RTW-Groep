@@ -82,6 +82,8 @@ header section form input{
     margin-right: 1em;
     border: none;
     border-radius: 5em;
+
+    visibility: hidden;
 }
 
 header section form button{
@@ -98,7 +100,15 @@ header section form button{
     background-size: 70%;
     transform: rotate(-90deg);
     transition: .5s;
+
+    visibility: hidden;
 }
+
+header section form.admin input,
+header section form.admin button{
+  visibility: visible;
+}
+
 
 header section form button:hover{
   background-color: var(--pink);
@@ -110,15 +120,65 @@ header div {
   height: 30%;
 
   background-color: var(--bg);
-  display: flex;
+  /* display: flex;
   justify-content: center;
+  align-items: center; */
+  display: grid;
+  place-items: center;
+
+  position: relative;
 }
 
 header div iframe {
   width: 100%;
   /* height: 100%; */
   aspect-ratio: 16/9;
+  position: absolute;
 }
+
+header div button{
+  appearance: none;
+  -webkit-appearance: none ;
+
+  border: none;
+  background-color: transparent;
+
+  width: 5em;
+  height: fit-content;
+
+  position: absolute;
+  transition: .5s;
+
+  cursor: pointer;
+  /* display: none; */
+}
+
+header div button.admin{
+  display: none;
+}
+
+header div button:hover{
+  transform: scale(1.4);
+}
+
+header div button:active{
+  transform: scale(1);
+}
+
+header div span{
+  display: block;
+  width: 100%;
+  height: 100%;
+  
+  background-color: rgba(255, 0, 0, 0.274);
+  
+  position: absolute;
+}
+
+header div span.admin{
+  display: none;
+}
+
 
 @media (min-width: 500px) {
   header div {

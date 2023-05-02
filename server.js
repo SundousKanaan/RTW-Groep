@@ -18,8 +18,11 @@ app.get("/", async (req, res) => {
   }
 });
 
-const rooms = {};         // object om de open kamer te bewaren, key is de kamer naam, value is true
-const roomsArray = [];
+// const rooms = {};         // object om de open kamer te bewaren, key is de kamer naam, value is true
+// const roomsArray = [];
+const roomUsers = [];
+// const roomUsers = { ID: "", users: [] };
+
 
 
 // room path
@@ -31,53 +34,70 @@ app.get("/:room", (req, res) => {
 io.on("connection", (socket) => {
   console.log("connected");
 
-  socket.on('checkRoom', (openRoom) => {
-    console.log("client data", openRoom);
+  socket.on('checkRoom', (roomname) => {
+    // const openRoomName = openRoom.roomname;
+    console.log("openRoomName", roomname);
 
-    const openRoomName = openRoom.roomname;
-    const roomName = openRoom.openRoom
+    let roomIndex = roomUsers.findIndex(room => room.ID === roomname);
 
-    roomsArray.push(openRoomName)
-    console.log("roomsArray" , roomsArray);
-    
-    console.log("checkRoom Array", roomName);
-    
-    io.emit('checkRoom', { openRoomName, roomName, roomsArray });
+    for (const [index, room] of Object.entries(roomUsers)) {
+      if (room.ID === roomname) {
+        roomIndex = index;
+        break;
+      }
+    }
+
+    // let roomIndex = -1;
+
+    if (roomIndex === -1) {
+      // Als het kamer-ID niet werd gevonden, voeg dan een nieuw object toe aan de array
+      roomUsers.push({ ID: roomname, users: [] });
+
+      console.log("roomUsers 1:", roomUsers);
+
+      io.emit('checkRoom', { roomname, roomUsers, log: "1" });
+    } else {
+      console.log("roomUsers 2:", roomUsers);
+
+      io.emit('checkRoom2', { roomname, roomUsers, log: "2" });
+    }
   })
 
-  // Join room scriptindex.js
-  socket.on('addRoom', (data) => {
+  // Join room script.js
+  socket.on('joinRoom', (data) => {
     socket.join(data.room);
     socket.room = data.room;
 
     const Room = data.room;
     const roomUser = data.user;
-    const roomUsers = data.roomUsers
 
-    if (!rooms[Room]) {
-      rooms[Room] = { users: [] };
+    let roomIndex = roomUsers.findIndex(room => room.ID === Room);
+
+    if (roomIndex !== -1) {
+      // Voeg de nieuwe gebruiker toe aan de users array in het gevonden object
+      if (!roomUsers[roomIndex].users.includes(roomUser)) {
+        roomUsers[roomIndex].users.push(roomUser);
+      }
     }
-    rooms[Room].users.push(roomUser);
-    console.log("Room DATA:", Room, rooms[Room]);
+    else {
+      // Als het kamer-ID niet werd gevonden, voeg dan een nieuw object toe aan de array
+      roomUsers.push({ ID: Room, users: [roomUser] });
+    }
 
-    io.emit('addRoom', { Room: Room, users: rooms[Room].users, roomUsers });
+    io.emit('joinRoom', { Room, roomUser, roomUsers });
   });
 
-  socket.on('addAdmin', (Admin) => {
-    const currentRoom = rooms[socket.room];
-    const currentAdmin = Admin;
+  socket.on('roomAdmin', (currentRoom) => {
+    console.log("roomAdmin", currentRoom.roomID);
 
-    console.log("AAA", Admin);
-
-    if (socket.username === currentAdmin) {
-      console.log(`${currentAdmin} is performing admin actions in room ${currentRoom}`);
-
+    const room = roomUsers.find(room => room.ID === currentRoom.roomID);
+    if (room) {
+      console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
+      io.emit('roomAdmin', room)
     } else {
-      console.log(`${currentAdmin} is not the admin of room ${currentRoom}`);
-      // perform non-admin actions
+      console.log("Kamer niet gevonden");
     }
 
-    io.emit('addAdmin', currentAdmin)
   })
 
   socket.on("chatmessage", (chat) => {
@@ -100,6 +120,18 @@ io.on("connection", (socket) => {
 
     io.emit("gifmessage", { gifMessage, room, userName, searchKey });
   });
+
+  socket.on('streamLink', (data) => {
+    const link = data.link;
+    const roomID = data.roomID;
+    console.log("link", data);
+    io.emit('streamLink', { link, roomID });
+  })
+
+  socket.on('startStream', (data) => {
+    io.emit('startStream', data);
+  })
+
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
