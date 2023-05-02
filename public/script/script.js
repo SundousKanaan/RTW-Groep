@@ -103,6 +103,7 @@ socket.on("roomAdmin", (roomData) => {
     if (roomData.users[0] === usernameInput.value) {
       videoForm.classList.add("admin");
       span.classList.add("admin");
+      streamStart.classList.add("admin")
     }
   }
 })
@@ -352,7 +353,7 @@ streamStart.addEventListener("click", () => {
   
   const iframeLink = iframe.src
   console.log("iframe", iframeLink);
-  streamStart.classList.add("admin")
+  streamStart.classList.remove("admin")
 
   socket.emit('startStream', {iframeLink, roomID});
 });

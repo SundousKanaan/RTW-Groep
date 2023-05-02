@@ -150,11 +150,11 @@ header div button{
   transition: .5s;
 
   cursor: pointer;
-  /* display: none; */
+  display: none;
 }
 
 header div button.admin{
-  display: none;
+  display: block;
 }
 
 header div button:hover{
