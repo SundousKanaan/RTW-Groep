@@ -86,6 +86,7 @@ header section form input{
     visibility: hidden;
 }
 
+header section button,
 header section form button{
     height: 100%;
     aspect-ratio: 1/1;
@@ -94,16 +95,24 @@ header section form button{
     cursor: pointer;
 
     background-color: var(--white);
-    background-image: url(https://icons.veryicon.com/png/o/miscellaneous/utility/send-26.png);
-    background-position: 70% 50%;
-    background-repeat: no-repeat;
-    background-size: 70%;
-    transform: rotate(-90deg);
-    transition: .5s;
-
+    
     visibility: hidden;
+  }
+  
+  header section button:last-of-type{
+    visibility: visible;
+  }
+
+  header section form button{
+  background-image: url(https://icons.veryicon.com/png/o/miscellaneous/utility/send-26.png);
+  background-position: 70% 50%;
+  background-repeat: no-repeat;
+  background-size: 70%;
+  transform: rotate(-90deg);
+  transition: .5s;
 }
 
+header section button.admin,
 header section form.admin input,
 header section form.admin button{
   visibility: visible;

@@ -16,7 +16,9 @@ let videoLinkInput = document.querySelector("header section form input");
 const videoSendLinkbutton = document.querySelector("header section form button");
 const iframe = document.querySelector("header div iframe");
 const span = document.querySelector("header div span");
-const streamStart = document.querySelector("header div button");
+const streamStart = document.querySelector("header div form button");
+const streamStop = document.querySelector("header section button:first-of-type");
+const roomLinkbutton = document.querySelector("header section button:last-of-type");
 
 
 const socket = io();
@@ -49,12 +51,27 @@ const searchParams = new URLSearchParams(window.location.search);
 const roomID = searchParams.get("room");
 console.log("binQuery", roomID);
 
+roomLinkbutton.addEventListener("click", () => {
+  var copyText = searchParams;
+
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value);
+
+    // Alert the copied text
+  alert("Copied the text: " + copyText.value);
+
+})
+
+
 // log in and save the user name in the local Storage
 logginButton.addEventListener("click", () => {
   loggin.classList.add("hidden");
   chatScreen.classList.remove("hidden");
 
-  localStorage.setItem("room-name", usernameInput.value);
+  // localStorage.setItem("room-name", usernameInput.value);
 
   // Stuur de lijst van gebruikers naar de server
   const data = {
@@ -81,8 +98,6 @@ socket.on("joinRoom", (data) => {
 
 // Room admin
 
-// let currentRoom;
-
 function roomAdmin(roomUsers) {
   const room = roomUsers.find(room => room.ID === roomID);
 
@@ -103,7 +118,7 @@ socket.on("roomAdmin", (roomData) => {
     if (roomData.users[0] === usernameInput.value) {
       videoForm.classList.add("admin");
       span.classList.add("admin");
-      streamStart.classList.add("admin")
+      streamStart.classList.add("admin");
     }
   }
 })
@@ -350,16 +365,39 @@ socket.on("streamLink", (data) => {
 // "&autoplay=1"
 streamStart.addEventListener("click", () => {
   iframe.src = iframe.src + "&autoplay=1";
-  
   const iframeLink = iframe.src
   console.log("iframe", iframeLink);
   streamStart.classList.remove("admin")
+  streamStop.classList.add('admin')
 
   socket.emit('startStream', {iframeLink, roomID});
 });
 
+
 socket.on("startStream", (data) => {
   console.log("startStream",data);
+  const room = messages.getAttribute("data-room");
+
+  if (data.roomID === room) {
+    iframe.src = data.iframeLink;
+    console.log(iframe);
+  }
+})
+
+streamStop.addEventListener("click", () => {
+  iframe.src = iframe.src + "&autoplay=0";
+  
+  const iframeLink = iframe.src
+  console.log("iframe", iframeLink);
+  streamStart.classList.add("admin")
+  streamStop.classList.remove('admin')
+
+
+  socket.emit('stopStream', {iframeLink, roomID});
+});
+
+socket.on("stopStream", (data) => {
+  console.log("stopStream",data);
   const room = messages.getAttribute("data-room");
 
   if (data.roomID === room) {

@@ -132,6 +132,10 @@ io.on("connection", (socket) => {
     io.emit('startStream', data);
   })
 
+  socket.on('stopStream', (data) => {
+    io.emit('stopStream', data);
+  })
+
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
