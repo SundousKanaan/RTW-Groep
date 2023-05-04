@@ -47,7 +47,7 @@ header {
 
 header section {
   width: 100%;
-  height: 3em;
+  height: 3.5em;
   padding: 0.5em 0;
 
   display: flex;
@@ -73,6 +73,8 @@ header section form {
 
   display: flex;
   flex-wrap: nowrap;
+
+  visibility: hidden;
 }
 
 header section form input{
@@ -95,12 +97,18 @@ header section form button{
     cursor: pointer;
 
     background-color: var(--white);
+    position: relative;
     
     visibility: hidden;
   }
   
   header section button:last-of-type{
     visibility: visible;
+  }
+
+  header section button:active{
+    background-color: var(--pink);
+    box-shadow: none;
   }
 
   header section form button{
@@ -118,10 +126,32 @@ header section form.admin button{
   visibility: visible;
 }
 
-
+header section button:hover,
 header section form button:hover{
-  background-color: var(--pink);
+  /* background-color: var(--pink); */
+  box-shadow: 0 0 0 .4em var(--pink);
   background-size: 80%;
+}
+
+header section > button:last-of-type::before{
+  content: "copy";
+  width: 3em;
+
+  padding: .5em;
+  border-radius: 1em;
+
+  position: absolute;
+  top: -105%;
+  left: calc(50% - 3em /2) ;
+  z-index: 10000;
+  
+  background-color: var(--pink);
+
+  visibility: hidden;
+}
+
+header section > button:last-of-type:hover::before{
+  visibility: visible;
 }
 
 header div {

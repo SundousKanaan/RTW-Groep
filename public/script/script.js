@@ -18,7 +18,7 @@ const iframe = document.querySelector("header div iframe");
 const span = document.querySelector("header div span");
 const streamStart = document.querySelector("header div button");
 const streamStop = document.querySelector("header section > button:first-of-type");
-const roomLinkbutton = document.querySelector("header section button:last-of-type");
+const roomLinkbutton = document.querySelector("header section > button:last-of-type");
 
 
 const socket = io();
@@ -51,19 +51,18 @@ const searchParams = new URLSearchParams(window.location.search);
 const roomID = searchParams.get("room");
 console.log("binQuery", roomID);
 
-// roomLinkbutton.addEventListener("click", () => {
-//   // var copyText = searchParams;
+roomLinkbutton.addEventListener("click", () => {
+  var copyText = window.location.href;
 
-//   // copyText.select();
-//   // copyText.setSelectionRange(0, 99999); // For mobile devices
+  // copyText.select();
+  // copyText.setSelectionRange(0, 99999); // For mobile devices
 
-//     // Copy the text inside the text field
-//   // navigator.clipboard.writeText(copyText.value);
+    // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText);
 
-//     // Alert the copied text
-//   alert("Copied the text: " + copyText.value);
-
-// })
+    // Alert the copied text
+  console.log("Copied the text: ", copyText);
+})
 
 
 // log in and save the user name in the local Storage
@@ -320,6 +319,9 @@ socket.on("gifmessage", (msg) => {
 // ***********************
 //     iframe code
 // ***********************
+
+let link;
+
 videoLinkInput.addEventListener("keydown", (event) => {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -332,12 +334,11 @@ videoSendLinkbutton.addEventListener("click", () => {
 
   if (videoLinkInput.value.includes("embed")) {
     iframe.src = videoLinkInput.value + "?controls=0";
-    const link = iframe.src
+
+    link = iframe.src
     console.log("iframeSRC", {link, roomID});
 
     socket.emit('streamLink', {link, roomID});
-    socket.emit('startStream', {link, roomID});
-    socket.emit('stopStream', {link, roomID});
   }
 
   else if (videoLinkInput.value.includes("https://www.youtube.com/")) {
@@ -350,12 +351,11 @@ videoSendLinkbutton.addEventListener("click", () => {
     let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
     iframe.src = iframeSRC;
     // ?controls=0
-    const link = iframe.src
+
+     link = iframe.src
     console.log("iframeSRC", link, roomID);
-    
+
     socket.emit('streamLink', {link, roomID});
-    socket.emit('startStream', {link, roomID});
-    socket.emit('stopStream', {link, roomID});
   }
 });
 
@@ -374,7 +374,7 @@ const stopvideo = "&autoplay=0";
 
 // "&autoplay=1"
 streamStart.addEventListener("click", () => {
-  iframe.src = iframe.src + startvideo;
+  iframe.src = link + startvideo;
   const iframeLink = iframe.src
 
   console.log("streamStart", iframeLink);
@@ -398,7 +398,7 @@ socket.on("startStream", (data) => {
 })
 
 streamStop.addEventListener("click", () => {
-  iframe.src = iframe.src + stopvideo;
+  iframe.src = link + stopvideo;
   const iframeLink = iframe.src
 
   console.log("streamStop", iframeLink);
