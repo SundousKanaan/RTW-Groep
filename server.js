@@ -129,6 +129,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on('startStream', (data) => {
+    console.log("startStream",data);
     io.emit('startStream', data);
   })
 
