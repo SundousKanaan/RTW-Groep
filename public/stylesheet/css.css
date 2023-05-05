@@ -338,7 +338,7 @@ main.loggin section:first-of-type > a.startRoom{
 
 }
 
-main.room section:first-of-type:has(form:valid) > button {
+main.room section:first-of-type > button {
   /* visibility: visible; */
   display: grid;
 
