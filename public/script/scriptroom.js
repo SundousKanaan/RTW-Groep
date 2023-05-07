@@ -298,7 +298,7 @@ socket.on("gifmessage", (msg) => {
   if (msg.room === room) {
     const messageschat = document.querySelector("section ul");
     messageschat.appendChild(li);
-    messageschat.scrollTop = messageschat.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
     console.log("hi", messageschat);
   }
 

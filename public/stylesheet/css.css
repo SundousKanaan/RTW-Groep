@@ -88,7 +88,7 @@ header section form input{
     visibility: hidden;
 }
 
-header section button,
+header section > button,
 header section form button{
     height: 100%;
     aspect-ratio: 1/1;
@@ -102,7 +102,7 @@ header section form button{
     visibility: hidden;
   }
   
-  header section button:last-of-type{
+  header section > button:last-of-type{
     visibility: visible;
   }
 
@@ -120,7 +120,7 @@ header section form button{
   transition: .5s;
 }
 
-header section button.admin,
+header section > button:first-of-type.admin,
 header section form.admin input,
 header section form.admin button{
   visibility: visible;

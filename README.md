@@ -55,9 +55,9 @@ node app.js
 * Users can chat together online ✅
 * Can see if someone is typing ✅
 * Can choose a username and which gets displayed with each message ✅
+* Can choose a avatar foto (from standard list)
 * Find GIFs and send them to everyone in the chat ✅
 * watch or listen to somthing together online via youtube video link
-* Watch series via the website link
 
 ---
 
