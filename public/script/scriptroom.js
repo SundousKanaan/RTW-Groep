@@ -41,6 +41,20 @@ usernameInput.addEventListener("keydown", (event) => {
   }
 });
 
+usernameInput.addEventListener("input", () => {
+  console.log(usernameInput.value);
+
+  if (usernameInput.validity.valid) {
+    console.log('Form is valid');
+
+    startChattingButton.classList.add('startChating')
+  } else {
+    console.log('Form is invalid');
+
+    startChattingButton.classList.remove('startChating')
+  }
+})
+
 // the user name auto fill for the user
 const clientName = localStorage.getItem("room-name");
 if (clientName !== null) {

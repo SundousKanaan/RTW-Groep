@@ -32,8 +32,8 @@
             <section>
                 <h2>Choose your username</h2>
                 <form>
-                    <input type="text" id="username-input" placeholder="Enter your username" pattern="[^\s]+"
-                        minlength="3" maxlength="10" required />
+                    <input type="text" id="username-input" placeholder="Enter your username" pattern="^(?!\s)(?!.*\s$).{1,19}$"
+                        minlength="4" maxlength="15" required />
                     <h2>Choose your avatar</h2>
                     <ul>
                         <li>

@@ -390,7 +390,7 @@ main.loggin section:first-of-type>a.startRoom {
 
 }
 
-main.room section:first-of-type>button {
+main.room section:first-of-type>button.startChating {
   display: grid;
 }
 
@@ -438,8 +438,8 @@ main.room section:first-of-type form {
 } */
 
 
-/* main.room section:first-of-type form>input {
-  height: 4em;
+/* main.room section:first-of-type form:valid ~ button {
+  background-color: red;
 } */
 
 main.room section:first-of-type form ul {
