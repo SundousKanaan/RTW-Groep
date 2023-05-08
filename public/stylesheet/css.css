@@ -537,6 +537,10 @@ main.room section:first-of-type form ul li input {
   opacity: 0;
 }
 
+main.room section:first-of-type form ul li input:focus-visible~label {
+  border: solid .3em var(--pink);
+}
+
 main.room section:first-of-type form ul li input:checked~label {
   transform: scale(1.3);
   border: solid .3em var(--blue);
