@@ -116,22 +116,22 @@ socket.on("joinRoom", (data) => {
   console.log("data", Room, roomUser, roomUsers);
 })
 
-function disconnect() {
-  const data = {
-    room: roomID,
-    user: usernameInput.value,
-  }
+// function disconnect() {
+//   const data = {
+//     room: roomID,
+//     user: usernameInput.value,
+//   }
 
-  socket.emit("disconnect", data);
-}
+//   socket.emit("disconnect", data);
+// }
 
-disconnect();
+// disconnect();
 
-socket.on('disconnect', (data) =>{
+// socket.on('disconnect', (data) =>{
 
-  console.log("disconnect",data);
+//   console.log("disconnect",data);
 
-})
+// })
 
 
 // Room admin
