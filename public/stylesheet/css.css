@@ -462,6 +462,8 @@ main.room section:first-of-type form ul li {
 
   display: grid;
   place-items: center;
+
+  position: relative;
 }
 
 
@@ -478,56 +480,60 @@ main.room section:first-of-type form ul li label {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  
+
+  position: absolute;
 }
 
 main.room section:first-of-type form ul li:first-of-type label {
-  background-image: url(../images/girl-avatar-1.svg);
+  background-image: url(../images/user-avatar.svg);
   /* background-image: attr(data-avatar); */
 }
 
 main.room section:first-of-type form ul li:nth-of-type(2) label {
-  background-image: url(../images/boy-avatar-1.svg);
+  background-image: url(../images/girl-avatar-1.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(3) label {
-  background-image: url(../images/girl-avatar-2.svg);
+  background-image: url(../images/boy-avatar-1.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(4) label {
-  background-image: url(../images/boy-avatar-2.svg);
+  background-image: url(../images/girl-avatar-2.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(5) label {
-  background-image: url(../images/batman-avatar.svg);
+  background-image: url(../images/boy-avatar-2.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(6) label {
-  background-image: url(../images/magician-avatar.svg);
+  background-image: url(../images/batman-avatar.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(7) label {
-  background-image: url(../images/cacti-avatar.svg);
+  background-image: url(../images/magician-avatar.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(8) label {
-  background-image: url(../images/lazybones-avatar.svg);
+  background-image: url(../images/cacti-avatar.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(9) label {
+  background-image: url(../images/lazybones-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(10) label {
   background-image: url(../images/emoji-avatar.svg);
 }
 
 
 
 main.room section:first-of-type form ul li input {
-  display: none;
+  opacity: 0;
 }
 
-main.room section:first-of-type form ul li label:focus,
 main.room section:first-of-type form ul li input:checked~label {
-  border: solid .3em var(--blue);
   transform: scale(1.3);
+  border: solid .3em var(--blue);
 }
 
 main.room section:last-of-type {
