@@ -10,7 +10,6 @@ const chatScreen = document.querySelector(".room section:last-of-type");
 const startChattingButton = document.querySelector(".room section:first-of-type > button");
 
 const loadingChat = document.querySelector(".room section:last-of-type > div");
-console.log(startChattingButton);
 
 // ***********************
 //     iframe code
@@ -425,12 +424,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function onPlayerReady(event) {
-    console.log('player ready!');
-    player = event.target;
-    streamStart.addEventListener('click', playYTVideo);
-  }
-
   videoSendLinkbutton.addEventListener("click", () => {
     streamStart.classList.add("admin")
     streamStop.classList.remove('admin')
@@ -487,9 +480,20 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log('Player state has changed');
   }
 
-  function stopVideo() {
-    player.stopVideo();
+  function onPlayerReady(event) {
+    console.log('player ready!');
+    player = event.target;
+    streamStart.addEventListener('click', playYTVideo);
+    streamStop.addEventListener('click', stopYTVideo);
+
   }
+
+  function stopYTVideo() {
+    streamStart.classList.add("admin")
+    streamStop.classList.remove("admin")
+    console.log("Player is paused");
+    socket.emit('stopStream', roomID);
+    }
 
   function playYTVideo() {
     streamStart.classList.remove("admin")
@@ -505,9 +509,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
       player.playVideo();
       player.seekTo(0);
-      // player.stopVideo();
 
       console.log("play video");
+    };
+  })
+
+  socket.on('stopStream', (roomID) => {
+    const room = messages.getAttribute("data-room");
+    if (roomID === room) {
+      player.pauseVideo();
+
+      console.log("pause video");
     };
   })
 
