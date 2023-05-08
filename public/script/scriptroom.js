@@ -17,7 +17,7 @@ const h1 = document.querySelector("header section h1")
 let videoForm = document.querySelector("header section form")
 let videoLinkInput = document.querySelector("header section form input");
 const videoSendLinkbutton = document.querySelector("header section form button");
-const iframe = document.querySelector("header div iframe");
+// const iframe = document.querySelector("header div iframe");
 const span = document.querySelector("header div span");
 const streamStart = document.querySelector("header div button");
 const streamStop = document.querySelector("header section > button:first-of-type");
@@ -60,10 +60,10 @@ roomLinkbutton.addEventListener("click", () => {
   // copyText.select();
   // copyText.setSelectionRange(0, 99999); // For mobile devices
 
-    // Copy the text inside the text field
+  // Copy the text inside the text field
   navigator.clipboard.writeText(copyText);
 
-    // Alert the copied text
+  // Alert the copied text
   console.log("Copied the text: ", copyText);
 })
 
@@ -86,27 +86,27 @@ logginButton.addEventListener("click", () => {
 
 
 socket.on("joinRoom", (data) => {
-  
+
   const room = messages.getAttribute("data-room");
 
   const Room = data.Room;
   const roomUser = data.roomUser;
   const roomUsers = data.roomUsers;
 
-  
+
   const liElement = document.createElement("li")
   liElement.classList.add("note")
-  liElement.innerHTML=`
+  liElement.innerHTML = `
   <p>${roomUser} joined the chat</p>
   `
-  
-  if (Room === room){
+
+  if (Room === room) {
     messages.appendChild(liElement)
     console.log(liElement);
   }
 
   roomAdmin(roomUsers);
-  
+
   console.log("data", Room, roomUser, roomUsers);
 })
 
@@ -119,14 +119,14 @@ function roomAdmin(roomUsers) {
   const currentAdmin = room.users[0];
 
   h1.textContent = `Admin ${currentAdmin}`;
-  
-  socket.emit("roomAdmin", {currentAdmin , roomID });
+
+  socket.emit("roomAdmin", { currentAdmin, roomID });
 }
 
 socket.on("roomAdmin", (roomData) => {
-  console.log("roomData",roomData.users);
-  console.log("roomData id",roomData.ID);
-  
+  console.log("roomData", roomData.users);
+  console.log("roomData id", roomData.ID);
+
   const room = messages.getAttribute("data-room");
 
   if (roomData.ID === room) {
@@ -166,7 +166,7 @@ sendMessage.addEventListener("click", (event) => {
       username: usernameInput.value,
       message: messageInput.value,
       room: roomID,
-      avatar:avatarsrc
+      avatar: avatarsrc
     };
 
     console.log(chat);
@@ -185,7 +185,7 @@ socket.on("chatmessage", (msg) => {
   // element.textContent = `${msg.message} `;
   // element.dataset.username = `${msg.username}`
 
-  element.innerHTML=`
+  element.innerHTML = `
           <div>
              <img src="${msg.avatar}" alt="${msg.avatar} icon">
           </div>
@@ -196,7 +196,7 @@ socket.on("chatmessage", (msg) => {
   // haal de data-room attribuut op van de parent ul om te bepalen in welke chatroom het bericht hoort
   const room = messages.getAttribute("data-room");
   if (msg.room === room) {
-    console.log("element",element);
+    console.log("element", element);
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
   }
@@ -328,7 +328,7 @@ socket.on("gifmessage", (msg) => {
   // li.dataset.username = `${msg.userName}`
   // li.classList.add("gif")
 
-  li.innerHTML=`
+  li.innerHTML = `
   <div>
     <img src="./images/girl-avatar-2.svg" alt="">
   </div>
@@ -362,103 +362,134 @@ socket.on("gifmessage", (msg) => {
 //     iframe code
 // ***********************
 
-let link;
+// const iframe = document.querySelector("header div iframe");
+// const streamStart = document.querySelector("header div button");
+// const streamStop = document.querySelector("header section > button:first-of-type");
+// const roomLinkbutton = document.querySelector("header section > button:last-of-type");
 
-videoLinkInput.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    videoSendLinkbutton.click();
+const videoFrame = document.getElementById("videoFrame");
+
+let link = '';
+let player;
+let videoId = '';
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  videoLinkInput.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      videoSendLinkbutton.click();
+    }
+  });
+
+  function onYouTubeIframeAPIReady(videoUrl) {
+    console.log("onYouTubeIframeAPIReady:", videoUrl);
+    const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
+
+    if (youtubeUrlRegex.test(videoUrl)) {
+      const ytlink = videoUrl.match(/(\?v=|\/embed\/|\/\d\/|\/vi\/|\/v\/|youtu\.be\/|\/e\/|\/watch\?v=|\/watch\?feature=player_embedded&v=|\/watch\?v%3D|^v\=|\/embed\/|youtu\.be\/|\/e\/|watch\?v=|v%3D|youtu\.be\/|embed\/|watch\?v%3D|youtube.com\/user\/[^#]*#([^\/]*\/)*)?([^#\&\?\/]*)/)[3];
+
+      console.log("YT test", ytlink);
+
+      let newURL = new URL(videoUrl).pathname;
+
+      const parts = newURL.split("/");
+      const videoId = parts[parts.length - 1];
+
+      player = new YT.Player(videoFrame, {
+        videoId: videoId,
+        playerVars: {
+          'playsinline': 1,
+          'controls': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+
+    } else {
+      console.log("Ongeldige YouTube-video-URL");
+    }
   }
-});
 
-
-videoSendLinkbutton.addEventListener("click", () => {
-
-  if (videoLinkInput.value.includes("embed")) {
-    iframe.src = videoLinkInput.value + "?controls=0";
-
-    link = iframe.src
-    console.log("iframeSRC", {link, roomID});
-
-    socket.emit('streamLink', {link, roomID});
+  function onPlayerReady(event) {
+    console.log('player ready!');
+    player = event.target;
+    streamStart.addEventListener('click', playVideo1)
   }
 
-  else if (videoLinkInput.value.includes("https://www.youtube.com/")) {
-    console.log(videoLinkInput.value);
-    let newURL = new URL(videoLinkInput.value);
-    console.log(newURL);
-    let urlSearch = newURL.search;
-    let searchID = urlSearch.substring(3);
-    console.log("newStr", searchID);
-    let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
-    iframe.src = iframeSRC;
-    // ?controls=0
+  videoSendLinkbutton.addEventListener("click", () => {
+    streamStart.classList.add("admin")
+    streamStop.classList.remove('admin')
 
-     link = iframe.src
-    console.log("iframeSRC", link, roomID);
+    const videoUrl = videoLinkInput.value;
 
-    socket.emit('streamLink', {link, roomID});
+
+    if (videoUrl.includes("embed")) {
+      link = videoUrl + "?controls=0";
+
+      onYouTubeIframeAPIReady(link);
+      onPlayerStateChange();
+
+      socket.emit('streamLink', { link, roomID });
+      console.log("iframeSRC", { link, roomID });
+    }
+
+    else if (videoUrl.includes("https://www.youtube.com/")) {
+      console.log(videoUrl);
+      let newURL = new URL(videoUrl);
+      console.log("newURL", newURL);
+      let urlSearch = newURL.search;
+      let searchID = urlSearch.substring(3);
+      console.log("newStr", searchID);
+      let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
+      link = iframeSRC
+
+      onYouTubeIframeAPIReady(link);
+
+      socket.emit('streamLink', { link, roomID });
+    }
+    else {
+
+      console.log("else searchID", videoUrl);
+      link = videoUrl;
+
+      onYouTubeIframeAPIReady(videoUrl);
+      socket.emit('streamLink', { link, roomID });
+    }
+  });
+
+  socket.on("streamLink", (data) => {
+    const room = messages.getAttribute("data-room");
+    if (data.roomID === room) {
+      onYouTubeIframeAPIReady(data.link)
+      console.log("Hi yt");
+    };
+  })
+
+  function onPlayerStateChange(event) {
+    console.log('Player state has changed');
   }
-});
 
-socket.on("streamLink", (data) => {
-  const room = messages.getAttribute("data-room");
 
-  console.log("LINK", data.link);
 
-  if (data.roomID === room) {
-    iframe.src = data.link;
+  function playVideo1() {
+    streamStart.classList.remove("admin")
+    streamStop.classList.add("admin")
+    
+    console.log("Player is ready");
+    socket.emit('startStream', roomID);
   }
-})
 
-const startvideo = "&autoplay=1";
-const stopvideo = "&autoplay=0";
+  socket.on('startStream', (roomID) => {
+    const room = messages.getAttribute("data-room");
+    if (roomID === room) {
 
-// "&autoplay=1"
-streamStart.addEventListener("click", () => {
-  iframe.src = link + startvideo;
-  const iframeLink = iframe.src
+      player.playVideo();
 
-  console.log("streamStart", iframeLink);
+      console.log("play video");
+    };
+  })
 
-  streamStart.classList.remove("admin")
-  streamStop.classList.add('admin')
-
-  socket.emit('startStream', {iframeLink, roomID});
-});
-
-
-socket.on("startStream", (data) => {
-  const room = messages.getAttribute("data-room");
-
-  console.log("startStream",data);
-
-  if (data.roomID === room) {
-    iframe.src = data.iframeLink;
-    console.log(iframe);
-  }
-})
-
-streamStop.addEventListener("click", () => {
-  iframe.src = link + stopvideo;
-  const iframeLink = iframe.src
-
-  console.log("streamStop", iframeLink);
-
-  streamStart.classList.add("admin")
-  streamStop.classList.remove('admin')
-
-  socket.emit('stopStream', {iframeLink, roomID});
-});
-
-socket.on("stopStream", (data) => {
-  const room = messages.getAttribute("data-room");
-
-  console.log("stopStream",data);
-  
-
-  if (data.roomID === room) {
-    iframe.src = data.iframeLink;
-    console.log(iframe);
-  }
 })

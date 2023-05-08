@@ -130,9 +130,9 @@ io.on("connection", (socket) => {
     io.emit('streamLink', { link, roomID });
   })
 
-  socket.on('startStream', (data) => {
-    console.log("startStream",data);
-    io.emit('startStream', data);
+  socket.on('startStream', (roomID) => {
+    console.log("startStream",roomID);
+    io.emit('startStream', roomID);
   })
 
   socket.on('stopStream', (data) => {

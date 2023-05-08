@@ -134,7 +134,7 @@ header section form button:hover{
 }
 
 header section > button:last-of-type::before{
-  content: "copy";
+  content: "copyed";
   width: 3em;
 
   padding: .5em;
@@ -150,7 +150,7 @@ header section > button:last-of-type::before{
   visibility: hidden;
 }
 
-header section > button:last-of-type:hover::before{
+header section > button:last-of-type:active::before{
   visibility: visible;
 }
 
