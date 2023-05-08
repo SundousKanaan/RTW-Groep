@@ -605,7 +605,7 @@ main.room section:last-of-type form {
   height: 3em;
 
   position: absolute;
-  bottom: 0.5em;
+  bottom: 2em;
 
   display: flex;
   justify-content: space-around;
