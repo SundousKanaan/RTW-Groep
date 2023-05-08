@@ -3,6 +3,7 @@ const messageInput = document.querySelector("#message-input");
 const sendMessage = document.querySelector("#message-button");
 
 const usernameInput = document.querySelector("#username-input");
+const userDataForm = document.querySelectorAll("main.room section:first-of-type form")
 const avatarsInput = document.querySelectorAll("main.room section:first-of-type form ul li input");
 
 const loggin = document.querySelector(".room section:first-of-type");
@@ -68,7 +69,6 @@ roomLinkbutton.addEventListener("click", () => {
 
 // log in and save the user name in the local Storage
 startChattingButton.addEventListener("click", () => {
-
   loggin.classList.add("hidden");
   chatScreen.classList.remove("hidden");
 
@@ -79,14 +79,17 @@ startChattingButton.addEventListener("click", () => {
   }
 
   socket.emit("joinRoom", data);
+
   socket.emit("roomAdmin", roomID);
 
+  console.log("1", loadingChat);
   setTimeout(() => {
     loadingChat.classList.add("noLoading");
-  }, 2500);
+    console.log("2", loadingChat);
+
+  }, 1000);
+
 });
-
-
 
 socket.on("joinRoom", (data) => {
 
@@ -111,6 +114,23 @@ socket.on("joinRoom", (data) => {
   roomAdmin(roomUsers);
 
   console.log("data", Room, roomUser, roomUsers);
+})
+
+function disconnect() {
+  const data = {
+    room: roomID,
+    user: usernameInput.value,
+  }
+
+  socket.emit("disconnect", data);
+}
+
+disconnect();
+
+socket.on('disconnect', (data) =>{
+
+  console.log("disconnect",data);
+
 })
 
 

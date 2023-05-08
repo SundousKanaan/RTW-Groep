@@ -30,6 +30,10 @@ button {
   font-family: "interstate", sans-serif;
 }
 
+input{
+  caret-color: black;
+}
+
 body {
   background-color: var(--bg);
   width: 100vw;
@@ -279,9 +283,9 @@ main.room section:first-of-type h2 {
 main.loggin section form,
 main.room section:first-of-type form {
   width: 80%;
-  height: 3em;
   height: fit-content;
-  margin-bottom: 1em;
+  height: fit-content;
+  margin: 1em 0;
 }
 
 main.loggin section:first-of-type form input,
@@ -290,10 +294,30 @@ main.room section:first-of-type form>input {
   -webkit-appearance: none;
 
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  height: 4em;
+
   border-radius: 3em;
   padding-left: 1em;
   border: none;
+}
+
+
+main.loggin section:first-of-type form input.goodRoomName{
+  background-color: var(--green);
+}
+
+main.loggin section:first-of-type form input.badRoomName{
+  animation: badRoomName .1s 3 both linear alternate;
+}
+
+@keyframes badRoomName{
+  form{
+    transform: translateX(-1.5em);
+  }
+  to{
+    transform: translateX(1.5em);
+  }
 }
 
 main.loggin section>button,
@@ -328,21 +352,41 @@ main.loggin section>button {
 }
 
 main.loggin section>button.startRoom {
-  /* visibility: hidden; */
   display: none;
+}
 
+main.loggin section>button.checking{
+  --left: 0%;
+  background-image: linear-gradient(to right ,var(--pink) var(--left), var(--blue) 0);
+  animation: gradient 3s linear infinite;
+  color: transparent;
+}
+
+@keyframes gradient {
+  0% {
+    --left: 0%;
+  }
+  25%{
+    --left: 25%;
+  }
+  50%{
+    --left: 50%;
+  }
+  75%{
+    --left: 75%;
+  }
+  100% {
+    --left: 100%;
+  }
 }
 
 main.loggin section:first-of-type>a.startRoom {
-  /* visibility: visible; */
   display: grid;
 
 }
 
 main.room section:first-of-type>button {
-  /* visibility: visible; */
   display: grid;
-
 }
 
 main.loggin section:first-of-type>a:hover,
@@ -382,26 +426,28 @@ main.loggin section>p.check {
 main.room {
   height: 70vh;
 }
-
+/* 
 main.room section:first-of-type form {
   height: 8em;
-}
+} */
 
 
-main.room section:first-of-type form>input {
+/* main.room section:first-of-type form>input {
   height: 4em;
-}
+} */
 
 main.room section:first-of-type form ul {
   width: 100%;
-  height: 3em;
+  height: fit-content;
 
   list-style: none;
 
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+
+  gap: 2em;
 
   margin-top: 1em;
 
@@ -410,12 +456,16 @@ main.room section:first-of-type form ul {
 }
 
 main.room section:first-of-type form ul li {
-  width: 3em;
-  height: 3em;
+  --size:4em;
+  width: var(--size);
+  height: var(--size);
 
   display: grid;
   place-items: center;
 }
+
+
+/* avatar foto's */
 
 main.room section:first-of-type form ul li label {
   width: 100%;
@@ -423,17 +473,21 @@ main.room section:first-of-type form ul li label {
 
   overflow: hidden;
   border-radius: 50%;
+
+  /* background-image: attr(data-avatar); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  
 }
 
 main.room section:first-of-type form ul li:first-of-type label {
   background-image: url(../images/girl-avatar-1.svg);
+  /* background-image: attr(data-avatar); */
 }
 
 main.room section:first-of-type form ul li:nth-of-type(2) label {
-  background-image: url(../images/boy-avatar-2.svg);
+  background-image: url(../images/boy-avatar-1.svg);
 }
 
 main.room section:first-of-type form ul li:nth-of-type(3) label {
@@ -444,14 +498,36 @@ main.room section:first-of-type form ul li:nth-of-type(4) label {
   background-image: url(../images/boy-avatar-2.svg);
 }
 
+main.room section:first-of-type form ul li:nth-of-type(5) label {
+  background-image: url(../images/batman-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(6) label {
+  background-image: url(../images/magician-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(7) label {
+  background-image: url(../images/cacti-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(8) label {
+  background-image: url(../images/lazybones-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(9) label {
+  background-image: url(../images/emoji-avatar.svg);
+}
+
+
+
 main.room section:first-of-type form ul li input {
   display: none;
 }
 
+main.room section:first-of-type form ul li label:focus,
 main.room section:first-of-type form ul li input:checked~label {
-  /* filter: drop-shadow(0 0 .5em var(--blue)); */
   border: solid .3em var(--blue);
-
+  transform: scale(1.3);
 }
 
 main.room section:last-of-type {

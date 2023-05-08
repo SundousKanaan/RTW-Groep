@@ -18,12 +18,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-// const rooms = {};         // object om de open kamer te bewaren, key is de kamer naam, value is true
-// const roomsArray = [];
 const roomUsers = [];
-// const roomUsers = { ID: "", users: [] };
-
-
 
 // room path
 app.get("/:room", (req, res) => {
@@ -139,9 +134,9 @@ io.on("connection", (socket) => {
     io.emit('stopStream', data);
   })
 
-
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("user disconnected", data);
+    // io.emit('disconnect');
   });
 
   socket.on("focus", (hasFocus) => {

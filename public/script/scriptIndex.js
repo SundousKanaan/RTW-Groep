@@ -22,6 +22,8 @@ roomNameInput.addEventListener("input", () => {
   startRoomButton.classList.remove("startRoom")
   checkRoomButton.classList.remove("startRoom")
   pNote.classList.remove("check")
+  roomNameInput.classList.remove("badRoomName")
+  roomNameInput.classList.remove("goodRoomName")
 })
 
 checkRoomButton.addEventListener('click', () => {
@@ -43,9 +45,22 @@ socket.on('checkRoom', (data) => {
     if (roomsIDs[i] === roomNameInput.value) {
       console.log("yes, you kan make the room");
 
+      
       pNote.classList.remove("check")
-      startRoomButton.classList.add("startRoom")
-      checkRoomButton.classList.add("startRoom")
+      
+      checkRoomButton.classList.add("checking")
+      console.log(checkRoomButton);
+      setTimeout(() => {
+        checkRoomButton.classList.remove("checking")
+        
+        roomNameInput.classList.add("goodRoomName")
+        roomNameInput.classList.remove("badRoomName")
+        startRoomButton.classList.add("startRoom")
+        checkRoomButton.classList.add("startRoom")
+        
+      }, 3000);
+
+
 
       startRoomButton.href = "/room?room=" + roomNameInput.value;
     }
@@ -54,13 +69,28 @@ socket.on('checkRoom', (data) => {
 
 socket.on('checkRoom2', (data) => {
   console.log("openRoomName:", data);
-  console.log("openRoomName:", data.roomname);
-
-
   console.log("You can't open room with name", data.roomname);
+
+  checkRoomButton.classList.add("checking")
+  console.log(checkRoomButton);
+  setTimeout(() => {
+    checkRoomButton.classList.remove("checking")
+    
+  roomNameInput.classList.add("badRoomName")
+  roomNameInput.classList.remove("goodRoomName")
+
+  roomNameInput.value=""
+
+  console.log(pNote);
+
+  pNote.innerHTML = `
+  The room "<strong>${data.roomname}</strong>" is all open. Choose another room name
+  `
+
   pNote.classList.add("check")
   startRoomButton.classList.remove("startRoom")
   checkRoomButton.classList.remove("startRoom")
+}, 3000);
 });
 
 
