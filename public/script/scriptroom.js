@@ -87,7 +87,7 @@ startChattingButton.addEventListener("click", () => {
     loadingChat.classList.add("noLoading");
     console.log("2", loadingChat);
 
-  }, 1000);
+  }, 2500);
 
 });
 

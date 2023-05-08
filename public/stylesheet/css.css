@@ -30,7 +30,7 @@ button {
   font-family: "interstate", sans-serif;
 }
 
-input{
+input {
   caret-color: black;
 }
 
@@ -303,19 +303,20 @@ main.room section:first-of-type form>input {
 }
 
 
-main.loggin section:first-of-type form input.goodRoomName{
+main.loggin section:first-of-type form input.goodRoomName {
   background-color: var(--green);
 }
 
-main.loggin section:first-of-type form input.badRoomName{
+main.loggin section:first-of-type form input.badRoomName {
   animation: badRoomName .1s 3 both linear alternate;
 }
 
-@keyframes badRoomName{
-  form{
+@keyframes badRoomName {
+  form {
     transform: translateX(-1.5em);
   }
-  to{
+
+  to {
     transform: translateX(1.5em);
   }
 }
@@ -355,9 +356,9 @@ main.loggin section>button.startRoom {
   display: none;
 }
 
-main.loggin section>button.checking{
+main.loggin section>button.checking {
   --left: 0%;
-  background-image: linear-gradient(to right ,var(--pink) var(--left), var(--blue) 0);
+  background-image: linear-gradient(to right, var(--pink) var(--left), var(--blue) 0);
   animation: gradient 3s linear infinite;
   color: transparent;
 }
@@ -366,15 +367,19 @@ main.loggin section>button.checking{
   0% {
     --left: 0%;
   }
-  25%{
+
+  25% {
     --left: 25%;
   }
-  50%{
+
+  50% {
     --left: 50%;
   }
-  75%{
+
+  75% {
     --left: 75%;
   }
+
   100% {
     --left: 100%;
   }
@@ -426,6 +431,7 @@ main.loggin section>p.check {
 main.room {
   height: 70vh;
 }
+
 /* 
 main.room section:first-of-type form {
   height: 8em;
@@ -456,7 +462,7 @@ main.room section:first-of-type form ul {
 }
 
 main.room section:first-of-type form ul li {
-  --size:4em;
+  --size: 4em;
   width: var(--size);
   height: var(--size);
 
@@ -551,6 +557,7 @@ main.room section:last-of-type {
   align-items: center;
 }
 
+/* loading screen */
 main.room section:last-of-type>div {
   width: 100%;
   height: 100%;
@@ -558,11 +565,84 @@ main.room section:last-of-type>div {
   position: fixed;
   top: 0;
   z-index: 100000;
-  background-color: red;
+  background-color: var(--white);
+
+  display: grid;
+  place-items: center;
 }
 
 main.room section:last-of-type>div.noLoading {
-display: none;
+  display: none;
+}
+
+main.room section:last-of-type>div span {
+  display: block;
+  width: 80%;
+  aspect-ratio: 1/0.8;
+
+  /* background-color: red; */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+main.room section:last-of-type>div span div:first-of-type {
+  width: 40%;
+  aspect-ratio: 1/1;
+
+  background-color: #95BDFF;
+
+  display: grid;
+  place-items: center;
+
+  position: relative;
+  overflow: hidden;
+}
+
+main.room section:last-of-type>div span div:first-of-type img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+main.room section:last-of-type>div span div:nth-of-type(2) {
+  width: 90%;
+  height: 2em;
+
+  border-radius: 2em;
+
+  background-color: #95BDFF;
+
+  /* --size: 0; */
+  background-image: linear-gradient(to right, var(--pink) var(--size), var(--light-blue) 0);
+  background-size: 100%;
+
+  animation: loadingChat 2.4s 1 both linear;
+}
+
+@keyframes loadingChat {
+  0% {
+    --size: 0;
+  }
+
+  25% {
+    --size: 25%;
+  }
+
+  50% {
+    --size: 50%;
+  }
+
+  75% {
+    --size: 75%;
+  }
+
+  100% {
+    --size: 100%;
+  }
 }
 
 main.room section:last-of-type>ul {
