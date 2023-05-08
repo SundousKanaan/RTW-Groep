@@ -33,12 +33,50 @@
                 <form>
                     <input type="text" id="username-input" placeholder="Enter your username" pattern="[^\s]+"
                         minlength="3" maxlength="10" required />
+                    <ul>
+                        <li>
+                            <input id="option1" type="radio" name="option" value="uit" checked>
+                            <label for="option1" data-avatar="./images/girl-avatar-1.svg">
+                            </label>
+                        </li>
+                        <li>
+                            <input id="option2" type="radio" name="option" value="option1">
+                            <label for="option2" data-avatar="./images/boy-avatar-1.svg">
+                            </label>
+                        </li>
+                        <li>
+                            <input id="option3" type="radio" name="option" value="option2">
+                            <label for="option3" data-avatar="./images/girl-avatar-2.svg">
+                            </label>
+                        </li>
+                        <li>
+                            <input id="option4" type="radio" name="option" value="option3">
+                            <label for="option4" data-avatar="./images/boy-avatar-2.svg">
+                            </label>
+                        </li>
+                    </ul>
                 </form>
                 <button>Start chatting</button>
             </section>
 
             <section>
-                <ul data-room=" <%- roomID %> "></ul>
+                <ul data-room=" <%- roomID %> ">
+                    <!-- <li class="note">
+                        <p>
+                            asacas
+                        </p>
+                    </li> -->
+                    <!-- <li>
+                        <div>
+                            <img src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png" alt="">
+                        </div>
+                            <p data-username="sundous">hi</p>
+
+                        <div data-username="sundous">
+                            <img src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png" alt="">
+                        </div>
+                    </li> -->
+                </ul>
                 <form>
                     <input type="text" name="message" id="message-input" placeholder="Chatting ..." required />
                     <button type="submit" id="message-button"></button>
@@ -61,6 +99,7 @@
                 </form>
             </section>
         </main>
+
         <%- include("./partials/footer.ejs") -%>
             <script src="./script/scriptroom.js"></script>
             <script>

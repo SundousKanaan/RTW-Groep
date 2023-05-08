@@ -1,7 +1,10 @@
-const messages = document.querySelector("section ul");
+const messages = document.querySelector(".room section:last-of-type ul");
 const messageInput = document.querySelector("#message-input");
 const sendMessage = document.querySelector("#message-button");
+
 const usernameInput = document.querySelector("#username-input");
+const avatarsInput = document.querySelectorAll("main.room section:first-of-type form ul li input");
+
 const loggin = document.querySelector(".room section:first-of-type");
 const chatScreen = document.querySelector(".room section:last-of-type");
 const logginButton = document.querySelector(".room section:first-of-type > button");
@@ -70,8 +73,6 @@ logginButton.addEventListener("click", () => {
   loggin.classList.add("hidden");
   chatScreen.classList.remove("hidden");
 
-  // localStorage.setItem("room-name", usernameInput.value);
-
   // Stuur de lijst van gebruikers naar de server
   const data = {
     room: roomID,
@@ -85,12 +86,27 @@ logginButton.addEventListener("click", () => {
 
 
 socket.on("joinRoom", (data) => {
+  
+  const room = messages.getAttribute("data-room");
+
   const Room = data.Room;
   const roomUser = data.roomUser;
   const roomUsers = data.roomUsers;
 
-  roomAdmin(roomUsers);
+  
+  const liElement = document.createElement("li")
+  liElement.classList.add("note")
+  liElement.innerHTML=`
+  <p>${roomUser} joined the chat</p>
+  `
+  
+  if (Room === room){
+    messages.appendChild(liElement)
+    console.log(liElement);
+  }
 
+  roomAdmin(roomUsers);
+  
   console.log("data", Room, roomUser, roomUsers);
 })
 
@@ -135,12 +151,22 @@ sendMessage.addEventListener("click", (event) => {
   chatScreen.classList.remove("focus");
   socket.emit("focus", false); // Verzend de focus class naar andere clients
 
+  let avatarsrc;
+  for (let i = 0; i < avatarsInput.length; i++) {
+    if (avatarsInput[i].checked) {
+      let labelChecked = avatarsInput[i].nextElementSibling
+      avatarsrc = labelChecked.dataset.avatar
+      console.log(avatarsrc, [i]);
+    }
+  }
+
   event.preventDefault();
   if (messageInput.value) {
     const chat = {
       username: usernameInput.value,
       message: messageInput.value,
-      room: roomID
+      room: roomID,
+      avatar:avatarsrc
     };
 
     console.log(chat);
@@ -156,13 +182,21 @@ socket.on("chatmessage", (msg) => {
   console.log("chat message: ", msg.message);
 
   const element = document.createElement("li");
-  element.textContent = `${msg.message} `;
-  element.dataset.username = `${msg.username}`
+  // element.textContent = `${msg.message} `;
+  // element.dataset.username = `${msg.username}`
+
+  element.innerHTML=`
+          <div>
+             <img src="${msg.avatar}" alt="${msg.avatar} icon">
+          </div>
+          <p data-username="${msg.username}">${msg.message}</p>
+         `
 
 
   // haal de data-room attribuut op van de parent ul om te bepalen in welke chatroom het bericht hoort
   const room = messages.getAttribute("data-room");
   if (msg.room === room) {
+    console.log("element",element);
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
   }
@@ -290,16 +324,24 @@ socket.on("gifmessage", (msg) => {
   const li = document.createElement("li");
   const img = document.createElement("img");
 
-  img.src = msg.gifMessage;
-  li.dataset.username = `${msg.userName}`
+  // img.src = msg.gifMessage;
+  // li.dataset.username = `${msg.userName}`
+  // li.classList.add("gif")
 
-  li.appendChild(img);
+  li.innerHTML=`
+  <div>
+    <img src="./images/girl-avatar-2.svg" alt="">
+  </div>
+  <div data-username="${msg.userName}">
+  <img src="${msg.gifMessage}" alt="">
+  </div>
+  `
+  // li.appendChild(img);
 
   if (msg.room === room) {
-    const messageschat = document.querySelector("section ul");
-    messageschat.appendChild(li);
+    messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
-    console.log("hi", messageschat);
+    console.log("hi", messages);
   }
 
   if (msg.userName === usernameInput.value) {

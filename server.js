@@ -70,6 +70,7 @@ io.on("connection", (socket) => {
 
     const Room = data.room;
     const roomUser = data.user;
+    // const avatar = data.avatar
 
     let roomIndex = roomUsers.findIndex(room => room.ID === Room);
 
@@ -104,10 +105,11 @@ io.on("connection", (socket) => {
     const room = chat.room;
     const message = chat.message;
     const username = chat.username;
+    const avatar = chat.avatar
     console.log("chat message |", `[${room}] ${username}: ${message}`);
 
     // send the message to all sockets in the room
-    io.emit("chatmessage", { username, message, room });
+    io.emit("chatmessage", { username, message, room, avatar });
   });
 
   socket.on('gifmessage', (message) => {

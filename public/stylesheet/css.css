@@ -280,11 +280,12 @@ main.loggin section form,
 main.room section:first-of-type form {
   width: 80%;
   height: 3em;
+  height: fit-content;
   margin-bottom: 1em;
 }
 
 main.loggin section:first-of-type form input,
-main.room section:first-of-type form input {
+main.room section:first-of-type form > input {
   appearance: none;
   -webkit-appearance: none;
 
@@ -381,6 +382,78 @@ main.loggin section > p.check{
 main.room {
   height: 70vh;
 }
+
+main.room section:first-of-type form{
+  height: 8em;
+}
+
+
+main.room section:first-of-type form > input{
+  height: 4em;
+}
+
+main.room section:first-of-type form ul{
+  width: 100%;
+  height: 3em;
+
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 1em;
+
+  /* background-color: rgba(255, 0, 0, 0.267); */
+
+}
+
+main.room section:first-of-type form ul li{
+  width: 3em;
+  height: 3em;
+
+  display: grid;
+  place-items: center;
+}
+
+main.room section:first-of-type form ul li label{
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  border-radius: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+main.room section:first-of-type form ul li:first-of-type label{
+  background-image: url(../images/girl-avatar-1.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(2) label{
+  background-image: url(../images/boy-avatar-2.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(3) label{
+  background-image: url(../images/girl-avatar-2.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(4) label{
+  background-image: url(../images/boy-avatar-2.svg);
+}
+
+main.room section:first-of-type form ul li input{
+  display: none;
+}
+
+main.room section:first-of-type form ul li input:checked ~label{
+  /* filter: drop-shadow(0 0 .5em var(--blue)); */
+  border: solid .3em var(--blue);
+
+}
+
 main.room section:last-of-type {
   width: 100%;
   height: 100%;
@@ -419,34 +492,66 @@ main.room section:last-of-type>ul::-webkit-scrollbar {
 
 main.room section:last-of-type>ul li {
   width: fit-content;
-  max-width: 90%;
+  max-width: 60%;
   height: fit-content;
-  padding: 0.5em;
+
   margin-top: 1.5em;
+  
+  /* position: relative; */
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: .5em;
+}
+
+main.room section:last-of-type>ul li.note{
+  align-self: center;
+}
+
+main.room section:last-of-type>ul li.note p{
+  background-color: transparent;
+  font-size: .8em;
+}
+
+main.room section:last-of-type>ul li p{
+  width: fit-content;
+  max-width: 100%;
+  height: fit-content;
+
+  word-wrap: break-word;
+
   background-color: var(--sand);
   border-radius: 1em;
-  word-wrap: break-word;
+  padding: 0.5em 1em;
 
   position: relative;
 }
 
-main.room section:last-of-type>ul li::before{
+main.room section:last-of-type>ul li div:nth-of-type(2)::before,
+main.room section:last-of-type>ul li p::before{
   content: attr(data-username);
   width: fit-content;
   height: fit-content;
   font-size: .7em;
   height: 1em;
   position: absolute;
-  top: -1em;
+  top: -1.5em;
   left: 0;
 }
 
 main.room section:last-of-type>ul li.message {
-  background-color: var(--green);
+  flex-direction: row-reverse;
   align-self: end;
 }
 
-main.room section:last-of-type>ul li.message::before{
+main.room section:last-of-type>ul li.message p {
+  background-color: var(--green);
+}
+
+main.room section:last-of-type>ul li.message div:nth-of-type(2)::before,
+main.room section:last-of-type>ul li.message p::before{
   right: 0;
   left: auto;
 }
@@ -455,7 +560,29 @@ main.room section:last-of-type>ul li::first-letter {
   text-transform: uppercase;
 }
 
-main.room section:last-of-type>ul li img{
+main.room section:last-of-type>ul li > div:first-of-type{
+  width: 3em;
+  height: 3em;
+
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+main.room section:last-of-type>ul li > div:first-of-type img{
+  width: 100%;
+  height: 100%;
+}
+
+main.room section:last-of-type>ul li div:nth-of-type(2){
+  width: fit-content;
+  background-color: var(--sand);
+  padding: 0.5em;
+  border-radius: 1em;
+
+  position: relative;
+}
+
+main.room section:last-of-type>ul li div:nth-of-type(2) img{
   width: 40vw;
 }
 
