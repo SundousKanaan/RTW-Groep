@@ -131,6 +131,19 @@ io.on("connection", (socket) => {
     console.log("roomHistory:", roomHistory);
   });
 
+  socket.on('roomAdmin', (currentRoom) => {
+    console.log("roomAdmin", currentRoom.roomID);
+
+    const room = roomUsers.find(room => room.ID === currentRoom.roomID);
+    if (room) {
+      console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
+      io.emit('roomAdmin', room)
+    } else {
+      console.log("Kamer niet gevonden");
+    }
+
+  })
+
   socket.on('gifmessage', (message) => {
     console.log("Hi:", message)
 
@@ -182,10 +195,10 @@ io.on("connection", (socket) => {
 
 
   socket.on("disconnect", () => {
-    
-    console.log("user disconnected", client , clientRoom);
 
-    io.emit('notconnected', { userName:client , roomID:clientRoom})
+    console.log("user disconnected", client, clientRoom);
+
+    io.emit('notconnected', { userName: client, roomID: clientRoom })
   });
 
   socket.on("focus", (hasFocus) => {
