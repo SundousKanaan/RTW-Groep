@@ -18,9 +18,11 @@ app.get("/", async (req, res) => {
   }
 });
 
-const roomUsers = [];
+let roomUsers = [];
 const historySize = 50;
 let roomHistory = [];
+let client;
+let clientRoom;
 
 // room path
 app.get("/:room", (req, res) => {
@@ -90,21 +92,11 @@ io.on("connection", (socket) => {
     io.emit('joinRoom', { Room, roomUser, roomUsers });
 
     socket.emit('chatHistory', roomHistory)
+
+    client = roomUser;
+    clientRoom = Room;
+    console.log("rooms DATA:", roomUsers);
   });
-
-
-  socket.on('roomAdmin', (currentRoom) => {
-    console.log("roomAdmin", currentRoom.roomID);
-
-    const room = roomUsers.find(room => room.ID === currentRoom.roomID);
-    if (room) {
-      // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
-      io.emit('roomAdmin', room)
-    } else {
-      console.log("Kamer niet gevonden");
-    }
-
-  })
 
   socket.on("chatmessage", (chat) => {
     const room = chat.room;
@@ -188,10 +180,12 @@ io.on("connection", (socket) => {
     io.emit('stopStream', data);
   })
 
+
   socket.on("disconnect", () => {
-    console.log("user disconnected");
-    socket.emit('notconnected')
-    // io.emit('disconnect');
+    
+    console.log("user disconnected", client , clientRoom);
+
+    io.emit('notconnected', { userName:client , roomID:clientRoom})
   });
 
   socket.on("focus", (hasFocus) => {

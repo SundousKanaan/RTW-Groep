@@ -52,7 +52,7 @@ usernameInput.addEventListener("input", () => {
     startChattingButton.classList.add('startChating')
   } else {
     console.log('Form is invalid');
-    
+
     badUserName.classList.add('badname')
     startChattingButton.classList.remove('startChating')
   }
@@ -133,24 +133,6 @@ socket.on("joinRoom", (data) => {
   console.log("data", Room, roomUser, roomUsers);
 })
 
-// function disconnect() {
-//   const data = {
-//     room: roomID,
-//     user: usernameInput.value,
-//   }
-
-//   socket.emit("disconnect", data);
-// }
-
-// disconnect();
-
-// socket.on('disconnect', (data) =>{
-
-//   console.log("disconnect",data);
-
-// })
-
-
 // Room admin
 
 function roomAdmin(roomUsers) {
@@ -223,6 +205,9 @@ socket.on("chatmessage", (msg) => {
 
   const element = document.createElement("li");
 
+  element.dataset.client = `${msg.username}`;
+
+
   element.innerHTML = `
           <div id="userImg">
              <img src="${msg.avatar}" alt="${msg.avatar} icon">
@@ -256,28 +241,44 @@ function connected() {
   }
 
   console.log(usernameInput.value, 'is online');
-  // return userImg
 }
 
 socket.on('connected', () => {
   connected();
 })
 
-function notconnected() {
-  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
-  console.log("not connected user");
-  for (let i = 0; i < usersImg.length; i++) {
-    if (usersImg[i]) {
-      usersImg[i].classList.remove('connected');
+function nona(test) {
+    if (test.firstElementChild.classList.contains("connected")) {
+      test.firstElementChild.classList.remove('connected');
+      console.log("notconnected", test);
+    }
+}
+
+socket.on('notconnected', (data) => {
+  const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
+
+  for (let i = 0; i < chatMessages.length; i++) {
+    const dataset = chatMessages[i].dataset.client;
+    console.log("dataset 2", dataset);
+
+    if (dataset === data.userName) {
+      let test = chatMessages[i];
+     nona(test);
     }
   }
 
-  console.log(usernameInput.value, 'is online');
-  // return userImg
-}
 
-socket.on('notconnected', () => {
-  notconnected();
+  const liElement = document.createElement("li")
+  liElement.classList.add("note")
+  liElement.innerHTML = `
+  <p>${data.userName} left the chat</p>
+  `
+  const room = messages.getAttribute("data-room");
+
+  if (data.roomID === room) {
+    messages.appendChild(liElement)
+    console.log(liElement);
+  }
 })
 
 socket.on("focus", (hasFocus) => {
@@ -362,6 +363,7 @@ gifSearch.addEventListener('click', (event) => {
             console.log(avatarsrc, [i]);
           }
         }
+
         button.addEventListener('click', (event) => {
           event.preventDefault();
           console.log('Image clicked', Gifs);
@@ -404,8 +406,7 @@ socket.on("gifmessage", (msg) => {
 
   // create li element with gif image
   const li = document.createElement("li");
-  const img = document.createElement("img");
-
+  li.dataset.client = `${msg.userName}`;
 
   li.innerHTML = `
   <div>
@@ -649,17 +650,14 @@ socket.on('chatHistory', (roomHistory) => {
         </div>
         <p data-username="${roomDataHistory[i].username}">${roomDataHistory[i].message}</p>
        `
-       if (roomDataHistory[i].username === usernameInput.value) {
-         liElement.classList.add("message");
-       }
+        if (roomDataHistory[i].username === usernameInput.value) {
+          liElement.classList.add("message");
+        }
 
-       messages.appendChild(liElement);
-       messages.scrollTop = messages.scrollHeight;
+        messages.appendChild(liElement);
+        messages.scrollTop = messages.scrollHeight;
 
       }
-
-
-
     }
   }
 })
