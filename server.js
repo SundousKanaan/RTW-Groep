@@ -28,6 +28,15 @@ app.get("/:room", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("connected");
+  // const userImage = document.querySelector(".room section:last-of-type ul li div img")
+
+  if (socket.connected) {
+    // console.log("online");
+    socket.emit('connected')
+  } else {
+    socket.emit('notconnected')
+    // console.log("offline");
+  }
 
   socket.on('checkRoom', (roomname) => {
     // const openRoomName = openRoom.roomname;

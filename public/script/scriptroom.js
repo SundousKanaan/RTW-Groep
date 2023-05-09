@@ -223,12 +223,11 @@ socket.on("chatmessage", (msg) => {
   // element.dataset.username = `${msg.username}`
 
   element.innerHTML = `
-          <div>
+          <div id="userImg">
              <img src="${msg.avatar}" alt="${msg.avatar} icon">
           </div>
           <p data-username="${msg.username}">${msg.message}</p>
          `
-
 
   // haal de data-room attribuut op van de parent ul om te bepalen in welke chatroom het bericht hoort
   const room = messages.getAttribute("data-room");
@@ -236,13 +235,49 @@ socket.on("chatmessage", (msg) => {
     console.log("element", element);
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
+    connected(messages) 
   }
 
   if (msg.username === usernameInput.value) {
     element.classList.add("message");
   }
 
+  
 });
+
+function connected() {
+  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
+  // console.log("connected",userImg);
+  for (let i = 0; i < usersImg.length; i++) {
+    if (usersImg[i]) {
+      usersImg[i].classList.add('connected');
+    }
+  }
+
+  console.log(usernameInput.value,'is online');
+  // return userImg
+}
+
+socket.on('connected',() => {
+  connected();
+})
+
+function notconnected() {
+  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
+  // console.log("connected",userImg);
+  for (let i = 0; i < usersImg.length; i++) {
+    if (usersImg[i]) {
+      usersImg[i].classList.remove('connected');
+    }
+  }
+
+  console.log(usernameInput.value,'is online');
+  // return userImg
+}
+
+socket.on('notconnected',() => {
+  notconnected();
+})
 
 socket.on("focus", (hasFocus) => {
   if (hasFocus) {

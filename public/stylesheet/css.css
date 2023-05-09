@@ -535,6 +535,7 @@ main.room section:first-of-type form ul li:nth-of-type(10) label {
 
 main.room section:first-of-type form ul li input {
   opacity: 0;
+  /* z-index: 1000; */
 }
 
 main.room section:first-of-type form ul li input:focus-visible~label {
@@ -604,6 +605,7 @@ main.room section:last-of-type>div span div:first-of-type {
   position: relative;
   overflow: hidden;
 }
+
 
 main.room section:last-of-type>div span div:first-of-type img {
   width: 100%;
@@ -746,6 +748,10 @@ main.room section:last-of-type>ul li>div:first-of-type {
 
   border-radius: 50%;
   overflow: hidden;
+}
+
+main.room section:last-of-type>ul li>div:first-of-type.connected{
+  border: 2px solid green;
 }
 
 main.room section:last-of-type>ul li>div:first-of-type img {
