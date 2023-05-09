@@ -300,14 +300,12 @@ main.room section:first-of-type form>input {
   -webkit-appearance: none;
 
   width: 100%;
-  /* height: 100%; */
   height: 4em;
 
   border-radius: 3em;
   padding-left: 1em;
   border: none;
 }
-
 
 main.loggin section:first-of-type form input.goodRoomName {
   background-color: var(--green);
@@ -325,6 +323,21 @@ main.loggin section:first-of-type form input.badRoomName {
   to {
     transform: translateX(1.5em);
   }
+}
+
+main.room section:first-of-type form p{
+  width: 100%;
+  
+  margin-top: .5em;
+  height: fit-content;
+  word-wrap: break-word;
+  text-align: center;
+  
+  display: none;
+}
+
+main.room section:first-of-type form p.badname{
+  display: block;
 }
 
 main.loggin section>button,
@@ -488,6 +501,8 @@ main.room section:first-of-type form ul li label {
   overflow: hidden;
   border-radius: 50%;
 
+  opacity: 50%;
+
   /* background-image: attr(data-avatar); */
   background-position: center;
   background-repeat: no-repeat;
@@ -545,12 +560,24 @@ main.room section:first-of-type form ul li input {
 }
 
 main.room section:first-of-type form ul li input:focus-visible~label {
-  border: solid .3em var(--pink);
+  /* border: solid .6em var(--pink); */
+  opacity: 100%;
+  box-shadow: 0 0 0 .4em var(--pink);
 }
 
 main.room section:first-of-type form ul li input:checked~label {
-  transform: scale(1.3);
   border: solid .3em var(--blue);
+  opacity: 100%;
+  animation: checked .5s infinite linear alternate;
+}
+
+@keyframes checked {
+  form{
+    transform: scale(.6);
+  }
+  to{
+    transform: scale(1.2);
+  }
 }
 
 main.room section:last-of-type {

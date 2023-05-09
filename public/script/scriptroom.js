@@ -1,9 +1,11 @@
+// const { Socket } = require("socket.io");
+
 const messages = document.querySelector(".room section:last-of-type ul");
 const messageInput = document.querySelector("#message-input");
 const sendMessage = document.querySelector("#message-button");
 
 const usernameInput = document.querySelector("#username-input");
-const userDataForm = document.querySelectorAll("main.room section:first-of-type form")
+const badUserName = document.querySelector("main.room section:first-of-type form p")
 const avatarsInput = document.querySelectorAll("main.room section:first-of-type form ul li input");
 
 const loggin = document.querySelector(".room section:first-of-type");
@@ -46,20 +48,21 @@ usernameInput.addEventListener("input", () => {
 
   if (usernameInput.validity.valid) {
     console.log('Form is valid');
-
+    badUserName.classList.remove('badname')
     startChattingButton.classList.add('startChating')
   } else {
     console.log('Form is invalid');
-
+    
+    badUserName.classList.add('badname')
     startChattingButton.classList.remove('startChating')
   }
 })
 
 // the user name auto fill for the user
-const clientName = localStorage.getItem("room-name");
-if (clientName !== null) {
-  usernameInput.value = clientName;
-}
+// const clientName = localStorage.getItem("room-name");
+// if (clientName !== null) {
+//   usernameInput.value = clientName;
+// }
 
 // *******************
 // *******************
@@ -219,8 +222,6 @@ socket.on("chatmessage", (msg) => {
   console.log("chat message: ", msg.message);
 
   const element = document.createElement("li");
-  // element.textContent = `${msg.message} `;
-  // element.dataset.username = `${msg.username}`
 
   element.innerHTML = `
           <div id="userImg">
@@ -235,14 +236,14 @@ socket.on("chatmessage", (msg) => {
     console.log("element", element);
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
-    connected(messages) 
+    connected(messages)
   }
 
   if (msg.username === usernameInput.value) {
     element.classList.add("message");
   }
 
-  
+
 });
 
 function connected() {
@@ -254,11 +255,11 @@ function connected() {
     }
   }
 
-  console.log(usernameInput.value,'is online');
+  console.log(usernameInput.value, 'is online');
   // return userImg
 }
 
-socket.on('connected',() => {
+socket.on('connected', () => {
   connected();
 })
 
@@ -271,11 +272,11 @@ function notconnected() {
     }
   }
 
-  console.log(usernameInput.value,'is online');
+  console.log(usernameInput.value, 'is online');
   // return userImg
 }
 
-socket.on('notconnected',() => {
+socket.on('notconnected', () => {
   notconnected();
 })
 
@@ -353,6 +354,14 @@ gifSearch.addEventListener('click', (event) => {
         li.appendChild(button)
         gifList.appendChild(li)
         // add event listener to button
+        let avatarsrc;
+        for (let i = 0; i < avatarsInput.length; i++) {
+          if (avatarsInput[i].checked) {
+            let labelChecked = avatarsInput[i].nextElementSibling
+            avatarsrc = labelChecked.dataset.avatar
+            console.log(avatarsrc, [i]);
+          }
+        }
         button.addEventListener('click', (event) => {
           event.preventDefault();
           console.log('Image clicked', Gifs);
@@ -362,7 +371,8 @@ gifSearch.addEventListener('click', (event) => {
             gifUrl: Gifs,
             room: roomID,
             userName: usernameInput.value,
-            searchKey: searchKey
+            searchKey: searchKey,
+            avatar: avatarsrc
           };
 
           console.log("ii", message);
@@ -396,13 +406,10 @@ socket.on("gifmessage", (msg) => {
   const li = document.createElement("li");
   const img = document.createElement("img");
 
-  // img.src = msg.gifMessage;
-  // li.dataset.username = `${msg.userName}`
-  // li.classList.add("gif")
 
   li.innerHTML = `
   <div>
-    <img src="./images/girl-avatar-2.svg" alt="">
+    <img src="${msg.avatar}" alt="">
   </div>
   <div data-username="${msg.userName}">
   <img src="${msg.gifMessage}" alt="">
@@ -562,7 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
     streamStop.classList.remove("admin")
     console.log("Player is paused");
     socket.emit('stopStream', roomID);
-    }
+  }
 
   function playYTVideo() {
     streamStart.classList.remove("admin")
@@ -592,4 +599,67 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   })
 
+})
+
+socket.on('chatHistory', (roomHistory) => {
+  const room = messages.getAttribute("data-room");
+  let roomDataHistory;
+
+  for (let t = 0; t < roomHistory.length; t++) {
+    if (roomHistory[t].roomID === room) {
+
+
+      roomDataHistory = roomHistory[t].messages
+      console.log("roomHistory[i]", roomDataHistory);
+    }
+
+    for (let i = 0; i < roomDataHistory.length; i++) {
+      const liElement = document.createElement("li");
+
+
+      if (roomDataHistory[i].gifMessage) {
+        console.log("is is gif");
+        liElement.innerHTML = `
+      <div>
+        <img src="${roomDataHistory[i].avatar}" alt="">
+      </div>
+      <div data-username="${roomDataHistory[i].username}">
+      <img src="${roomDataHistory[i].gifMessage}" alt="">
+      </div>
+      `
+        if (roomDataHistory[i].username === usernameInput.value) {
+          liElement.classList.add("message");
+        }
+
+        if (roomDataHistory[i].username === usernameInput.value) {
+          liElement.classList.add("message");
+        }
+
+        messages.appendChild(liElement);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      if (!roomDataHistory[i].gifMessage) {
+        const liElement = document.createElement("li");
+
+        console.log("is is text");
+        liElement.innerHTML = `
+        <div id="userImg">
+           <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar} icon">
+        </div>
+        <p data-username="${roomDataHistory[i].username}">${roomDataHistory[i].message}</p>
+       `
+       if (roomDataHistory[i].username === usernameInput.value) {
+         liElement.classList.add("message");
+       }
+
+       messages.appendChild(liElement);
+       messages.scrollTop = messages.scrollHeight;
+
+      }
+
+
+
+    }
+  }
 })

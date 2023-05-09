@@ -33,11 +33,12 @@
                 <h2>Choose your username</h2>
                 <form>
                     <input type="text" id="username-input" placeholder="Enter your username" pattern="^(?!\s)(?!.*\s$).{1,19}$"
-                        minlength="4" maxlength="15" required />
+                        minlength="1" maxlength="15" required />
+                        <p></p>
                     <h2>Choose your avatar</h2>
                     <ul>
                         <li>
-                            <input id="option0" type="radio" name="option" value="option0" required>
+                            <input id="option0" type="radio" name="option" value="option0" required checked>
                             <label for="option0" data-avatar="./images/user-avatar.svg">
                             </label>
                         </li>

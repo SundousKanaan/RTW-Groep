@@ -31,9 +31,9 @@ app.get("/:room", (req, res) => {
 io.on("connection", (socket) => {
   console.log("connected");
 
-  io.emit('chat history', roomHistory )
 
   if (socket.connected) {
+    console.log("Lela");
     socket.emit('connected')
   }
 
@@ -88,14 +88,17 @@ io.on("connection", (socket) => {
     }
 
     io.emit('joinRoom', { Room, roomUser, roomUsers });
+
+    socket.emit('chatHistory', roomHistory)
   });
+
 
   socket.on('roomAdmin', (currentRoom) => {
     console.log("roomAdmin", currentRoom.roomID);
 
     const room = roomUsers.find(room => room.ID === currentRoom.roomID);
     if (room) {
-      console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
+      // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
       io.emit('roomAdmin', room)
     } else {
       console.log("Kamer niet gevonden");
@@ -108,32 +111,32 @@ io.on("connection", (socket) => {
     const message = chat.message;
     const username = chat.username;
     const avatar = chat.avatar
-    console.log("chat message |", `[${room}] ${username}: ${message}`);
+    console.log("chat message |", chat);
 
     // send the message to all sockets in the room
     io.emit("chatmessage", { username, message, room, avatar });
 
 
-  // Zoek de index van de kamer in de roomHistory array
-  const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
+    // Zoek de index van de kamer in de roomHistory array
+    const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
 
-  if (roomIndex !== -1) {
-    // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
-    roomHistory[roomIndex].messages.push({ username, message, avatar });
-  } else {
-    // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
-    roomHistory.push({
-      roomID: room,
-      messages: [{ username, message, avatar }],
-    });
-  }
+    if (roomIndex !== -1) {
+      // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
+      roomHistory[roomIndex].messages.push({ username, message, avatar });
+    } else {
+      // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
+      roomHistory.push({
+        roomID: room,
+        messages: [{ username, message, avatar }],
+      });
+    }
 
-  // Optioneel: beperk de grootte van de geschiedenis per kamer
-  const roomMessages = roomHistory.find((item) => item.roomID === room).messages;
-  if (roomMessages.length > historySize) {
-    roomMessages.shift(); // Verwijder het oudste bericht
-  }
-  console.log("roomHistory:",roomHistory);
+    // Optioneel: beperk de grootte van de geschiedenis per kamer
+    const roomMessages = roomHistory.find((item) => item.roomID === room).messages;
+    if (roomMessages.length > historySize) {
+      roomMessages.shift(); // Verwijder het oudste bericht
+    }
+    console.log("roomHistory:", roomHistory);
   });
 
   socket.on('gifmessage', (message) => {
@@ -143,8 +146,30 @@ io.on("connection", (socket) => {
     const gifMessage = message.gifUrl;
     const searchKey = message.searchKey;
     const userName = message.userName;
+    const avatar = message.avatar;
 
-    io.emit("gifmessage", { gifMessage, room, userName, searchKey });
+    io.emit("gifmessage", { gifMessage, room, userName, avatar });
+
+    // Zoek de index van de kamer in de roomHistory array
+    const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
+
+    if (roomIndex !== -1) {
+      // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
+      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar });
+    } else {
+      // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
+      roomHistory.push({
+        roomID: room,
+        messages: [{ userName, gifMessage, avatar }],
+      });
+    }
+
+    // Optioneel: beperk de grootte van de geschiedenis per kamer
+    const roomMessages = roomHistory.find((item) => item.roomID === room).messages;
+    if (roomMessages.length > historySize) {
+      roomMessages.shift(); // Verwijder het oudste bericht
+    }
+    console.log("roomHistory:", roomHistory);
   });
 
   socket.on('streamLink', (data) => {
@@ -155,7 +180,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on('startStream', (roomID) => {
-    console.log("startStream",roomID);
+    console.log("startStream", roomID);
     io.emit('startStream', roomID);
   })
 
