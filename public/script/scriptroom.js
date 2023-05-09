@@ -5,7 +5,7 @@ const messageInput = document.querySelector("#message-input");
 const sendMessage = document.querySelector("#message-button");
 
 const usernameInput = document.querySelector("#username-input");
-const badUserName = document.querySelector("main.room section:first-of-type form p")
+const badNameNote = document.querySelector("main.room section:first-of-type form p")
 const avatarsInput = document.querySelectorAll("main.room section:first-of-type form ul li input");
 
 const loggin = document.querySelector(".room section:first-of-type");
@@ -43,31 +43,61 @@ usernameInput.addEventListener("keydown", (event) => {
   }
 });
 
-usernameInput.addEventListener("input", () => {
+function nameCheck() {
   console.log(usernameInput.value);
 
-  if (usernameInput.validity.valid) {
-    console.log('Form is valid');
-    badUserName.classList.remove('badname')
-    startChattingButton.classList.add('startChating')
-  } else {
-    console.log('Form is invalid');
+  clientName = usernameInput.value
+  socket.emit('nameCheck', { roomID, clientName });
+}
 
-    badUserName.classList.add('badname')
-    startChattingButton.classList.remove('startChating')
+usernameInput.addEventListener("input", nameCheck);
+
+function nameFeedback() {
+  if (usernameInput.value.trim() === '') {
+    console.log('Form is invalid', badNameNote);
+    badNameNote.innerHTML = "Form is invalid"
+    badNameNote.classList.add('badname');
+    startChattingButton.classList.remove('startChating');
+
+  } else {
+    console.log('Form is valid', badNameNote);
+
+    badNameNote.classList.remove('badname');
+    startChattingButton.classList.add('startChating');
+  }
+}
+
+socket.on('nameCheck', (data) => {
+  console.log("nameCheck data", data);
+  // console.log("nameCheck roomData", roomData);
+
+  const room = messages.getAttribute("data-room");
+  console.log("currentRoomUsers", data);
+
+  if (data.currentRoomUsers) {
+    const currentRoomUsers = data.currentRoomUsers;
+
+    if (currentRoomUsers.includes(data.client)) {
+      badNameNote.innerHTML = `The username ${data.client} has been used`;
+      usernameInput.value=''
+      usernameInput.classList.add('badName')
+      startChattingButton.classList.remove('startChating');
+    } else {
+      badNameNote.innerHTML = ""
+      usernameInput.classList.replace('badName','goodName')
+      startChattingButton.classList.add('startChating');
+    }
+  } else {
+    badNameNote.innerHTML = ""
+    usernameInput.classList.add('goodName')
+    startChattingButton.classList.add('startChating');
   }
 })
 
-// the user name auto fill for the user
-// const clientName = localStorage.getItem("room-name");
-// if (clientName !== null) {
-//   usernameInput.value = clientName;
-// }
 
 // *******************
 // *******************
 
-// let roomUsers = [];
 
 const searchParams = new URLSearchParams(window.location.search);
 const roomID = searchParams.get("room");
@@ -99,10 +129,10 @@ startChattingButton.addEventListener("click", () => {
 
   socket.emit("roomAdmin", roomID);
 
-  console.log("1", loadingChat);
+  // console.log("1", loadingChat);
   setTimeout(() => {
     loadingChat.classList.add("noLoading");
-    console.log("2", loadingChat);
+    // console.log("2", loadingChat);
 
   }, 2500);
 
@@ -125,12 +155,12 @@ socket.on("joinRoom", (data) => {
 
   if (Room === room) {
     messages.appendChild(liElement)
-    console.log(liElement);
+    // console.log(liElement);
   }
 
   roomAdmin(roomUsers);
 
-  console.log("data", Room, roomUser, roomUsers);
+  // console.log("data", Room, roomUser, roomUsers);
 })
 
 // Room admin
@@ -146,8 +176,8 @@ function roomAdmin(roomUsers) {
 }
 
 socket.on("roomAdmin", (roomData) => {
-  console.log("roomData", roomData.users);
-  console.log("roomData id", roomData.ID);
+  console.log("room admin:", roomData.users[0]);
+  // console.log("roomData id", roomData.ID);
 
   const room = messages.getAttribute("data-room");
 
@@ -155,7 +185,7 @@ socket.on("roomAdmin", (roomData) => {
     if (roomData.users[0] === usernameInput.value) {
       videoForm.classList.add("admin");
       span.classList.add("admin");
-      streamStart.classList.add("admin");
+      // streamStart.classList.add("admin");
     }
   }
 })
@@ -248,10 +278,10 @@ socket.on('connected', () => {
 })
 
 function nona(test) {
-    if (test.firstElementChild.classList.contains("connected")) {
-      test.firstElementChild.classList.remove('connected');
-      console.log("notconnected", test);
-    }
+  if (test.firstElementChild.classList.contains("connected")) {
+    test.firstElementChild.classList.remove('connected');
+    // console.log("notconnected", test);
+  }
 }
 
 socket.on('notconnected', (data) => {
@@ -259,11 +289,11 @@ socket.on('notconnected', (data) => {
 
   for (let i = 0; i < chatMessages.length; i++) {
     const dataset = chatMessages[i].dataset.client;
-    console.log("dataset 2", dataset);
+    // console.log("dataset 2", dataset);
 
     if (dataset === data.userName) {
       let test = chatMessages[i];
-     nona(test);
+      nona(test);
     }
   }
 
@@ -463,6 +493,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  videoLinkInput.addEventListener('input', () => {
+    // The value is a space or an empty string
+    if (videoLinkInput.value.trim() === '') {
+      console.log("1");
+      videoSendLinkbutton.classList.remove("admin");
+    } else {
+      console.log("2");
+      videoSendLinkbutton.classList.add("admin");
+    }
+  })
+
   function onYouTubeIframeAPIReady(videoUrl) {
     console.log("onYouTubeIframeAPIReady:", videoUrl);
     const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
@@ -497,6 +538,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
     } else {
+      videoLinkInput.value = '';
+      videoLinkInput.placeholder = "Invalid YouTube URL"
       console.log("Ongeldige YouTube-video-URL");
     }
   }

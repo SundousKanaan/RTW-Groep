@@ -125,8 +125,11 @@ header section form button {
 }
 
 header section>button:first-of-type.admin,
-header section form.admin input,
-header section form.admin button {
+header section form.admin input {
+  visibility: visible;
+}
+
+header section form button.admin {
   visibility: visible;
 }
 
@@ -281,9 +284,13 @@ main.room section:first-of-type.hidden {
 }
 
 main.room section:first-of-type h2 {
-  height: 3em;
-  display: flex;
-  align-items: center;
+  font-size: 5vw;
+  height: 2em;
+}
+
+main.room section:first-of-type form h2 {
+  width: 100%;
+  text-align: center;
 }
 
 main.loggin section form,
@@ -307,11 +314,11 @@ main.room section:first-of-type form>input {
   border: none;
 }
 
-main.loggin section:first-of-type form input.goodRoomName {
+main section:first-of-type form input.goodName {
   background-color: var(--green);
 }
 
-main.loggin section:first-of-type form input.badRoomName {
+main section:first-of-type form input.badName {
   animation: badRoomName .1s 3 both linear alternate;
 }
 
@@ -325,20 +332,20 @@ main.loggin section:first-of-type form input.badRoomName {
   }
 }
 
-main.room section:first-of-type form p{
+main.room section:first-of-type form p {
   width: 100%;
-  
+
   margin-top: .5em;
   height: fit-content;
   word-wrap: break-word;
   text-align: center;
-  
-  display: none;
+
+  /* visibility: hidden; */
 }
 
-main.room section:first-of-type form p.badname{
-  display: block;
-}
+/* main.room section:first-of-type form p.badname {
+  visibility: visible;
+} */
 
 main.loggin section>button,
 main.loggin section:first-of-type>a,
@@ -472,9 +479,9 @@ main.room section:first-of-type form ul {
   align-items: center;
   justify-content: center;
 
-  gap: 2em;
+  gap: .5em;
 
-  margin-top: 1em;
+  /* margin-top: 1em; */
 
   /* background-color: rgba(255, 0, 0, 0.267); */
 
@@ -572,10 +579,11 @@ main.room section:first-of-type form ul li input:checked~label {
 }
 
 @keyframes checked {
-  form{
+  form {
     transform: scale(.6);
   }
-  to{
+
+  to {
     transform: scale(1.2);
   }
 }
@@ -783,7 +791,7 @@ main.room section:last-of-type>ul li>div:first-of-type {
   overflow: hidden;
 }
 
-main.room section:last-of-type>ul li>div:first-of-type.connected{
+main.room section:last-of-type>ul li>div:first-of-type.connected {
   border: 2px solid green;
 }
 

@@ -98,6 +98,23 @@ io.on("connection", (socket) => {
     console.log("rooms DATA:", roomUsers);
   });
 
+  socket.on('nameCheck', (data) => {
+    console.log("nameCheck:", data);
+    const client = data.clientName
+    const roomId = data.roomID;
+
+    const roomData = roomUsers.find(room => room.ID === roomId);
+    if (roomData) {
+      const currentRoomUsers = roomData.users
+      // console.log("roomData.users",room_users);
+    //   console.log("roomData",roomData);
+    socket.emit('nameCheck', { client, roomId,currentRoomUsers});
+    } else {
+      socket.emit('nameCheck', { client, roomId});
+      console.log('ID niet gevonden in de array');
+    }
+  })
+
   socket.on("chatmessage", (chat) => {
     const room = chat.room;
     const message = chat.message;

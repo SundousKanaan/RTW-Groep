@@ -7,10 +7,6 @@ const startRoomButton = document.querySelector('main.loggin section a');
 const checkRoomButton = document.querySelector('main.loggin section button');
 const pNote = document.querySelector("main.loggin section > p")
 
-
-// let openRoom = [];
-// console.log(openRoom);
-
 roomNameInput.addEventListener('keydown', (event) => {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -22,8 +18,8 @@ roomNameInput.addEventListener("input", () => {
   startRoomButton.classList.remove("startRoom")
   checkRoomButton.classList.remove("startRoom")
   pNote.classList.remove("check")
-  roomNameInput.classList.remove("badRoomName")
-  roomNameInput.classList.remove("goodRoomName")
+  roomNameInput.classList.remove("badName")
+  roomNameInput.classList.remove("goodName")
 })
 
 checkRoomButton.addEventListener('click', () => {
