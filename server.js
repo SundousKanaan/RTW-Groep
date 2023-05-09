@@ -19,6 +19,8 @@ app.get("/", async (req, res) => {
 });
 
 const roomUsers = [];
+const historySize = 50;
+let roomHistory = [];
 
 // room path
 app.get("/:room", (req, res) => {
@@ -28,7 +30,8 @@ app.get("/:room", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("connected");
-  // const userImage = document.querySelector(".room section:last-of-type ul li div img")
+
+  io.emit('chat history', roomHistory )
 
   if (socket.connected) {
     // console.log("online");
@@ -114,6 +117,28 @@ io.on("connection", (socket) => {
 
     // send the message to all sockets in the room
     io.emit("chatmessage", { username, message, room, avatar });
+
+
+  // Zoek de index van de kamer in de roomHistory array
+  const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
+
+  if (roomIndex !== -1) {
+    // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
+    roomHistory[roomIndex].messages.push({ username, message, avatar });
+  } else {
+    // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
+    roomHistory.push({
+      roomID: room,
+      messages: [{ username, message, avatar }],
+    });
+  }
+
+  // Optioneel: beperk de grootte van de geschiedenis per kamer
+  const roomMessages = roomHistory.find((item) => item.roomID === room).messages;
+  if (roomMessages.length > historySize) {
+    roomMessages.shift(); // Verwijder het oudste bericht
+  }
+  console.log("roomHistory:",roomHistory);
   });
 
   socket.on('gifmessage', (message) => {
