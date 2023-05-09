@@ -160,7 +160,7 @@ header section>button:last-of-type:active::before {
 
 header div {
   width: 100%;
-  height: 30%;
+  height: 100%;
 
   background-color: var(--bg);
   /* display: flex;
@@ -172,10 +172,16 @@ header div {
   position: relative;
 }
 
-header div iframe {
+header div #videoFrame {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
+  /* aspect-ratio: 16/9; */
   position: absolute;
+
+  background-image: url(https://gifdb.com/images/high/cute-anime-welcome-back-master-fxo0j278n9oic0un.webp);
+  background-position: bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 
@@ -224,9 +230,9 @@ header div span.admin {
 
 
 @media (min-width: 500px) {
-  header div {
+  /* header div {
     height: 20em;
-  }
+  } */
 
   header div iframe {
     width: auto;
@@ -674,7 +680,6 @@ main.room section:last-of-type>ul::-webkit-scrollbar {
 
 main.room section:last-of-type>ul li {
   width: fit-content;
-  max-width: 60%;
   height: fit-content;
 
   margin-top: 1.5em;
@@ -695,11 +700,12 @@ main.room section:last-of-type>ul li.note {
 main.room section:last-of-type>ul li.note p {
   background-color: transparent;
   font-size: .8em;
+  max-width: fit-content;
 }
 
 main.room section:last-of-type>ul li p {
   width: fit-content;
-  max-width: 100%;
+  max-width: 60%;
   height: fit-content;
 
   word-wrap: break-word;
@@ -776,8 +782,8 @@ main.room section:last-of-type form {
   width: 95%;
   height: 3em;
 
-  position: absolute;
-  bottom: 2em;
+  position: fixed;
+  bottom: 1em;
 
   display: flex;
   justify-content: space-around;
@@ -786,7 +792,7 @@ main.room section:last-of-type form {
 main.room section:last-of-type form:last-of-type {
   width: 100vw;
   height: 7em;
-  bottom: 4.2em;
+  bottom: 5em;
 
   display: flex;
   flex-direction: column;
@@ -801,7 +807,8 @@ main.room section:last-of-type form:last-of-type.search {
 }
 
 main.room section:last-of-type.focus form:first-of-type::after {
-  content: "writing...";
+  content: "Writting";
+  /* attr(data-username) */
   padding: 0.2em;
   position: absolute;
   color: rgb(56, 56, 56);
@@ -856,8 +863,8 @@ main.room section:last-of-type>button {
   border-radius: 2em;
 
   position: fixed;
-  right: 5em;
-  bottom: 1em;
+  right: 4.5em;
+  bottom: 1.5em;
 
   cursor: pointer;
 }

@@ -247,7 +247,7 @@ socket.on("chatmessage", (msg) => {
 
 function connected() {
   const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
-  // console.log("connected",userImg);
+  console.log("connected user");
   for (let i = 0; i < usersImg.length; i++) {
     if (usersImg[i]) {
       usersImg[i].classList.add('connected');
@@ -264,7 +264,7 @@ socket.on('connected',() => {
 
 function notconnected() {
   const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
-  // console.log("connected",userImg);
+  console.log("not connected user");
   for (let i = 0; i < usersImg.length; i++) {
     if (usersImg[i]) {
       usersImg[i].classList.remove('connected');

@@ -34,15 +34,10 @@ io.on("connection", (socket) => {
   io.emit('chat history', roomHistory )
 
   if (socket.connected) {
-    // console.log("online");
     socket.emit('connected')
-  } else {
-    socket.emit('notconnected')
-    // console.log("offline");
   }
 
   socket.on('checkRoom', (roomname) => {
-    // const openRoomName = openRoom.roomname;
     console.log("openRoomName", roomname);
 
     let roomIndex = roomUsers.findIndex(room => room.ID === roomname);
@@ -170,6 +165,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
+    socket.emit('notconnected')
     // io.emit('disconnect');
   });
 
