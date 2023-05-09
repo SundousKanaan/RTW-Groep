@@ -592,6 +592,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const room = messages.getAttribute("data-room");
     if (data.roomID === room) {
       onYouTubeIframeAPIReady(data.link)
+      const liElement = document.createElement("li")
+      liElement.classList.add("note")
+      liElement.innerHTML = `
+      <p> <a href="${data.link}" target ="blank">Current video</a></p>
+      `
+      messages.appendChild(liElement)
       console.log("Hi yt");
     };
   })
@@ -637,13 +643,18 @@ document.addEventListener("DOMContentLoaded", function () {
   socket.on('stopStream', (roomID) => {
     const room = messages.getAttribute("data-room");
     if (roomID === room) {
-      player.pauseVideo();
+      player.stopVideo();
 
-      console.log("pause video");
+      console.log("stop video");
     };
   })
 
 })
+
+
+
+
+
 
 socket.on('chatHistory', (roomHistory) => {
   const room = messages.getAttribute("data-room");
