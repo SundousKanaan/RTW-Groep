@@ -1,0 +1,649 @@
+/* Chat page */
+
+main.room > p {
+    z-index: 1;
+    width: 9em;
+    height: 1.5em;
+    color: var(--thema-color);
+    border-radius: 5em;
+    position: absolute;
+    top: 1em;
+    left: calc(50% - 9em/2);
+    background-color: var(--white);
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: .5em;
+    opacity: 30%;
+    visibility: hidden;
+}
+
+main.room > p span {
+    color: var(--blue);
+}
+
+main.room > p.focus {
+    visibility: visible;
+    animation: writingEffect .5s infinite linear alternate;
+}
+
+@keyframes writingEffect {
+    0% {
+        opacity: 30%;
+    }
+
+    50%,
+    100% {
+        opacity: 100%;
+    }
+}
+
+
+main.room section:first-of-type form ul {
+    width: 100%;
+    height: fit-content;
+
+    list-style: none;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    gap: .7em;
+}
+
+main.room section:first-of-type form ul li {
+    --size: 4em;
+    width: var(--size);
+    height: var(--size);
+
+    display: grid;
+    place-items: center;
+
+    background-color: rgb(2, 2, 2);
+    border-radius: 50%;
+
+    position: relative;
+}
+
+main.room section:first-of-type form ul li:hover label {
+    opacity: 100%;
+    background-size: 150%;
+    cursor: pointer;
+}
+
+
+/* avatar foto's */
+
+main.room section:first-of-type form ul li label {
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+    border-radius: 50%;
+
+    opacity: 50%;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 115%;
+
+    position: absolute;
+    transition: .5s;
+}
+
+main.room section:first-of-type form ul li:first-of-type label {
+    background-image: url(../images/user-avatar.svg);
+    /* background-image: attr(data-avatar); */
+}
+
+main.room section:first-of-type form ul li:nth-of-type(2) label {
+    background-image: url(../images/girl-avatar-1.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(3) label {
+    background-image: url(../images/boy-avatar-1.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(4) label {
+    background-image: url(../images/girl-avatar-2.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(5) label {
+    background-image: url(../images/boy-avatar-2.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(6) label {
+    background-image: url(../images/batman-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(7) label {
+    background-image: url(../images/magician-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(8) label {
+    background-image: url(../images/cacti-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(9) label {
+    background-image: url(../images/lazybones-avatar.svg);
+}
+
+main.room section:first-of-type form ul li:nth-of-type(10) label {
+    background-image: url(../images/emoji-avatar.svg);
+}
+
+
+
+main.room section:first-of-type form ul li input {
+    opacity: 0;
+}
+
+main.room section:first-of-type form ul li input:focus-visible~label {
+    /* border: solid .6em var(--pink); */
+    opacity: 100%;
+    background-size: 150%;
+    box-shadow: 0 0 0 .4em var(--thema-color);
+}
+
+main.room section:first-of-type form ul li input:checked~label {
+    border: solid .3em var(--blue);
+    opacity: 100%;
+    animation: checked .4s infinite linear alternate;
+}
+
+@keyframes checked {
+    form {
+        transform: scale(.6);
+    }
+
+    to {
+        transform: scale(1.1);
+    }
+}
+
+main.room section:last-of-type {
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.500);
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* loading screen */
+main.room section:last-of-type > div {
+    width: 100vw;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100000;
+    background-color: var(--bg-login);
+
+    display: grid;
+    place-items: center;
+}
+
+main.room section:last-of-type > div.noLoading {
+    display: none;
+}
+
+main.room section:last-of-type > div span {
+    display: block;
+    width: 80%;
+    aspect-ratio: 1/0.8;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+main.room section:last-of-type > div span div:first-of-type {
+    width: 40%;
+    aspect-ratio: 1/1;
+
+    background-color: #95BDFF;
+
+    display: grid;
+    place-items: center;
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+main.room section:last-of-type > div span div:first-of-type img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+main.room section:last-of-type > div span div:nth-of-type(2) {
+    width: 90%;
+    height: 2em;
+
+    border-radius: 2em;
+
+    background-color: #95BDFF;
+
+    /* --size: 0; */
+    background-image: linear-gradient(to right, var(--pink) var(--size), var(--light-blue) 0);
+    background-size: 100%;
+
+    animation: loadingChat 2.4s 1 both linear;
+}
+
+@keyframes loadingChat {
+    0% {
+        --size: 0;
+    }
+
+    25% {
+        --size: 25%;
+    }
+
+    50% {
+        --size: 50%;
+    }
+
+    75% {
+        --size: 75%;
+    }
+
+    100% {
+        --size: 100%;
+    }
+}
+
+
+
+
+
+
+
+/* messages */
+
+main.room section:last-of-type > ul {
+    width: 95%;
+    height: calc(100vh - (65vw + 4.5em));
+    padding: 0 1em 1em 1em;
+    list-style: none;
+    position: absolute;
+    top: 0;
+
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    margin-bottom: 0.5em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+main.room section:last-of-type > ul::-webkit-scrollbar {
+    border-radius: 5em;
+    width: 0.5em;
+
+    display: none;
+}
+
+main.room section:last-of-type > ul li {
+    width: fit-content;
+    height: fit-content;
+
+    margin-top: 1.5em;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 1em;
+}
+
+main.room section:last-of-type > ul li.note {
+    align-self: center;
+}
+
+main.room section:last-of-type > ul li.note p {
+    background-color: transparent;
+    font-size: .8em;
+    max-width: fit-content;
+    color: var(--text-color);
+}
+
+main.room section:last-of-type > ul li.note p span {
+    color: var(--thema-color);
+}
+
+main.room section:last-of-type > ul li.note p a {
+    text-decoration: none;
+    background-color: var(--white);
+    padding: 1em;
+    border-radius: 2em;
+    box-shadow: -0.2em 0.3em 0 0.1em var(--thema-color);
+    color: var(--bg);
+}
+
+main.room section:last-of-type > ul li.note p a:hover,
+main.room section:last-of-type > ul li.note p a:focus-visible {
+    outline-color: transparent;
+    box-shadow: inset 0 0 0 .2em var(--thema-color);
+    background-color: var(--light-blue);
+}
+
+main.room section:last-of-type > ul li.note p a:active {
+    background-color: var(--pink);
+    box-shadow: inset 0 0 0 .2em var(--thema-color);
+}
+
+main.room section:last-of-type > ul li p {
+    width: fit-content;
+    max-width: 60%;
+    height: fit-content;
+
+    word-wrap: break-word;
+
+    background-color: var(--sand);
+    border-radius: 5em;
+    padding: 0.5em 1em;
+
+    position: relative;
+}
+
+main.room section:last-of-type > ul li div:nth-of-type(2)::before,
+main.room section:last-of-type > ul li p::before {
+    content: attr(data-username);
+    width: fit-content;
+    height: fit-content;
+    font-size: .7em;
+    height: 1em;
+    position: absolute;
+    top: -1.5em;
+    left: 0;
+
+    color: var(--text-color);
+}
+
+main.room section:last-of-type > ul li.message {
+    flex-direction: row-reverse;
+    align-self: end;
+}
+
+main.room section:last-of-type > ul li.message p {
+    background-color: var(--pink);
+}
+
+main.room section:last-of-type > ul li.message div:nth-of-type(2)::before,
+main.room section:last-of-type > ul li.message p::before {
+    right: 0;
+    left: auto;
+}
+
+main.room section:last-of-type > ul li::first-letter {
+    text-transform: uppercase;
+}
+
+main.room section:last-of-type > ul li > div:first-of-type {
+    width: 3em;
+    height: 3em;
+
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+
+/* online user */
+main.room section:last-of-type > ul li > div:first-of-type.connected {
+    box-shadow: 0 0 0 0.3em var(--online-user)
+}
+
+main.room section:last-of-type > ul li > div:first-of-type img {
+    width: 100%;
+    height: 100%;
+}
+
+main.room section:last-of-type > ul li div:nth-of-type(2) {
+    width: fit-content;
+    background-color: transparent;
+    /* padding: 0.5em; */
+    /* border-radius: 1em; */
+
+    position: relative;
+
+    display: grid;
+    place-items: center;
+}
+
+main.room section:last-of-type > ul li div:nth-of-type(2) img {
+    width: 40vw;
+    border-radius: .5em;
+    background-color: rgba(0, 0, 0, 0.500);
+}
+
+
+
+
+
+
+/* message input form */
+
+main.room section:last-of-type > span {
+    width: 100%;
+    height: fit-content;
+
+    position: fixed;
+    /* background-color: pink; */
+    bottom: 1em;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: .5em;
+    padding: 0 .5em;
+
+}
+
+main.room section:last-of-type form {
+    width: 100%;
+    height: 3em;
+
+    display: flex;
+    justify-content: space-between;
+    gap: .5em;
+}
+
+main.room section:last-of-type > form:last-of-type {
+    width: 100vw;
+    height: fit-content;
+    bottom: 5em;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-x: hidden;
+
+    position: fixed;
+    bottom: 5em;
+
+    visibility: hidden;
+}
+
+main.room section:last-of-type > form:last-of-type.search {
+    visibility: visible;
+}
+
+main.room section:last-of-type > form:last-of-type label input,
+main.room section:last-of-type form:first-of-type input {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 100%;
+    height: 100%;
+    border-radius: 3em;
+    padding-left: 1em;
+    border: none;
+}
+
+main.room section:last-of-type form:first-of-type input {
+    width: calc(100% - 3.5em);
+}
+
+main.room section:last-of-type > form:last-of-type label input {
+    width: 100%;
+    height: 3em;
+    align-self: center;
+}
+
+main section form button:focus,
+main section form input:focus {
+    outline-color: var(--rosy);
+    border: 0.5px solid var(--rosy);
+}
+
+main.room section:last-of-type span > button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 3.5em;
+    aspect-ratio: 1/1;
+
+    border: none;
+    border-radius: 2em;
+
+    cursor: pointer;
+
+    order: -1;
+}
+
+main.room section:last-of-type form:first-of-type > button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 3.5em;
+    height: 3.5em;
+
+    border: none;
+    border-radius: 50%;
+
+    background-color: var(--white);
+    background-image: url(https://icons.veryicon.com/png/o/miscellaneous/utility/send-26.png);
+    background-position: 70% 50%;
+    background-repeat: no-repeat;
+    background-size: 70%;
+}
+
+main.room section:last-of-type > span button {
+    transition: .5s;
+    cursor: pointer;
+}
+
+main.room section:last-of-type > span button:active {
+    transform: scale(.7);
+}
+
+main.room section:last-of-type form:last-of-type label button:focus-visible,
+main.room section:last-of-type form:last-of-type label button:hover,
+main.room section:last-of-type > span button:focus-visible,
+main.room section:last-of-type > span button:hover {
+    outline-color: transparent;
+    box-shadow: inset 0 0 0 .2em var(--thema-color);
+    background-color: var(--light-blue);
+}
+
+main.room section:last-of-type form:last-of-type ul {
+    height: 5em;
+    list-style: none;
+    padding: .5em 0 0 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    visibility: hidden;
+}
+
+main.room section:last-of-type form:last-of-type ul.search {
+    visibility: visible;
+}
+
+main.room section:last-of-type form:last-of-type ul::-webkit-scrollbar {
+    display: none;
+}
+
+main.room section:last-of-type form:last-of-type ul li {
+    width: fit-content;
+    height: 100%;
+    margin-left: .5em;
+}
+
+main.room section:last-of-type form:last-of-type ul li button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    height: 5em;
+    width: fit-content;
+
+    border: none;
+    border-radius: .5em;
+
+    overflow: hidden;
+
+    cursor: pointer;
+}
+
+main.room section:last-of-type form:last-of-type ul li button:focus-visible,
+main.room section:last-of-type form:last-of-type ul li button:hover {
+    outline-color: transparent;
+    box-shadow: inset 0 0 0 0.3em var(--thema-color);
+}
+
+main.room section:last-of-type form:last-of-type ul li button:focus-visible img,
+main.room section:last-of-type form:last-of-type ul li button:hover img {
+    transform: scale(1.3);
+}
+
+main.room section:last-of-type form:last-of-type ul li button img {
+    display: block;
+    width: auto;
+    height: 100%;
+    transition: .5s
+}
+
+main.room section:last-of-type form:last-of-type label {
+    padding: 0 .5em;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+}
+
+main.room section:last-of-type form:last-of-type label button {
+    height: 90%;
+    aspect-ratio: 1/1;
+
+    border: none;
+    border-radius: 2em;
+
+    position: absolute;
+    right: 1em;
+
+    background-color: transparent;
+    background-image: url(https://cdn-icons-png.flaticon.com/512/45/45301.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 68%;
+
+    cursor: pointer;
+}

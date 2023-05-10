@@ -1,0 +1,200 @@
+
+/* index main */
+
+main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  
+    background-image: url(https://wallpapers.com/images/featured/8k436w42fxqrt0xb.jpg);
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+  }
+  
+  main section h2 {
+    color: var(--text-color)
+  }
+  
+  main.loggin section,
+  main.room section:first-of-type {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-login);
+  
+    position: fixed;
+    top: 0;
+    z-index: 10000000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  main.room section:last-of-type.hidden,
+  main.room section:first-of-type.hidden {
+    display: none;
+  }
+  
+  main.room section:first-of-type h2 {
+    font-size: 5vw;
+    height: 2em;
+  }
+  
+  main.room section:first-of-type form h2 {
+    width: 100%;
+    text-align: center;
+  }
+  
+  main.loggin section form,
+  main.room section:first-of-type form {
+    width: 80%;
+    height: fit-content;
+    height: fit-content;
+    margin: 1em 0;
+  }
+  
+  main.loggin section:first-of-type form input,
+  main.room section:first-of-type form > input {
+    appearance: none;
+    -webkit-appearance: none;
+  
+    width: 100%;
+    height: 4em;
+  
+    border-radius: 3em;
+    padding-left: 1em;
+    border: none;
+  }
+  
+  main input[type=text]:focus-visible,
+  main section > button:focus-visible {
+    outline-color: transparent;
+    box-shadow: inset 0 0 0 0.25em var(--thema-color);
+  }
+  
+  main section:first-of-type form input.goodName {
+    background-color: var(--good-effect);
+  }
+  
+  main section:first-of-type form input.badName {
+    animation: badRoomName .1s 3 both linear alternate;
+  }
+  
+  @keyframes badRoomName {
+    form {
+      transform: translateX(-1.5em);
+    }
+  
+    to {
+      transform: translateX(1.5em);
+    }
+  }
+  
+  main.room section:first-of-type form p {
+    width: 100%;
+  
+    color: var(--error-color);
+    margin-top: .5em;
+    height: 1.5em;
+    word-wrap: break-word;
+    text-align: center;
+  }
+  
+  main.loggin section > button,
+  main.loggin section:first-of-type > a,
+  main.room section:first-of-type > button {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 40%;
+    height: 10%;
+  
+    border: none;
+    border-radius: 5em;
+  
+    background-color: var(--blue);
+    cursor: pointer;
+    transition: 0.5s;
+  
+    text-decoration: none;
+    color: var(--bg);
+    place-content: center;
+  }
+  
+  main.loggin section > button,
+  main.loggin section:first-of-type > a {
+    display: none;
+  }
+  
+  main.room section:first-of-type > button {
+    display: grid;
+    visibility: hidden;
+  }
+  
+  main.loggin section > button {
+    display: grid;
+  }
+  
+  main.loggin section > button.startRoom {
+    display: none;
+  }
+  
+  main section > button.checking {
+    --left: 0%;
+    background-image: linear-gradient(to right, var(--pink) var(--left), var(--blue) 0);
+    animation: gradient 2s linear infinite;
+    color: transparent;
+  }
+  
+  @keyframes gradient {
+    0% {
+      --left: 0%;
+    }
+  
+    25% {
+      --left: 25%;
+    }
+  
+    50% {
+      --left: 50%;
+    }
+  
+    75% {
+      --left: 75%;
+    }
+  
+    100% {
+      --left: 100%;
+    }
+  }
+  
+  main.loggin section:first-of-type > a.startRoom {
+    display: grid;
+  }
+  
+  main.room section:first-of-type > button.startChating {
+    visibility: visible;
+  }
+  
+  main.loggin section:first-of-type > a:hover,
+  main.room section:first-of-type > button:hover {
+    background-color: var(--sand);
+  }
+  
+  main.loggin section:first-of-type > a:active,
+  main.room section:first-of-type > button:active {
+    transform: scale(0.8);
+  }
+  
+  
+  main.loggin section > p {
+    padding: 0 .5em;
+    margin-bottom: 1em;
+    text-align: center;
+    color: var(--error-color);
+    display: none;
+  }
+  
+  main.loggin section > p.check {
+    display: block;
+  }

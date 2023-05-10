@@ -58,6 +58,8 @@ const socket = io();
 
 // resize ==========================================================================
 
+// Bron: https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+
 // We listen to the resize event
 window.addEventListener('resize', () => {
   // We execute the same script as before
