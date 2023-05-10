@@ -49,12 +49,12 @@ socket.on('checkRoom', (data) => {
       setTimeout(() => {
         checkRoomButton.classList.remove("checking")
         
-        roomNameInput.classList.add("goodRoomName")
-        roomNameInput.classList.remove("badRoomName")
+        roomNameInput.classList.add("goodName")
+        roomNameInput.classList.remove("badName")
         startRoomButton.classList.add("startRoom")
         checkRoomButton.classList.add("startRoom")
         
-      }, 3000);
+      }, 1000);
 
 
 
@@ -72,8 +72,8 @@ socket.on('checkRoom2', (data) => {
   setTimeout(() => {
     checkRoomButton.classList.remove("checking")
     
-  roomNameInput.classList.add("badRoomName")
-  roomNameInput.classList.remove("goodRoomName")
+  roomNameInput.classList.add("badName")
+  roomNameInput.classList.remove("goodName")
 
   roomNameInput.value=""
 

@@ -15,13 +15,21 @@ html {
 
 :root {
   --bg: #292929;
+  --text-color: #f2f2f2;
+  --thema-color: #d80459;
+  --error-color: #D27685;
+  --good-effect: #9df38a;
+  --secondary-color: #66347F;
+  --online-user: #9df38a;
+  --blue: #6ca2f8;
+  --sand: #fff5d4;
+  --pink: #f184bd;
+
+  --bg-login: #292929;
+  --white: #f2f2f2;
   /* --rosy: #ff4f81; */
   --light-blue: #B4E4FF;
-  --green: #DFFFD8;
-  --blue: #95BDFF;
-  --pink: #F7C8E0;
-  --sand: #fff5d4;
-  --white: #f2f2f2;
+
 }
 
 body,
@@ -44,31 +52,33 @@ body {
 
 header {
   width: 100%;
-  height: 30vh;
+  height: 65vw;
   display: flex;
   flex-direction: column-reverse;
 }
 
 header section {
   width: 100%;
-  height: 3.5em;
-  padding: 0.5em 0;
+  height: 4em;
+  padding: 0.5em;
 
   display: flex;
   justify-content: space-around;
   align-items: center;
 
-  background-color: var(--blue);
+  background-color: var(--secondary-color);
 }
 
 header section h1 {
-  width: fit-content;
+  width: 18vw;
   height: 100%;
   font-size: 1em;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  color: var(--text-color);
 }
 
 header section form {
@@ -95,14 +105,16 @@ header section form input {
 header section>button,
 header section form button {
   height: 100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1.5/1;
   border: none;
-  border-radius: 50%;
+  border-radius: 5em;
   cursor: pointer;
 
+  font-size: 1.7em;
   background-color: var(--white);
   position: relative;
 
+  transition: .5s;
   visibility: hidden;
 }
 
@@ -111,16 +123,14 @@ header section>button:last-of-type {
 }
 
 header section button:active {
-  background-color: var(--pink);
+  background-color: var(--thema-color);
+  transform: scale(.8);
   box-shadow: none;
 }
 
 header section form button {
-  background-image: url(https://icons.veryicon.com/png/o/miscellaneous/utility/send-26.png);
-  background-position: 70% 50%;
-  background-repeat: no-repeat;
-  background-size: 70%;
-  transform: rotate(-90deg);
+  height: 100%;
+  aspect-ratio: 1.5/1;
   transition: .5s;
 }
 
@@ -133,33 +143,14 @@ header section form button.admin {
   visibility: visible;
 }
 
+header section button:focus-visible,
+header section form button:focus-visible,
 header section button:hover,
 header section form button:hover {
-  /* background-color: var(--pink); */
-  box-shadow: 0 0 0 .4em var(--pink);
-  background-size: 80%;
+  box-shadow: 0 0 0 .15em var(--thema-color);
+  background-color: var(--light-blue);
 }
 
-header section>button:last-of-type::before {
-  content: "copyed";
-  width: 3em;
-
-  padding: .5em;
-  border-radius: 1em;
-
-  position: absolute;
-  top: -105%;
-  left: calc(50% - 3em /2);
-  z-index: 10000;
-
-  background-color: var(--pink);
-
-  visibility: hidden;
-}
-
-header section>button:last-of-type:active::before {
-  visibility: visible;
-}
 
 header div {
   width: 100%;
@@ -222,7 +213,7 @@ header div span {
   width: 100%;
   height: 100%;
 
-  background-color: rgba(255, 0, 0, 0.274);
+  background-color: transparent;
 
   position: absolute;
 }
@@ -260,14 +251,21 @@ main {
   height: 100%;
   position: relative;
 
-  background-color: var(--light-blue);
+  background-image: url(https://wallpapers.com/images/featured/8k436w42fxqrt0xb.jpg);
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+main section h2 {
+  color: var(--text-color)
 }
 
 main.loggin section,
 main.room section:first-of-type {
   width: 100vw;
   height: 100vh;
-  background-color: var(--white);
+  background-color: var(--bg-login);
 
   position: fixed;
   top: 0;
@@ -314,8 +312,14 @@ main.room section:first-of-type form>input {
   border: none;
 }
 
+main input[type=text]:focus-visible,
+main section>button:focus-visible {
+  outline-color: transparent;
+  box-shadow: inset 0 0 0 0.25em var(--thema-color);
+}
+
 main section:first-of-type form input.goodName {
-  background-color: var(--green);
+  background-color: var(--good-effect);
 }
 
 main section:first-of-type form input.badName {
@@ -335,17 +339,12 @@ main section:first-of-type form input.badName {
 main.room section:first-of-type form p {
   width: 100%;
 
+  color: var(--error-color);
   margin-top: .5em;
-  height: fit-content;
+  height: 1.5em;
   word-wrap: break-word;
   text-align: center;
-
-  /* visibility: hidden; */
 }
-
-/* main.room section:first-of-type form p.badname {
-  visibility: visible;
-} */
 
 main.loggin section>button,
 main.loggin section:first-of-type>a,
@@ -364,28 +363,31 @@ main.room section:first-of-type>button {
 
   text-decoration: none;
   color: var(--bg);
-  /* display: grid; */
   place-content: center;
+}
 
+main.loggin section>button,
+main.loggin section:first-of-type>a {
   display: none;
-  /* visibility: hidden; */
+}
+
+main.room section:first-of-type>button {
+  display: grid;
+  visibility: hidden;
 }
 
 main.loggin section>button {
-  /* visibility: visible; */
   display: grid;
-
-  /* margin-bottom: 1em; */
 }
 
 main.loggin section>button.startRoom {
   display: none;
 }
 
-main.loggin section>button.checking {
+main section>button.checking {
   --left: 0%;
   background-image: linear-gradient(to right, var(--pink) var(--left), var(--blue) 0);
-  animation: gradient 3s linear infinite;
+  animation: gradient 2s linear infinite;
   color: transparent;
 }
 
@@ -413,11 +415,12 @@ main.loggin section>button.checking {
 
 main.loggin section:first-of-type>a.startRoom {
   display: grid;
-
 }
 
 main.room section:first-of-type>button.startChating {
-  display: grid;
+  /* display: grid; */
+  visibility: visible;
+
 }
 
 main.loggin section:first-of-type>a:hover,
@@ -435,6 +438,7 @@ main.loggin section>p {
   padding: 0 .5em;
   margin-bottom: 1em;
   text-align: center;
+  color: var(--error-color);
   display: none;
 }
 
@@ -452,11 +456,14 @@ main.loggin section>p.check {
 
 
 
+
+
+
 /* Chat page */
 
-main.room {
+/* main.room {
   height: 70vh;
-}
+} */
 
 /* 
 main.room section:first-of-type form {
@@ -479,7 +486,7 @@ main.room section:first-of-type form ul {
   align-items: center;
   justify-content: center;
 
-  gap: .5em;
+  gap: .7em;
 
   /* margin-top: 1em; */
 
@@ -495,7 +502,16 @@ main.room section:first-of-type form ul li {
   display: grid;
   place-items: center;
 
+  background-color: rgb(2, 2, 2);
+  border-radius: 50%;
+
   position: relative;
+}
+
+main.room section:first-of-type form ul li:hover label {
+  opacity: 100%;
+  background-size: 150%;
+  cursor: pointer;
 }
 
 
@@ -513,9 +529,10 @@ main.room section:first-of-type form ul li label {
   /* background-image: attr(data-avatar); */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 115%;
 
   position: absolute;
+  transition: .5s;
 }
 
 main.room section:first-of-type form ul li:first-of-type label {
@@ -569,13 +586,14 @@ main.room section:first-of-type form ul li input {
 main.room section:first-of-type form ul li input:focus-visible~label {
   /* border: solid .6em var(--pink); */
   opacity: 100%;
-  box-shadow: 0 0 0 .4em var(--pink);
+  background-size: 150%;
+  box-shadow: 0 0 0 .4em var(--thema-color);
 }
 
 main.room section:first-of-type form ul li input:checked~label {
   border: solid .3em var(--blue);
   opacity: 100%;
-  animation: checked .5s infinite linear alternate;
+  animation: checked .4s infinite linear alternate;
 }
 
 @keyframes checked {
@@ -584,7 +602,7 @@ main.room section:first-of-type form ul li input:checked~label {
   }
 
   to {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 }
 
@@ -593,7 +611,8 @@ main.room section:last-of-type {
   height: 100%;
   padding: 1em 0;
 
-  background-image: linear-gradient(to top, transparent, var(--white));
+  background-color: rgba(0, 0, 0, 0.500);
+  /* background-image: linear-gradient(to top, transparent 40%, var(--white)); */
   /* border-radius: 8% 8% 8% 8% / 8% 8% 8% 8% ; */
 
   position: relative;
@@ -611,7 +630,7 @@ main.room section:last-of-type>div {
   position: fixed;
   top: 0;
   z-index: 100000;
-  background-color: var(--white);
+  background-color: var(--bg-login);
 
   display: grid;
   place-items: center;
@@ -692,10 +711,18 @@ main.room section:last-of-type>div span div:nth-of-type(2) {
   }
 }
 
+
+
+
+
+
+
+/* messages */
+
 main.room section:last-of-type>ul {
   width: 95%;
-  height: 85%;
-
+  height: calc(100vh - (65vw + 6.5em));
+  padding: 0 1em 1em 1em;
   list-style: none;
 
   overflow-y: scroll;
@@ -719,13 +746,11 @@ main.room section:last-of-type>ul li {
 
   margin-top: 1.5em;
 
-  /* position: relative; */
-
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: flex-end;
-  gap: .5em;
+  gap: 1em;
 }
 
 main.room section:last-of-type>ul li.note {
@@ -736,6 +761,32 @@ main.room section:last-of-type>ul li.note p {
   background-color: transparent;
   font-size: .8em;
   max-width: fit-content;
+  color: var(--text-color);
+}
+
+main.room section:last-of-type>ul li.note p span {
+  color: var(--thema-color);
+}
+
+main.room section:last-of-type>ul li.note p a {
+  text-decoration: none;
+  background-color: var(--white);
+  padding: 1em;
+  border-radius: 2em;
+  box-shadow: -0.2em 0.3em 0 0.1em var(--thema-color);
+  color: var(--bg);
+}
+
+main.room section:last-of-type>ul li.note p a:hover,
+main.room section:last-of-type>ul li.note p a:focus-visible {
+  outline-color: transparent;
+  box-shadow: inset 0 0 0 .2em var(--thema-color);
+  background-color: var(--light-blue);
+}
+
+main.room section:last-of-type>ul li.note p a:active {
+  background-color: var(--pink);
+  box-shadow: inset 0 0 0 .2em var(--thema-color);
 }
 
 main.room section:last-of-type>ul li p {
@@ -746,7 +797,7 @@ main.room section:last-of-type>ul li p {
   word-wrap: break-word;
 
   background-color: var(--sand);
-  border-radius: 1em;
+  border-radius: 5em;
   padding: 0.5em 1em;
 
   position: relative;
@@ -762,6 +813,8 @@ main.room section:last-of-type>ul li p::before {
   position: absolute;
   top: -1.5em;
   left: 0;
+
+  color: var(--text-color);
 }
 
 main.room section:last-of-type>ul li.message {
@@ -770,7 +823,7 @@ main.room section:last-of-type>ul li.message {
 }
 
 main.room section:last-of-type>ul li.message p {
-  background-color: var(--green);
+  background-color: var(--pink);
 }
 
 main.room section:last-of-type>ul li.message div:nth-of-type(2)::before,
@@ -791,8 +844,10 @@ main.room section:last-of-type>ul li>div:first-of-type {
   overflow: hidden;
 }
 
+
+/* online user */
 main.room section:last-of-type>ul li>div:first-of-type.connected {
-  border: 2px solid green;
+  box-shadow: 0 0 0 0.3em var(--online-user)
 }
 
 main.room section:last-of-type>ul li>div:first-of-type img {
@@ -802,31 +857,57 @@ main.room section:last-of-type>ul li>div:first-of-type img {
 
 main.room section:last-of-type>ul li div:nth-of-type(2) {
   width: fit-content;
-  background-color: var(--sand);
-  padding: 0.5em;
-  border-radius: 1em;
+  background-color: transparent;
+  /* padding: 0.5em; */
+  /* border-radius: 1em; */
 
   position: relative;
+
+  display: grid;
+  place-items: center;
 }
 
 main.room section:last-of-type>ul li div:nth-of-type(2) img {
   width: 40vw;
+  border-radius: .5em;
 }
 
-main.room section:last-of-type form {
-  width: 95%;
-  height: 3em;
+
+
+
+
+
+/* message input form */
+
+main.room section:last-of-type>span {
+  width: 100%;
+  height: fit-content;
 
   position: fixed;
+  /* background-color: pink; */
   bottom: 1em;
 
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: .5em;
+  padding: 0 .5em;
+
 }
 
-main.room section:last-of-type form:last-of-type {
+main.room section:last-of-type form {
+  width: 100%;
+  height: 3em;
+
+  display: flex;
+  justify-content: space-between;
+  gap: .5em;
+}
+
+main.room section:last-of-type>form:last-of-type {
   width: 100vw;
-  height: 7em;
+  height: fit-content;
   bottom: 5em;
 
   display: flex;
@@ -834,10 +915,13 @@ main.room section:last-of-type form:last-of-type {
 
   overflow-x: hidden;
 
+  position: fixed;
+  bottom: 5em;
+
   visibility: hidden;
 }
 
-main.room section:last-of-type form:last-of-type.search {
+main.room section:last-of-type>form:last-of-type.search {
   visibility: visible;
 }
 
@@ -863,7 +947,7 @@ main.room section:last-of-type.focus form:first-of-type::after {
   }
 }
 
-main.room section:last-of-type form:last-of-type label input,
+main.room section:last-of-type>form:last-of-type label input,
 main.room section:last-of-type form:first-of-type input {
   appearance: none;
   -webkit-appearance: none;
@@ -875,9 +959,13 @@ main.room section:last-of-type form:first-of-type input {
   border: none;
 }
 
-main.room section:last-of-type form:last-of-type label input {
+main.room section:last-of-type form:first-of-type input {
+  width: calc(100% - 3.5em);
+}
+
+main.room section:last-of-type>form:last-of-type label input {
   width: 100%;
-  height: 2.5em;
+  height: 3em;
   align-self: center;
 }
 
@@ -887,21 +975,19 @@ main section form input:focus {
   border: 0.5px solid var(--rosy);
 }
 
-main.room section:last-of-type>button {
+main.room section:last-of-type span>button {
   appearance: none;
   -webkit-appearance: none;
 
-  width: 3em;
+  width: 3.5em;
   aspect-ratio: 1/1;
 
   border: none;
   border-radius: 2em;
 
-  position: fixed;
-  right: 4.5em;
-  bottom: 1.5em;
-
   cursor: pointer;
+
+  order: -1;
 }
 
 main.room section:last-of-type form:first-of-type>button {
@@ -921,8 +1007,22 @@ main.room section:last-of-type form:first-of-type>button {
   background-size: 70%;
 }
 
-main.room section:last-of-type form:first-of-type>button:active {
-  background-color: var(--rosy);
+main.room section:last-of-type>span button {
+  transition: .5s;
+  cursor: pointer;
+}
+
+main.room section:last-of-type>span button:active {
+  transform: scale(.7);
+}
+
+main.room section:last-of-type form:last-of-type label button:focus-visible,
+main.room section:last-of-type form:last-of-type label button:hover,
+main.room section:last-of-type>span button:focus-visible,
+main.room section:last-of-type>span button:hover {
+  outline-color: transparent;
+  box-shadow: inset 0 0 0 .2em var(--thema-color);
+  background-color: var(--light-blue);
 }
 
 main.room section:last-of-type form:last-of-type ul {
@@ -968,6 +1068,13 @@ main.room section:last-of-type form:last-of-type ul li button {
   cursor: pointer;
 }
 
+main.room section:last-of-type form:last-of-type ul li button:focus-visible,
+main.room section:last-of-type form:last-of-type ul li button:hover{
+  outline-color: transparent;
+  box-shadow: inset 0 0 0 0.3em var(--thema-color);
+}
+
+main.room section:last-of-type form:last-of-type ul li button:focus-visible img,
 main.room section:last-of-type form:last-of-type ul li button:hover img {
   transform: scale(1.3);
 }
@@ -988,20 +1095,20 @@ main.room section:last-of-type form:last-of-type label {
 }
 
 main.room section:last-of-type form:last-of-type label button {
-  width: 2em;
+  height: 90%;
   aspect-ratio: 1/1;
 
   border: none;
   border-radius: 2em;
 
   position: absolute;
-  right: 2em;
+  right: 1em;
 
   background-color: transparent;
   background-image: url(https://cdn-icons-png.flaticon.com/512/45/45301.png);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 90%;
+  background-size: 68%;
 
   cursor: pointer;
 }

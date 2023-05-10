@@ -63,6 +63,7 @@ function nameFeedback() {
     console.log('Form is valid', badNameNote);
 
     badNameNote.classList.remove('badname');
+
     startChattingButton.classList.add('startChating');
   }
 }
@@ -79,8 +80,9 @@ socket.on('nameCheck', (data) => {
 
     if (currentRoomUsers.includes(data.client)) {
       badNameNote.innerHTML = `The username ${data.client} has been used`;
-      usernameInput.value=''
       usernameInput.classList.add('badName')
+      usernameInput.classList.replace('goodName','badName')
+      console.log("check", usernameInput);
       startChattingButton.classList.remove('startChating');
     } else {
       badNameNote.innerHTML = ""
@@ -109,6 +111,11 @@ roomLinkbutton.addEventListener("click", () => {
   // Copy the text inside the text field
   navigator.clipboard.writeText(copyText);
 
+roomLinkbutton.textContent="✔️"
+  setTimeout(() => {
+    roomLinkbutton.textContent="🔗"
+  }, 4000);
+
   // Alert the copied text
   console.log("Copied the text: ", copyText);
 })
@@ -116,24 +123,22 @@ roomLinkbutton.addEventListener("click", () => {
 
 // log in and save the user name in the local Storage
 startChattingButton.addEventListener("click", () => {
-  loggin.classList.add("hidden");
-  chatScreen.classList.remove("hidden");
-
+  
   // Stuur de lijst van gebruikers naar de server
   const data = {
     room: roomID,
     user: usernameInput.value,
   }
-
+  
   socket.emit("joinRoom", data);
-
+  
   socket.emit("roomAdmin", roomID);
-
-  // console.log("1", loadingChat);
+  
+  loggin.classList.add("hidden");
+  chatScreen.classList.remove("hidden");
+  
   setTimeout(() => {
     loadingChat.classList.add("noLoading");
-    // console.log("2", loadingChat);
-
   }, 2500);
 
 });
@@ -333,16 +338,22 @@ socket.on("focus", (hasFocus) => {
 
 const gifInput = document.querySelector("#gifsearch");
 const gifSearch = document.querySelector("#gif-button");
-const gifList = document.querySelector(".room section:last-of-type form:last-of-type ul");
-const gifButton = document.querySelector(".room section:last-of-type > button");
-const gifForm = document.querySelector(".room section:last-of-type form:last-of-type")
+const gifList = document.querySelector(".room section:last-of-type > form ul");
+const gifButton = document.querySelector(".room section:last-of-type > span > button");
+const gifForm = document.querySelector(".room section:last-of-type > form")
 
 gifButton.addEventListener("click", () => {
   if (gifList.classList.contains("search")) {
+    
     gifList.classList.remove('search')
+  } 
+    gifForm.classList.toggle('search')
+  
+  if (gifButton.innerHTML === "GIF") {
+    gifButton.innerHTML="⛌";
+  } else {
+    gifButton.innerHTML="GIF";
   }
-  gifForm.classList.toggle('search')
-
 })
 
 // Annuleer the enter event on the input
@@ -547,6 +558,7 @@ document.addEventListener("DOMContentLoaded", function () {
   videoSendLinkbutton.addEventListener("click", () => {
     streamStart.classList.add("admin")
     streamStop.classList.remove('admin')
+    videoSendLinkbutton.textContent="🔁"
 
     const videoUrl = videoLinkInput.value;
 
@@ -595,7 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const liElement = document.createElement("li")
       liElement.classList.add("note")
       liElement.innerHTML = `
-      <p> <a href="${data.link}" target ="blank">Current video</a></p>
+      <p><a href="${data.link}" target ="blank">Open current video on YouTube</a></p>
       `
       messages.appendChild(liElement)
       console.log("Hi yt");
