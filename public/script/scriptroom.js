@@ -638,14 +638,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const room = messages.getAttribute("data-room");
     if (data.roomID === room) {
       onYouTubeIframeAPIReady(data.link)
-      // const liElement = document.createElement("li")
-      // liElement.classList.add("note")
-      // liElement.innerHTML = `
-      // <p><a href="${data.link}" target ="blank">Open current video on YouTube ↗️</a></p>
-      // `
-      // messages.appendChild(liElement)
-      // messages.scrollTop = messages.scrollHeight;
-      // console.log("Hi yt");
     };
   })
 

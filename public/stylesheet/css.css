@@ -765,6 +765,8 @@ main.room section:last-of-type>ul {
   height: calc(100vh - (65vw + 4.5em));
   padding: 0 1em 1em 1em;
   list-style: none;
+  position: absolute;
+  top: 0;
 
   overflow-y: scroll;
   scroll-behavior: smooth;
