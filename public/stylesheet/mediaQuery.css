@@ -1,0 +1,41 @@
+@media (min-width: 950px) {
+    header{
+        width: 70vw;
+        height: 100%;
+    }
+
+    header section{
+        height: 5em;
+    }
+
+    main.loggin section, main.room section:first-of-type{
+        width: 100vw;
+        height: 100vh;
+        left: 0;
+    }
+
+
+    main.room section:last-of-type>div span{
+        width: 60%;
+    }
+
+    main.room{
+        width: 30vw;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    main.room section:last-of-type>form:last-of-type,
+    main.room section:last-of-type>span{
+        width: 30vw;
+    }
+
+    main.room section:last-of-type>ul{
+        height: calc(100vh - 5em);
+    }
+
+    main.room section:last-of-type>ul li div:nth-of-type(2) img {
+        width: 20rem;
+    }
+}

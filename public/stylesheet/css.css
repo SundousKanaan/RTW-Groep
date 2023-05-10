@@ -650,11 +650,12 @@ main.room section:last-of-type {
 
 /* loading screen */
 main.room section:last-of-type>div {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   position: fixed;
   top: 0;
+  left: 0;
   z-index: 100000;
   background-color: var(--bg-login);
 
@@ -896,6 +897,7 @@ main.room section:last-of-type>ul li div:nth-of-type(2) {
 main.room section:last-of-type>ul li div:nth-of-type(2) img {
   width: 40vw;
   border-radius: .5em;
+  background-color: rgba(0, 0, 0, 0.500);
 }
 
 

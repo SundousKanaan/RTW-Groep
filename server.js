@@ -1,3 +1,4 @@
+const { log } = require('console')
 const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
@@ -21,8 +22,7 @@ app.get("/", async (req, res) => {
 let roomUsers = [];
 const historySize = 50;
 let roomHistory = [];
-let client;
-let clientRoom;
+// let client;
 
 // room path
 app.get("/:room", (req, res) => {
@@ -33,6 +33,9 @@ app.get("/:room", (req, res) => {
 io.on("connection", (socket) => {
   console.log("connected");
 
+  // let roomCode;
+  let client;
+  let clientRoom;
 
   if (socket.connected) {
     console.log("Lela");
@@ -72,6 +75,9 @@ io.on("connection", (socket) => {
     socket.join(data.room);
     socket.room = data.room;
 
+    clientRoom = data.room;
+    client = data.user;
+
     const Room = data.room;
     const roomUser = data.user;
     // const avatar = data.avatar
@@ -92,9 +98,6 @@ io.on("connection", (socket) => {
     io.emit('joinRoom', { Room, roomUser, roomUsers });
 
     socket.emit('chatHistory', roomHistory)
-
-    client = roomUser;
-    clientRoom = Room;
     console.log("rooms DATA:", roomUsers);
   });
 
@@ -107,10 +110,10 @@ io.on("connection", (socket) => {
     if (roomData) {
       const currentRoomUsers = roomData.users
       // console.log("roomData.users",room_users);
-    //   console.log("roomData",roomData);
-    socket.emit('nameCheck', { client, roomId,currentRoomUsers});
+      //   console.log("roomData",roomData);
+      socket.emit('nameCheck', { client, roomId, currentRoomUsers });
     } else {
-      socket.emit('nameCheck', { client, roomId});
+      socket.emit('nameCheck', { client, roomId });
       console.log('ID niet gevonden in de array');
     }
   })
@@ -153,7 +156,7 @@ io.on("connection", (socket) => {
 
     const room = roomUsers.find(room => room.ID === currentRoom.roomID);
     if (room) {
-      console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
+      // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
       io.emit('roomAdmin', room)
     } else {
       console.log("Kamer niet gevonden");
@@ -210,12 +213,25 @@ io.on("connection", (socket) => {
     io.emit('stopStream', data);
   })
 
-
   socket.on("disconnect", () => {
-
+    // console.log("disconnect")
+    // console.log(client);
+    // const {clicnt , clientRoom} = socket.data
     console.log("user disconnected", client, clientRoom);
+    if(client && clientRoom) {
+      const roomIndex = roomUsers.findIndex(room => room.ID == clientRoom);
+      const userIndex = roomUsers[roomIndex].users.findIndex(user => user == client);
+      console.log("disconnect",roomUsers)
 
-    io.emit('notconnected', { userName: client, roomID: clientRoom })
+      roomUsers[roomIndex].users.splice(userIndex, 1);
+      if(roomUsers[roomIndex].users.length == 0) {
+        roomUsers.splice(roomIndex, 1);
+        console.log(clientRoom, "closed")
+      }
+
+      console.log("disconnect 2",roomUsers);
+      io.emit('notconnected', { userName: client, roomID: clientRoom, users:roomUsers })
+    }
   });
 
   socket.on("focus", (data) => {

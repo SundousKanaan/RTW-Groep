@@ -30,6 +30,11 @@ const streamStop = document.querySelector("header section > button:first-of-type
 const roomLinkbutton = document.querySelector("header section > button:last-of-type");
 
 
+const searchParams = new URLSearchParams(window.location.search);
+const roomID = searchParams.get("room");
+console.log("roomID", roomID);
+messages.dataset.room = new URLSearchParams(new URL(window.location).search).get("room")
+const room = messages.getAttribute("data-room");
 const socket = io();
 
 if (!chatScreen.classList.contains("hidden")) {
@@ -82,12 +87,12 @@ socket.on('nameCheck', (data) => {
     if (currentRoomUsers.includes(data.client)) {
       badNameNote.innerHTML = `The username ${data.client} has been used`;
       usernameInput.classList.add('badName')
-      usernameInput.classList.replace('goodName','badName')
+      usernameInput.classList.replace('goodName', 'badName')
       console.log("check", usernameInput);
       startChattingButton.classList.remove('startChating');
     } else {
       badNameNote.innerHTML = ""
-      usernameInput.classList.replace('badName','goodName')
+      usernameInput.classList.replace('badName', 'goodName')
       startChattingButton.classList.add('startChating');
     }
   } else {
@@ -101,20 +106,15 @@ socket.on('nameCheck', (data) => {
 // *******************
 // *******************
 
-
-const searchParams = new URLSearchParams(window.location.search);
-const roomID = searchParams.get("room");
-console.log("binQuery", roomID);
-
 roomLinkbutton.addEventListener("click", () => {
   var copyText = window.location.href;
 
   // Copy the text inside the text field
   navigator.clipboard.writeText(copyText);
 
-roomLinkbutton.textContent="✔️"
+  roomLinkbutton.textContent = "✔️"
   setTimeout(() => {
-    roomLinkbutton.textContent="🔗"
+    roomLinkbutton.textContent = "🔗"
   }, 4000);
 
   // Alert the copied text
@@ -124,20 +124,21 @@ roomLinkbutton.textContent="✔️"
 
 // log in and save the user name in the local Storage
 startChattingButton.addEventListener("click", () => {
-  
+
   // Stuur de lijst van gebruikers naar de server
   const data = {
     room: roomID,
     user: usernameInput.value,
   }
-  
+
+  socket.data = {username: data.user, roomID: room}
+
   socket.emit("joinRoom", data);
-  
   socket.emit("roomAdmin", roomID);
-  
+
   loggin.classList.add("hidden");
   chatScreen.classList.remove("hidden");
-  
+
   setTimeout(() => {
     loadingChat.classList.add("noLoading");
   }, 2500);
@@ -145,7 +146,6 @@ startChattingButton.addEventListener("click", () => {
 });
 
 socket.on("joinRoom", (data) => {
-
   const room = messages.getAttribute("data-room");
 
   const Room = data.Room;
@@ -164,7 +164,7 @@ socket.on("joinRoom", (data) => {
     messages.scrollTop = messages.scrollHeight;
     // console.log(liElement);
   }
-
+  
   roomAdmin(roomUsers);
 
   // console.log("data", Room, roomUser, roomUsers);
@@ -183,7 +183,7 @@ function roomAdmin(roomUsers) {
 }
 
 socket.on("roomAdmin", (roomData) => {
-  console.log("room admin:", roomData.users[0]);
+  console.log("room admin:", roomData);
   // console.log("roomData id", roomData.ID);
 
   const room = messages.getAttribute("data-room");
@@ -204,7 +204,7 @@ messageInput.addEventListener("input", () => {
   console.log(inputValue);
   chatScreen.classList.add("focus");
   const userName = usernameInput.value
-  socket.emit("focus", {hasFocus:true, roomID:roomID , userName:userName}); 
+  socket.emit("focus", { hasFocus: true, roomID: roomID, userName: userName });
 });
 
 sendMessage.addEventListener("click", (event) => {
@@ -232,11 +232,10 @@ sendMessage.addEventListener("click", (event) => {
     messageInput.value = "";
 
     chatScreen.classList.remove("focus");
-    socket.emit("focus", {hasFocus:false, roomID:roomID , userName: chat.username });
+    socket.emit("focus", { hasFocus: false, roomID: roomID, userName: chat.username });
   }
 });
 
-messages.dataset.room = new URLSearchParams(new URL(window.location).search).get("room")
 
 socket.on("chatmessage", (msg) => {
   console.log("chat message: ", msg.message);
@@ -285,14 +284,17 @@ socket.on('connected', () => {
   connected();
 })
 
-function nona(test) {
-  if (test.firstElementChild.classList.contains("connected")) {
-    test.firstElementChild.classList.remove('connected');
-    // console.log("notconnected", test);
+function connectedtest(ChatMsg) {
+  if (ChatMsg.firstElementChild.classList.contains("connected")) {
+    ChatMsg.firstElementChild.classList.remove('connected');
+    console.log("notconnected", ChatMsg);
   }
 }
 
 socket.on('notconnected', (data) => {
+  console.log(data.users);
+
+  const usersData = data.users;
   const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
 
   for (let i = 0; i < chatMessages.length; i++) {
@@ -300,9 +302,10 @@ socket.on('notconnected', (data) => {
     // console.log("dataset 2", dataset);
 
     if (dataset === data.userName) {
-      let test = chatMessages[i];
-      nona(test);
+      let ChatMsg = chatMessages[i];
+      connectedtest(ChatMsg);
     }
+    roomAdmin(data.users);
   }
 
 
@@ -328,11 +331,11 @@ socket.on("focus", (data) => {
     console.log("HI 0");
     if (data.hasFocus) {
       console.log("HI 1");
-      writingNote.innerHTML=`<span>${data.userName}</span> is writing`;
+      writingNote.innerHTML = `<span>${data.userName}</span> is writing`;
       writingNote.classList.add("focus");
     } else {
       console.log("HI 2");
-      writingNote.innerHTML="";
+      writingNote.innerHTML = "";
       writingNote.classList.remove("focus");
     }
   }
@@ -358,15 +361,15 @@ const gifForm = document.querySelector(".room section:last-of-type > form")
 
 gifButton.addEventListener("click", () => {
   if (gifList.classList.contains("search")) {
-    
+
     gifList.classList.remove('search')
-  } 
-    gifForm.classList.toggle('search')
-  
+  }
+  gifForm.classList.toggle('search')
+
   if (gifButton.innerHTML === "GIF") {
-    gifButton.innerHTML="⛌";
+    gifButton.innerHTML = "⛌";
   } else {
-    gifButton.innerHTML="GIF";
+    gifButton.innerHTML = "GIF";
   }
 })
 
@@ -572,7 +575,7 @@ document.addEventListener("DOMContentLoaded", function () {
   videoSendLinkbutton.addEventListener("click", () => {
     streamStart.classList.add("admin")
     streamStop.classList.remove('admin')
-    videoSendLinkbutton.textContent="🔁"
+    videoSendLinkbutton.textContent = "🔁"
 
     const videoUrl = videoLinkInput.value;
 
@@ -705,7 +708,7 @@ socket.on('chatHistory', (roomHistory) => {
 
 
       if (roomDataHistory[i].gifMessage) {
-        console.log("is is gif",roomDataHistory[i].userName);
+        console.log("is is gif", roomDataHistory[i].userName);
         liElement.innerHTML = `
       <div>
         <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">
