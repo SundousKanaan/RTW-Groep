@@ -274,21 +274,22 @@ main.room section:last-of-type > div span div:nth-of-type(2) {
 
 main.room section:last-of-type > ul {
     width: 95%;
-    height: calc(100vh - (65vw + 4.5em));
-    padding: 0 1em 1em 1em;
+    /* height: calc(100vh - (65vw + 4.5em)); */
+    height: 100%;
+    padding: 0 1em 5.5em 1em;
     list-style: none;
     position: absolute;
     top: 0;
 
     overflow-y: scroll;
     scroll-behavior: smooth;
-    margin-bottom: 0.5em;
+    /* margin-bottom: 0.5em; */
 
     display: flex;
     flex-direction: column;
     gap: 1em;
 
-    background-color: red;
+    /* background-color: red; */
 }
 
 main.room section:last-of-type > ul::-webkit-scrollbar {
