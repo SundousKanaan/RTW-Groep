@@ -161,6 +161,7 @@ socket.on("joinRoom", (data) => {
 
   if (Room === room) {
     messages.appendChild(liElement)
+    messages.scrollTop = messages.scrollHeight;
     // console.log(liElement);
   }
 
@@ -620,9 +621,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const liElement = document.createElement("li")
       liElement.classList.add("note")
       liElement.innerHTML = `
-      <p><a href="${data.link}" target ="blank">Open current video on YouTube</a></p>
+      <p><a href="${data.link}" target ="blank">Open current video on YouTube ↗️</a></p>
       `
       messages.appendChild(liElement)
+      messages.scrollTop = messages.scrollHeight;
       console.log("Hi yt");
     };
   })
@@ -681,14 +683,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
+
+
+// ***********************
+//     chatHistory code
+// ***********************
 socket.on('chatHistory', (roomHistory) => {
   const room = messages.getAttribute("data-room");
   let roomDataHistory;
 
   for (let t = 0; t < roomHistory.length; t++) {
     if (roomHistory[t].roomID === room) {
-
-
       roomDataHistory = roomHistory[t].messages
       console.log("roomHistory[i]", roomDataHistory);
     }
@@ -698,20 +705,16 @@ socket.on('chatHistory', (roomHistory) => {
 
 
       if (roomDataHistory[i].gifMessage) {
-        console.log("is is gif");
+        console.log("is is gif",roomDataHistory[i].userName);
         liElement.innerHTML = `
       <div>
-        <img src="${roomDataHistory[i].avatar}" alt="">
+        <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">
       </div>
-      <div data-username="${roomDataHistory[i].username}">
-      <img src="${roomDataHistory[i].gifMessage}" alt="">
+      <div data-username="${roomDataHistory[i].userName}">
+      <img src="${roomDataHistory[i].gifMessage}" alt="${roomDataHistory[i].gifMessage} GIF foto">
       </div>
       `
-        if (roomDataHistory[i].username === usernameInput.value) {
-          liElement.classList.add("message");
-        }
-
-        if (roomDataHistory[i].username === usernameInput.value) {
+        if (roomDataHistory[i].userName === usernameInput.value) {
           liElement.classList.add("message");
         }
 
@@ -727,9 +730,9 @@ socket.on('chatHistory', (roomHistory) => {
         <div id="userImg">
            <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar} icon">
         </div>
-        <p data-username="${roomDataHistory[i].username}">${roomDataHistory[i].message}</p>
+        <p data-username="${roomDataHistory[i].userName}">${roomDataHistory[i].message}</p>
        `
-        if (roomDataHistory[i].username === usernameInput.value) {
+        if (roomDataHistory[i].userName === usernameInput.value) {
           liElement.classList.add("message");
         }
 
