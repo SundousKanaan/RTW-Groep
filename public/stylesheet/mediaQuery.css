@@ -36,6 +36,16 @@
     }
 
     main.room section:last-of-type>ul li div:nth-of-type(2) img {
+        width: 10rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    main.room section:last-of-type>ul li div:nth-of-type(2) img {
         width: 20rem;
     }
 }
+
+
+/*         width: 20rem;
+ */
