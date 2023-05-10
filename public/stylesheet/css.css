@@ -459,21 +459,48 @@ main.loggin section>p.check {
 
 
 
+
+
 /* Chat page */
 
-/* main.room {
-  height: 70vh;
-} */
+main.room > p{
+  z-index: 1;
+  width: 9em;
+  height: 1.5em;
+  color: var(--thema-color);
+  border-radius: 5em;
+  position: absolute;
+  top: 1em;
+  left: calc(50% - 9em/2);
+  background-color: var(--white);
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: .5em;
+  opacity: 30%;
+  visibility: hidden;
 
-/* 
-main.room section:first-of-type form {
-  height: 8em;
-} */
+}
 
+main.room > p span{
+  color: var(--blue);
+}
 
-/* main.room section:first-of-type form:valid ~ button {
-  background-color: red;
-} */
+main.room > p.focus{
+  visibility: visible;
+  animation: writingEffect .5s infinite linear alternate;
+}
+
+@keyframes writingEffect{
+  0%{
+    opacity: 30%;
+  }
+  50%,100%{
+    opacity: 100%;
+  }
+}
+
 
 main.room section:first-of-type form ul {
   width: 100%;
@@ -609,7 +636,6 @@ main.room section:first-of-type form ul li input:checked~label {
 main.room section:last-of-type {
   width: 100%;
   height: 100%;
-  padding: 1em 0;
 
   background-color: rgba(0, 0, 0, 0.500);
   /* background-image: linear-gradient(to top, transparent 40%, var(--white)); */
@@ -923,28 +949,6 @@ main.room section:last-of-type>form:last-of-type {
 
 main.room section:last-of-type>form:last-of-type.search {
   visibility: visible;
-}
-
-main.room section:last-of-type.focus form:first-of-type::after {
-  content: "Writting";
-  /* attr(data-username) */
-  padding: 0.2em;
-  position: absolute;
-  color: rgb(56, 56, 56);
-  top: -1.7em;
-  left: 2em;
-
-  animation: writing 1s infinite both alternate;
-}
-
-@keyframes writing {
-  form {
-    color: rgb(56, 56, 56);
-  }
-
-  to {
-    color: var(--rosy);
-  }
 }
 
 main.room section:last-of-type>form:last-of-type label input,

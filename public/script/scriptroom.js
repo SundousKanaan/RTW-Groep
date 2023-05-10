@@ -318,6 +318,8 @@ socket.on('notconnected', (data) => {
   }
 })
 
+const writingNote = document.querySelector("main.room > p")
+
 socket.on("focus", (data) => {
   const room = messages.getAttribute("data-room");
   console.log("data Focus", data);
@@ -325,10 +327,12 @@ socket.on("focus", (data) => {
     console.log("HI 0");
     if (data.hasFocus) {
       console.log("HI 1");
-      chatScreen.classList.add("focus");
+      writingNote.innerHTML=`<span>${data.userName}</span> is writing`;
+      writingNote.classList.add("focus");
     } else {
       console.log("HI 2");
-      chatScreen.classList.remove("focus");
+      writingNote.innerHTML="";
+      writingNote.classList.remove("focus");
     }
   }
 });
