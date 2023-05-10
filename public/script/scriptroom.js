@@ -40,7 +40,6 @@ const h1 = document.querySelector("header section h1")
 let videoForm = document.querySelector("header section form")
 let videoLinkInput = document.querySelector("header section form input");
 const videoSendLinkbutton = document.querySelector("header section form button");
-// const iframe = document.querySelector("header div iframe");
 const span = document.querySelector("header div span");
 const streamStart = document.querySelector("header div button");
 const streamStop = document.querySelector("header section > button:first-of-type");
