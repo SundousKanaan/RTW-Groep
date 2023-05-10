@@ -151,10 +151,10 @@ io.on("connection", (socket) => {
     console.log("roomHistory:", roomHistory);
   });
 
-  socket.on('roomAdmin', (currentRoom) => {
-    console.log("roomAdmin", currentRoom.roomID);
+  socket.on('roomAdmin', (roomID) => {
+    console.log("roomAdmin", roomID);
 
-    const room = roomUsers.find(room => room.ID === currentRoom.roomID);
+    const room = roomUsers.find(room => room.ID === roomID);
     if (room) {
       // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
       io.emit('roomAdmin', room)
@@ -201,7 +201,8 @@ io.on("connection", (socket) => {
     const link = data.link;
     const roomID = data.roomID;
     console.log("link", data);
-    io.emit('streamLink', { link, roomID });
+    // io.emit('streamLink', { link, roomID });
+    socket.broadcast.emit('streamLink', { link, roomID });
   })
 
   socket.on('startStream', (roomID) => {

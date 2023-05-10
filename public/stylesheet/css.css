@@ -772,6 +772,7 @@ main.room section:last-of-type>ul {
 
   display: flex;
   flex-direction: column;
+  gap: 1em;
 }
 
 main.room section:last-of-type>ul::-webkit-scrollbar {

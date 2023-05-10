@@ -546,6 +546,7 @@ document.addEventListener("DOMContentLoaded", function () {
           player.destroy();
         }
       }
+
       console.log("YT test", ytlink);
 
       let newURL = new URL(videoUrl).pathname;
@@ -565,9 +566,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
+      const liElement = document.createElement("li")
+      liElement.classList.add("note")
+      liElement.innerHTML = `
+      <p><a href="${videoUrl}" target ="blank">Open current video on YouTube ↗️</a></p>
+      `
+      messages.appendChild(liElement)
+      messages.scrollTop = messages.scrollHeight;
+      console.log("Hi yt");
+
     } else {
       videoLinkInput.value = '';
       videoLinkInput.placeholder = "Invalid YouTube URL"
+      const liElement = document.createElement("li")
+      liElement.classList.add("note")
+      liElement.innerHTML = `
+      <p><a>Invalid link 💔</a></p>
+      `
+      messages.appendChild(liElement)
+      messages.scrollTop = messages.scrollHeight;
       console.log("Ongeldige YouTube-video-URL");
     }
   }
@@ -621,14 +638,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const room = messages.getAttribute("data-room");
     if (data.roomID === room) {
       onYouTubeIframeAPIReady(data.link)
-      const liElement = document.createElement("li")
-      liElement.classList.add("note")
-      liElement.innerHTML = `
-      <p><a href="${data.link}" target ="blank">Open current video on YouTube ↗️</a></p>
-      `
-      messages.appendChild(liElement)
-      messages.scrollTop = messages.scrollHeight;
-      console.log("Hi yt");
+      // const liElement = document.createElement("li")
+      // liElement.classList.add("note")
+      // liElement.innerHTML = `
+      // <p><a href="${data.link}" target ="blank">Open current video on YouTube ↗️</a></p>
+      // `
+      // messages.appendChild(liElement)
+      // messages.scrollTop = messages.scrollHeight;
+      // console.log("Hi yt");
     };
   })
 
@@ -698,9 +715,9 @@ socket.on('chatHistory', (roomHistory) => {
   let roomDataHistory;
 
   for (let t = 0; t < roomHistory.length; t++) {
+    console.log("roomHistory[i]", roomDataHistory);
     if (roomHistory[t].roomID === room) {
       roomDataHistory = roomHistory[t].messages
-      console.log("roomHistory[i]", roomDataHistory);
     }
 
     for (let i = 0; i < roomDataHistory.length; i++) {
