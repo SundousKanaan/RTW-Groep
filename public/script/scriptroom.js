@@ -1,4 +1,18 @@
-// const { Socket } = require("socket.io");
+// fast comments
+  // username check
+  // start chatting
+  // Room admin
+  // share room link
+  // user connected
+  // typeing note
+
+  // chat messages 
+  //  Gifs messages
+  // iframe code
+  // chatHistory code
+
+// ==========================================================================
+// ==========================================================================
 
 const messages = document.querySelector(".room section:last-of-type ul");
 const messageInput = document.querySelector("#message-input");
@@ -16,7 +30,7 @@ const startChattingButton = document.querySelector(".room section:first-of-type 
 const loadingChat = document.querySelector(".room section:last-of-type > div");
 
 // ***********************
-//     iframe code
+//     iframe variabels
 // ***********************
 
 const h1 = document.querySelector("header section h1")
@@ -37,11 +51,29 @@ messages.dataset.room = new URLSearchParams(new URL(window.location).search).get
 const room = messages.getAttribute("data-room");
 const socket = io();
 
-if (!chatScreen.classList.contains("hidden")) {
-  chatScreen.classList.add("hidden");
-}
 
-// Annuleer the enter event on the input
+
+// resize ==========================================================================
+
+// We listen to the resize event
+window.addEventListener('resize', () => {
+  // We execute the same script as before
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+});
+
+
+
+
+
+
+
+
+
+
+// username check  ==========================================================================
+
+// Annuleer the enter event on the username input
 usernameInput.addEventListener("keydown", (event) => {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -51,7 +83,6 @@ usernameInput.addEventListener("keydown", (event) => {
 
 function nameCheck() {
   console.log(usernameInput.value);
-
   clientName = usernameInput.value
   socket.emit('nameCheck', { roomID, clientName });
 }
@@ -67,20 +98,15 @@ function nameFeedback() {
 
   } else {
     console.log('Form is valid', badNameNote);
-
     badNameNote.classList.remove('badname');
-
     startChattingButton.classList.add('startChating');
   }
 }
 
 socket.on('nameCheck', (data) => {
   console.log("nameCheck data", data);
-  // console.log("nameCheck roomData", roomData);
-
   const room = messages.getAttribute("data-room");
   console.log("currentRoomUsers", data);
-
   if (data.currentRoomUsers) {
     const currentRoomUsers = data.currentRoomUsers;
 
@@ -103,28 +129,17 @@ socket.on('nameCheck', (data) => {
 })
 
 
-// *******************
-// *******************
-
-roomLinkbutton.addEventListener("click", () => {
-  var copyText = window.location.href;
-
-  // Copy the text inside the text field
-  navigator.clipboard.writeText(copyText);
-
-  roomLinkbutton.textContent = "✔️"
-  setTimeout(() => {
-    roomLinkbutton.textContent = "🔗"
-  }, 4000);
-
-  // Alert the copied text
-  console.log("Copied the text: ", copyText);
-})
 
 
-// log in and save the user name in the local Storage
+
+
+
+
+
+
+// start chatting ==========================================================================
+
 startChattingButton.addEventListener("click", () => {
-
   // Stuur de lijst van gebruikers naar de server
   const data = {
     room: roomID,
@@ -132,7 +147,6 @@ startChattingButton.addEventListener("click", () => {
   }
 
   socket.data = {username: data.user, roomID: room}
-
   socket.emit("joinRoom", data);
   socket.emit("roomAdmin", roomID);
 
@@ -142,7 +156,6 @@ startChattingButton.addEventListener("click", () => {
   setTimeout(() => {
     loadingChat.classList.add("noLoading");
   }, 2500);
-
 });
 
 socket.on("joinRoom", (data) => {
@@ -152,25 +165,23 @@ socket.on("joinRoom", (data) => {
   const roomUser = data.roomUser;
   const roomUsers = data.roomUsers;
 
-
   const liElement = document.createElement("li")
   liElement.classList.add("note")
   liElement.innerHTML = `
   <p>${roomUser} joined the chat</p>
   `
-
   if (Room === room) {
     messages.appendChild(liElement)
     messages.scrollTop = messages.scrollHeight;
-    // console.log(liElement);
   }
-  
   roomAdmin(roomUsers);
-
-  // console.log("data", Room, roomUser, roomUsers);
 })
 
-// Room admin
+
+
+
+ 
+// Room admin ==========================================================================
 
 function roomAdmin(roomUsers) {
   const room = roomUsers.find(room => room.ID === roomID);
@@ -198,61 +209,43 @@ socket.on("roomAdmin", (roomData) => {
 })
 
 
-messageInput.addEventListener("input", () => {
-  const inputValue = messageInput.value;
-  // Doe hier iets met de waarde van het invoerveld
-  console.log(inputValue);
-  chatScreen.classList.add("focus");
-  const userName = usernameInput.value
-  socket.emit("focus", { hasFocus: true, roomID: roomID, userName: userName });
-});
 
-sendMessage.addEventListener("click", (event) => {
-  let avatarsrc;
-  for (let i = 0; i < avatarsInput.length; i++) {
-    if (avatarsInput[i].checked) {
-      let labelChecked = avatarsInput[i].nextElementSibling
-      avatarsrc = labelChecked.dataset.avatar
-      console.log(avatarsrc, [i]);
-    }
-  }
 
-  event.preventDefault();
-  if (messageInput.value) {
-    const chat = {
-      username: usernameInput.value,
-      message: messageInput.value,
-      room: roomID,
-      avatar: avatarsrc
-    };
 
-    console.log(chat);
+// share room link ==========================================================================
 
-    socket.emit("chatmessage", chat);
-    messageInput.value = "";
+roomLinkbutton.addEventListener("click", () => {
+  var copyText = window.location.href;
 
-    chatScreen.classList.remove("focus");
-    socket.emit("focus", { hasFocus: false, roomID: roomID, userName: chat.username });
-  }
-});
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText);
+
+  roomLinkbutton.textContent = "✔️"
+  setTimeout(() => {
+    roomLinkbutton.textContent = "🔗"
+  }, 4000);
+
+  // Alert the copied text
+  console.log("Copied the text: ", copyText);
+})
+
+
+
+
+
+
+
 
 
 socket.on("chatmessage", (msg) => {
-  console.log("chat message: ", msg.message);
-
   const element = document.createElement("li");
-
   element.dataset.client = `${msg.username}`;
-
-
   element.innerHTML = `
           <div id="userImg">
              <img src="${msg.avatar}" alt="${msg.avatar} icon">
           </div>
           <p data-username="${msg.username}">${msg.message}</p>
          `
-
-  // haal de data-room attribuut op van de parent ul om te bepalen in welke chatroom het bericht hoort
   const room = messages.getAttribute("data-room");
   if (msg.room === room) {
     console.log("element", element);
@@ -264,9 +257,13 @@ socket.on("chatmessage", (msg) => {
   if (msg.username === usernameInput.value) {
     element.classList.add("message");
   }
-
-
 });
+
+
+
+
+
+//  user connected ==========================================================================
 
 function connected() {
   const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
@@ -322,8 +319,14 @@ socket.on('notconnected', (data) => {
   }
 })
 
-const writingNote = document.querySelector("main.room > p")
 
+
+
+
+
+// typeing note ==========================================================================
+
+const writingNote = document.querySelector("main.room > p")
 socket.on("focus", (data) => {
   const room = messages.getAttribute("data-room");
   console.log("data Focus", data);
@@ -349,8 +352,57 @@ socket.on("focus", (data) => {
 
 
 
+// ===================
+// chat messages 
+// ===================
+messageInput.addEventListener("input", () => {
+  const inputValue = messageInput.value;
+  console.log(inputValue);
+  chatScreen.classList.add("focus");
+  const userName = usernameInput.value
+  socket.emit("focus", { hasFocus: true, roomID: roomID, userName: userName });
+});
+
+sendMessage.addEventListener("click", (event) => {
+  let avatarsrc;
+  for (let i = 0; i < avatarsInput.length; i++) {
+    if (avatarsInput[i].checked) {
+      let labelChecked = avatarsInput[i].nextElementSibling
+      avatarsrc = labelChecked.dataset.avatar
+      console.log(avatarsrc, [i]);
+    }
+  }
+
+  event.preventDefault();
+  if (messageInput.value) {
+    const chat = {
+      username: usernameInput.value,
+      message: messageInput.value,
+      room: roomID,
+      avatar: avatarsrc
+    };
+
+    console.log(chat);
+
+    socket.emit("chatmessage", chat);
+    messageInput.value = "";
+
+    chatScreen.classList.remove("focus");
+    socket.emit("focus", { hasFocus: false, roomID: roomID, userName: chat.username });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 // ***********************
-//     Gifs code
+//     Gifs messages
 // ***********************
 
 const gifInput = document.querySelector("#gifsearch");
@@ -358,6 +410,14 @@ const gifSearch = document.querySelector("#gif-button");
 const gifList = document.querySelector(".room section:last-of-type > form ul");
 const gifButton = document.querySelector(".room section:last-of-type > span > button");
 const gifForm = document.querySelector(".room section:last-of-type > form")
+let searchKey = "";
+
+gifInput.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    gifSearch.click();
+  }
+});
 
 gifButton.addEventListener("click", () => {
   if (gifList.classList.contains("search")) {
@@ -373,15 +433,6 @@ gifButton.addEventListener("click", () => {
   }
 })
 
-// Annuleer the enter event on the input
-gifInput.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    gifSearch.click();
-  }
-});
-
-let searchKey = "";
 
 // handle form submit event
 gifSearch.addEventListener('click', (event) => {
@@ -457,12 +508,7 @@ gifSearch.addEventListener('click', (event) => {
 
 // receive gif data via socket
 socket.on("gifmessage", (msg) => {
-  console.log("imgSrc", msg);
-
-  console.log("roomID", roomID);
   const room = messages.getAttribute("data-room");
-
-  // create li element with gif image
   const li = document.createElement("li");
   li.dataset.client = `${msg.userName}`;
 
@@ -474,8 +520,6 @@ socket.on("gifmessage", (msg) => {
   <img src="${msg.gifMessage}" alt="">
   </div>
   `
-  // li.appendChild(img);
-
   if (msg.room === room) {
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
@@ -485,7 +529,6 @@ socket.on("gifmessage", (msg) => {
   if (msg.userName === usernameInput.value) {
     li.classList.add("message");
   }
-
 });
 
 
@@ -499,12 +542,6 @@ socket.on("gifmessage", (msg) => {
 // ***********************
 //     iframe code
 // ***********************
-
-// const iframe = document.querySelector("header div iframe");
-// const streamStart = document.querySelector("header div button");
-// const streamStop = document.querySelector("header section > button:first-of-type");
-// const roomLinkbutton = document.querySelector("header section > button:last-of-type");
-
 const videoFrame = document.getElementById("videoFrame");
 
 let link = '';
