@@ -5,6 +5,7 @@ const messageInput = document.querySelector("#message-input");
 const sendMessage = document.querySelector("#message-button");
 
 const usernameInput = document.querySelector("#username-input");
+
 const badNameNote = document.querySelector("main.room section:first-of-type form p")
 const avatarsInput = document.querySelectorAll("main.room section:first-of-type form ul li input");
 
@@ -201,13 +202,11 @@ messageInput.addEventListener("input", () => {
   // Doe hier iets met de waarde van het invoerveld
   console.log(inputValue);
   chatScreen.classList.add("focus");
-  socket.emit("focus", true); // Verzend de focus class naar andere clients
+  const userName = usernameInput.value
+  socket.emit("focus", {hasFocus:true, roomID:roomID , userName:userName}); 
 });
 
 sendMessage.addEventListener("click", (event) => {
-  chatScreen.classList.remove("focus");
-  socket.emit("focus", false); // Verzend de focus class naar andere clients
-
   let avatarsrc;
   for (let i = 0; i < avatarsInput.length; i++) {
     if (avatarsInput[i].checked) {
@@ -230,6 +229,9 @@ sendMessage.addEventListener("click", (event) => {
 
     socket.emit("chatmessage", chat);
     messageInput.value = "";
+
+    chatScreen.classList.remove("focus");
+    socket.emit("focus", {hasFocus:false, roomID:roomID , userName: chat.username });
   }
 });
 
@@ -316,11 +318,18 @@ socket.on('notconnected', (data) => {
   }
 })
 
-socket.on("focus", (hasFocus) => {
-  if (hasFocus) {
-    chatScreen.classList.add("focus");
-  } else {
-    chatScreen.classList.remove("focus");
+socket.on("focus", (data) => {
+  const room = messages.getAttribute("data-room");
+  console.log("data Focus", data);
+  if (data.roomID === room) {
+    console.log("HI 0");
+    if (data.hasFocus) {
+      console.log("HI 1");
+      chatScreen.classList.add("focus");
+    } else {
+      console.log("HI 2");
+      chatScreen.classList.remove("focus");
+    }
   }
 });
 

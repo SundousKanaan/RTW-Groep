@@ -218,8 +218,9 @@ io.on("connection", (socket) => {
     io.emit('notconnected', { userName: client, roomID: clientRoom })
   });
 
-  socket.on("focus", (hasFocus) => {
-    socket.broadcast.emit("focus", hasFocus);
+  socket.on("focus", (data) => {
+
+    io.emit("focus", data);
   });
 
 });
