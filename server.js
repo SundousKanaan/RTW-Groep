@@ -39,8 +39,9 @@ io.on("connection", (socket) => {
 
   if (socket.connected) {
     console.log("Lela");
-    socket.emit('connected')
+    io.emit('connected')
   }
+
 
   socket.on('checkRoom', (roomname) => {
     console.log("openRoomName", roomname);
@@ -97,7 +98,7 @@ io.on("connection", (socket) => {
 
     io.emit('joinRoom', { Room, roomUser, roomUsers });
 
-    socket.emit('chatHistory', roomHistory)
+    socket.emit('chatHistory', roomHistory);
     console.log("rooms DATA:", roomUsers);
   });
 
@@ -123,10 +124,11 @@ io.on("connection", (socket) => {
     const message = chat.message;
     const username = chat.username;
     const avatar = chat.avatar
-    console.log("chat message |", chat);
+    const time = chat.time
+    console.log("chat message |", time);
 
     // send the message to all sockets in the room
-    io.emit("chatmessage", { username, message, room, avatar });
+    io.emit("chatmessage", { username, message, room, avatar,time });
 
 
     // Zoek de index van de kamer in de roomHistory array
@@ -134,12 +136,12 @@ io.on("connection", (socket) => {
 
     if (roomIndex !== -1) {
       // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
-      roomHistory[roomIndex].messages.push({ username, message, avatar });
+      roomHistory[roomIndex].messages.push({ username, message, avatar,time });
     } else {
       // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
       roomHistory.push({
         roomID: room,
-        messages: [{ username, message, avatar }],
+        messages: [{ username, message, avatar,time }],
       });
     }
 
@@ -172,20 +174,21 @@ io.on("connection", (socket) => {
     const searchKey = message.searchKey;
     const userName = message.userName;
     const avatar = message.avatar;
+    const time = message.time;
 
-    io.emit("gifmessage", { gifMessage, room, userName, avatar });
+    io.emit("gifmessage", { gifMessage, room, userName, avatar,time });
 
     // Zoek de index van de kamer in de roomHistory array
     const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
 
     if (roomIndex !== -1) {
       // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
-      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar });
+      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar,time });
     } else {
       // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
       roomHistory.push({
         roomID: room,
-        messages: [{ userName, gifMessage, avatar }],
+        messages: [{ userName, gifMessage, avatar,time }],
       });
     }
 
@@ -201,7 +204,6 @@ io.on("connection", (socket) => {
     const link = data.link;
     const roomID = data.roomID;
     console.log("link", data);
-    // io.emit('streamLink', { link, roomID });
     socket.broadcast.emit('streamLink', { link, roomID });
   })
 
@@ -215,9 +217,6 @@ io.on("connection", (socket) => {
   })
 
   socket.on("disconnect", () => {
-    // console.log("disconnect")
-    // console.log(client);
-    // const {clicnt , clientRoom} = socket.data
     console.log("user disconnected", client, clientRoom);
     if(client && clientRoom) {
       const roomIndex = roomUsers.findIndex(room => room.ID == clientRoom);
@@ -232,12 +231,13 @@ io.on("connection", (socket) => {
 
       console.log("disconnect 2",roomUsers);
       io.emit('notconnected', { userName: client, roomID: clientRoom, users:roomUsers })
+      socket.emit('connected')
     }
+
   });
 
   socket.on("focus", (data) => {
-
-    io.emit("focus", data);
+    socket.emit("focus", data);
   });
 
 });

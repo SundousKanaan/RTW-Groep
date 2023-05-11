@@ -310,6 +310,8 @@ main.room section:last-of-type > ul li {
     flex-wrap: nowrap;
     align-items: flex-end;
     gap: 1em;
+
+    position: relative;
 }
 
 main.room section:last-of-type > ul li.note {
@@ -360,6 +362,22 @@ main.room section:last-of-type > ul li p {
     padding: 0.5em 1em;
 
     position: relative;
+}
+
+
+main.room section:last-of-type > ul li.time::after{
+    content: attr(data-time);
+    font-size: .7em;
+    position: absolute;
+    bottom: -1.5em;
+    right: 5%;
+
+    color: var(--text-color);
+}
+
+main.room section:last-of-type > ul li.message.time::after{
+    right: auto;
+    left: 5%;
 }
 
 main.room section:last-of-type > ul li div:nth-of-type(2)::before,
@@ -417,9 +435,6 @@ main.room section:last-of-type > ul li > div:first-of-type img {
 main.room section:last-of-type > ul li div:nth-of-type(2) {
     width: fit-content;
     background-color: transparent;
-    /* padding: 0.5em; */
-    /* border-radius: 1em; */
-
     position: relative;
 
     display: grid;

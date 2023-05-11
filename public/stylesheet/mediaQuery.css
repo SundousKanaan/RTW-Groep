@@ -1,4 +1,4 @@
-@media (min-width: 500px) {
+@media (min-width: 30) {
     header div iframe {
         width: auto;
         height: 100%;
@@ -6,7 +6,7 @@
     }
 }
 
-@media (min-width: 950px) {
+@media (min-width: 62em) {
     header {
         width: 70vw;
         height: 100%;
@@ -30,6 +30,7 @@
 
     main.room {
         width: 30vw;
+        height: 100vh;
         position: absolute;
         right: 0;
         top: 0;

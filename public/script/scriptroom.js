@@ -2,17 +2,17 @@
 // fast comments
 // ==========================================================================
 
-  // username check
-  // start chatting
-  // Room admin
-  // share room link
-  // user connected
-  // typeing note
+// username check
+// start chatting
+// Room admin
+// share room link
+// user connected
+// typeing note
 
-  // chat messages 
-  //  Gifs messages
-  // iframe code
-  // chatHistory code
+// chat messages 
+//  Gifs messages
+// iframe code
+// chatHistory code
 
 // ==========================================================================
 // ==========================================================================
@@ -55,8 +55,7 @@ const socket = io();
 
 
 
-
-
+let myname;
 
 // username check  ==========================================================================
 
@@ -133,7 +132,9 @@ startChattingButton.addEventListener("click", () => {
     user: usernameInput.value,
   }
 
-  socket.data = {username: data.user, roomID: room}
+  myname = usernameInput.value
+
+  socket.data = { username: data.user, roomID: room }
   socket.emit("joinRoom", data);
   socket.emit("roomAdmin", roomID);
 
@@ -167,14 +168,13 @@ socket.on("joinRoom", (data) => {
 
 
 
- 
+
 // Room admin ==========================================================================
 
 function roomAdmin(roomUsers) {
   const room = roomUsers.find(room => room.ID === roomID);
 
   const currentAdmin = room.users[0];
-
   h1.textContent = `Admin ${currentAdmin}`;
 
   socket.emit("roomAdmin", { currentAdmin, roomID });
@@ -224,33 +224,26 @@ roomLinkbutton.addEventListener("click", () => {
 
 
 
-socket.on("chatmessage", (msg) => {
-  const element = document.createElement("li");
-  element.dataset.client = `${msg.username}`;
-  element.innerHTML = `
-          <div id="userImg">
-             <img src="${msg.avatar}" alt="${msg.avatar} icon">
-          </div>
-          <p data-username="${msg.username}">${msg.message}</p>
-         `
-  const room = messages.getAttribute("data-room");
-  if (msg.room === room) {
-    console.log("element", element);
-    messages.appendChild(element);
-    messages.scrollTop = messages.scrollHeight;
-    connected(messages)
-  }
-
-  if (msg.username === usernameInput.value) {
-    element.classList.add("message");
-  }
-});
-
-
-
 
 
 //  user connected ==========================================================================
+
+function checkConnection() {
+  if (socket.connected) {
+      console.log('Socket is connected');
+      // chatScreen.classList.remove('socket-disconnected');
+  } else {
+      console.log('Socket is disconnected');
+      // chatScreen.classList.add('socket-disconnected');
+      // setTimeout(() => {
+      //     if (!socket.connected) {
+      //         const error = document.querySelector('#error');
+      //         error.textContent = 'You are disconnected';
+      //         error.classList.add('show');
+      //     }
+      // }, 5000);
+  }
+}
 
 function connected() {
   const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
@@ -266,7 +259,11 @@ function connected() {
 
 socket.on('connected', () => {
   connected();
+  checkConnection();
+
+  setInterval(checkConnection, 1000);
 })
+
 
 function connectedtest(ChatMsg) {
   if (ChatMsg.firstElementChild.classList.contains("connected")) {
@@ -316,7 +313,7 @@ socket.on('notconnected', (data) => {
 const writingNote = document.querySelector("main.room > p")
 socket.on("focus", (data) => {
   const room = messages.getAttribute("data-room");
-  console.log("data Focus", data);
+  // console.log("data Focus", data);
   if (data.roomID === room) {
     console.log("HI 0");
     if (data.hasFocus) {
@@ -340,7 +337,7 @@ socket.on("focus", (data) => {
 
 
 // ===================
-// chat messages 
+// chat messages
 // ===================
 messageInput.addEventListener("input", () => {
   const inputValue = messageInput.value;
@@ -351,6 +348,9 @@ messageInput.addEventListener("input", () => {
 });
 
 sendMessage.addEventListener("click", (event) => {
+
+  let currentTimeNL = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
   let avatarsrc;
   for (let i = 0; i < avatarsInput.length; i++) {
     if (avatarsInput[i].checked) {
@@ -366,10 +366,11 @@ sendMessage.addEventListener("click", (event) => {
       username: usernameInput.value,
       message: messageInput.value,
       room: roomID,
-      avatar: avatarsrc
+      avatar: avatarsrc,
+      time: currentTimeNL
     };
 
-    console.log(chat);
+    // console.log(chat);
 
     socket.emit("chatmessage", chat);
     messageInput.value = "";
@@ -377,8 +378,34 @@ sendMessage.addEventListener("click", (event) => {
     chatScreen.classList.remove("focus");
     socket.emit("focus", { hasFocus: false, roomID: roomID, userName: chat.username });
   }
+
 });
 
+
+socket.on("chatmessage", (msg) => {
+  const element = document.createElement("li");
+  element.dataset.client = `${msg.username}`;
+  element.innerHTML = `
+          <div id="userImg">
+             <img src="${msg.avatar}" alt="${msg.avatar} icon">
+          </div>
+          <p data-username="${msg.username}">${msg.message}</p>
+         `
+  const room = messages.getAttribute("data-room");
+  element.classList.add("time");
+  element.dataset.time = `${msg.time}`;
+
+  if (msg.room === room) {
+    console.log("element", element);
+    messages.appendChild(element);
+    messages.scrollTop = messages.scrollHeight;
+    connected(messages)
+  }
+
+  if (msg.username === usernameInput.value) {
+    element.classList.add("message");
+  }
+});
 
 
 
@@ -462,6 +489,7 @@ gifSearch.addEventListener('click', (event) => {
 
         button.addEventListener('click', (event) => {
           event.preventDefault();
+          let currentTimeNL = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
           console.log('Image clicked', Gifs);
 
           // send gif data via socket
@@ -470,7 +498,8 @@ gifSearch.addEventListener('click', (event) => {
             room: roomID,
             userName: usernameInput.value,
             searchKey: searchKey,
-            avatar: avatarsrc
+            avatar: avatarsrc,
+            time: currentTimeNL
           };
 
           console.log("ii", message);
@@ -507,6 +536,10 @@ socket.on("gifmessage", (msg) => {
   <img src="${msg.gifMessage}" alt="">
   </div>
   `
+
+  li.classList.add("time");
+  li.dataset.time = `${msg.time}`;
+
   if (msg.room === room) {
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
@@ -727,54 +760,67 @@ document.addEventListener("DOMContentLoaded", function () {
 //     chatHistory code
 // ***********************
 socket.on('chatHistory', (roomHistory) => {
-  const room = messages.getAttribute("data-room");
   let roomDataHistory;
+  let roomChatlist = document.querySelectorAll(".room section:last-of-type ul li");
+  const room = messages.getAttribute("data-room");
 
   for (let t = 0; t < roomHistory.length; t++) {
     console.log("roomHistory[i]", roomDataHistory);
     if (roomHistory[t].roomID === room) {
       roomDataHistory = roomHistory[t].messages
+      console.log("his msg", roomDataHistory);
     }
 
     for (let i = 0; i < roomDataHistory.length; i++) {
       const liElement = document.createElement("li");
 
+      // console.log("roomDataHistory", roomDataHistory);
 
-      if (roomDataHistory[i].gifMessage) {
-        console.log("is is gif", roomDataHistory[i].userName);
-        liElement.innerHTML = `
-      <div>
-        <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">
-      </div>
-      <div data-username="${roomDataHistory[i].userName}">
-      <img src="${roomDataHistory[i].gifMessage}" alt="${roomDataHistory[i].gifMessage} GIF foto">
-      </div>
-      `
-        if (roomDataHistory[i].userName === usernameInput.value) {
-          liElement.classList.add("message");
+      if (roomDataHistory.length !== roomChatlist.length) {
+
+        // console.log("hi history", roomDataHistory.length, roomChatlist.length);
+
+        // gifs history
+        if (roomDataHistory[i].gifMessage) {
+          // console.log("is is gif", roomDataHistory[i].userName);
+          liElement.innerHTML = `
+            <div>
+              <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">
+            </div>
+            <div data-username="${roomDataHistory[i].userName}">
+            <img src="${roomDataHistory[i].gifMessage}" alt="${roomDataHistory[i].gifMessage} GIF foto">
+            </div>
+            `
+            if (roomDataHistory[i].username === myname ) {  
+              liElement.classList.add("message");
+            }
+
+          messages.appendChild(liElement);
+          messages.scrollTop = messages.scrollHeight;
         }
 
-        messages.appendChild(liElement);
-        messages.scrollTop = messages.scrollHeight;
-      }
+        // text messages
+        if (!roomDataHistory[i].gifMessage) {
 
-      if (!roomDataHistory[i].gifMessage) {
-        const liElement = document.createElement("li");
+          const liElement = document.createElement("li");
+          liElement.innerHTML = `
+              <div id="userImg">
+                <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar} icon">
+              </div>
+              <p data-username="${roomDataHistory[i].username}">${roomDataHistory[i].message}</p>
+            `
 
-        console.log("is is text");
-        liElement.innerHTML = `
-        <div id="userImg">
-           <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar} icon">
-        </div>
-        <p data-username="${roomDataHistory[i].userName}">${roomDataHistory[i].message}</p>
-       `
-        if (roomDataHistory[i].userName === usernameInput.value) {
-          liElement.classList.add("message");
+          liElement.classList.add("time");
+          liElement.dataset.time = `${roomDataHistory[i].time}`;
+          
+          if (roomDataHistory[i].username === myname ) {
+            liElement.classList.add("message");
+          }
+
+          messages.appendChild(liElement);
+          messages.scrollTop = messages.scrollHeight;
+
         }
-
-        messages.appendChild(liElement);
-        messages.scrollTop = messages.scrollHeight;
-
       }
     }
   }
