@@ -30,7 +30,9 @@ const loggin = document.querySelector(".room section:first-of-type");
 const chatScreen = document.querySelector(".room section:last-of-type");
 const startChattingButton = document.querySelector(".room section:first-of-type > button");
 
-const loadingChat = document.querySelector(".room section:last-of-type > div");
+const loadingChat = document.querySelector(".room section:last-of-type > div:first-of-type");
+const disconnectedChat = document.querySelector(".room > div");
+
 
 // ***********************
 //     iframe variabels
@@ -229,17 +231,17 @@ roomLinkbutton.addEventListener("click", () => {
 function checkConnection() {
   if (socket.connected) {
     console.log('Socket is connected');
-    // chatScreen.classList.remove('socket-disconnected');
+    disconnectedChat.classList.remove("disconnected")
+    disconnectedChat.classList.add("connected")
+    setTimeout(() => {
+      disconnectedChat.classList.remove("connected")
+    }, 2000);
+
   } else {
     console.log('Socket is disconnected');
-    // chatScreen.classList.add('socket-disconnected');
-    // setTimeout(() => {
-    //     if (!socket.connected) {
-    //         const error = document.querySelector('#error');
-    //         error.textContent = 'You are disconnected';
-    //         error.classList.add('show');
-    //     }
-    // }, 5000);
+    disconnectedChat.classList.add("disconnected")
+    disconnectedChat.classList.remove("connected")
+
   }
 }
 
@@ -284,7 +286,6 @@ socket.on('notconnected', (data) => {
   if (roomID === roomid){
     for (let i = 0; i < chatMessages.length; i++) {
       const dataset = chatMessages[i].dataset.client;
-      // console.log("dataset 2", dataset);
   
       if (dataset === data.userName) {
         let ChatMsg = chatMessages[i];

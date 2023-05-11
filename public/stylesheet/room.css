@@ -177,7 +177,7 @@ main.room section:last-of-type {
 }
 
 /* loading screen */
-main.room section:last-of-type > div {
+main.room section:last-of-type > div:first-of-type {
     width: 100vw;
     height: 100vh;
 
@@ -191,11 +191,11 @@ main.room section:last-of-type > div {
     place-items: center;
 }
 
-main.room section:last-of-type > div.noLoading {
+main.room section:last-of-type > div:first-of-type.noLoading {
     display: none;
 }
 
-main.room section:last-of-type > div span {
+main.room section:last-of-type > div:first-of-type span {
     display: block;
     width: 80%;
     aspect-ratio: 1/0.8;
@@ -206,7 +206,7 @@ main.room section:last-of-type > div span {
     align-items: center;
 }
 
-main.room section:last-of-type > div span div:first-of-type {
+main.room section:last-of-type > div:first-of-type span div:first-of-type {
     width: 40%;
     aspect-ratio: 1/1;
 
@@ -220,14 +220,14 @@ main.room section:last-of-type > div span div:first-of-type {
 }
 
 
-main.room section:last-of-type > div span div:first-of-type img {
+main.room section:last-of-type > div:first-of-type span div:first-of-type img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
 }
 
-main.room section:last-of-type > div span div:nth-of-type(2) {
+main.room section:last-of-type > div:first-of-type span div:nth-of-type(2) {
     width: 90%;
     height: 2em;
 
@@ -239,7 +239,7 @@ main.room section:last-of-type > div span div:nth-of-type(2) {
     background-image: linear-gradient(to right, var(--pink) var(--size), var(--light-blue) 0);
     background-size: 100%;
 
-    animation: loadingChat 2.4s 1 both linear;
+    animation: loadingChat 2.4s infinite both linear;
 }
 
 @keyframes loadingChat {
@@ -264,9 +264,86 @@ main.room section:last-of-type > div span div:nth-of-type(2) {
     }
 }
 
+main.room > div{
+    height: 8vw;
+    width: 32vw;
+
+    position: fixed;
+    top: 1em;
+    left: -100%;
+    z-index: 10000000000000000000000000000000000;
+    background-color: white;
+    border-radius: 5em;
+
+    background-image: url(../images/disconnected.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    transition: 1s;
+}
+
+main.room > div.disconnected{
+    animation: disconnectNoteIn .8s .5s 1 linear both,
+    writingEffect .5s 1.5s infinite linear alternate backwards;
+}
+
+main.room > div.connected{
+    left: 1em;
+    background-image: url(../images/connected.png);
+    background-size: 90%;
 
 
 
+}
+
+@keyframes disconnectNoteIn {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 1em;
+    }
+}
+
+
+main.room section:last-of-type > div:nth-of-type(2){
+    width: 100%;
+    height: 3.5em;
+
+    background-color: #ffffff;
+    position: absolute;
+    top: -3.5em;
+    z-index: 2;
+    border-radius: 0;
+
+    background-image: url(../images/disconnected.png);
+    background-size: contain;
+
+    animation: moveBackground 5s linear infinite both;
+
+    visibility: hidden;
+}
+
+main.room section:last-of-type > div:nth-of-type(2).connected{
+    visibility: visible;
+    background-image: url(../images/connected.png);
+    animation:none;
+
+}
+
+main.room section:last-of-type > div:nth-of-type(2).disconnected{
+    visibility: visible;
+}
+
+@keyframes moveBackground {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
 
 
 
