@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
   if (socket.connected) {
     console.log("Lela");
     io.emit('connected');
-    io.emit('userConnected',{client, clientRoom})
+    socket.emit('userConnected',{client, clientRoom})
   }
 
 
