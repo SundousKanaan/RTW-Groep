@@ -232,9 +232,6 @@ function checkConnection() {
 
   if (socket.connected) {
     console.log('Socket is connected 0');
-    // if (client && clientRoom) {
-    //   console.log('Socket is connected 1', client, clientRoom).;
-    // }
     disconnectedNote.classList.remove("disconnected")
     disconnectedNote.classList.add("connected")
     setTimeout(() => {
@@ -255,24 +252,24 @@ socket.on('connected', () => {
 
 
 socket.on("userConnected", (userData) => {
-  // console.log("hi", userData)
+  console.log("hi", userData)
   usersConnectionTest();
   setInterval(usersConnectionTest, 1000)
 })
 
 function usersConnectionTest() {
-  // console.log("1");
+  console.log("1");
   const usersImg = document.querySelectorAll(".room section:last-of-type>ul li.time>div:first-of-type")
-
-  for (let i = 0; i < usersImg.length; i++) {
-    if (usersImg[i]) {
-      usersImg[i].classList.add('connected');
+    for (let i = 0; i < usersImg.length; i++) {
+      if (usersImg[i]) {
+        usersImg[i].classList.add('connected');
+      }
     }
-  }
 }
 
 
 function connectedtest(ChatMsg) {
+
   if (ChatMsg.firstElementChild.classList.contains("connected")) {
     ChatMsg.firstElementChild.classList.remove("connected");
     // console.log("notconnected", ChatMsg);
@@ -280,7 +277,7 @@ function connectedtest(ChatMsg) {
 }
 
 socket.on('notconnected', (data) => {
-  // console.log(data);
+  console.log("90");
 
   const roomid = messages.getAttribute("data-room");
   const usersData = data.users;
@@ -293,11 +290,8 @@ socket.on('notconnected', (data) => {
     if (dataset === data.userName) {
       let ChatMsg = chatMessages[i];
 
-      if (ChatMsg.firstElementChild.classList.contains("connected")) {
-        ChatMsg.firstElementChild.classList.remove("connected");
-
-        // connectedtest(ChatMsg);
-      }
+      clearInterval()
+      connectedtest(ChatMsg);
       roomAdmin(usersData);
     }
 
