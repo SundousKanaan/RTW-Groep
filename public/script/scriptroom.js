@@ -53,8 +53,12 @@ messages.dataset.room = new URLSearchParams(new URL(window.location).search).get
 const room = messages.getAttribute("data-room");
 const socket = io();
 
-console.log("url",new URLSearchParams(new URL(window.location)));
 
+let url = new URL(window.location).origin
+const ENDbutton = document.querySelector("header section > a")
+// ENDbutton.href = url;
+
+console.log("url", ENDbutton);
 
 let myname;
 
