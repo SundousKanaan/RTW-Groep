@@ -31,7 +31,7 @@ const chatScreen = document.querySelector(".room section:last-of-type");
 const startChattingButton = document.querySelector(".room section:first-of-type > button");
 
 const loadingChat = document.querySelector(".room section:last-of-type > div:first-of-type");
-const disconnectedChat = document.querySelector(".room > div");
+const disconnectedNote = document.querySelector(".room > div");
 
 
 // ***********************
@@ -50,7 +50,7 @@ const roomLinkbutton = document.querySelector("header section > button:last-of-t
 
 const searchParams = new URLSearchParams(window.location.search);
 const roomID = searchParams.get("room");
-console.log("roomID", roomID);
+// console.log("roomID", roomID);
 messages.dataset.room = new URLSearchParams(new URL(window.location).search).get("room")
 const room = messages.getAttribute("data-room");
 const socket = io();
@@ -68,7 +68,7 @@ usernameInput.addEventListener("keydown", (event) => {
 });
 
 function nameCheck() {
-  console.log(usernameInput.value);
+  // console.log(usernameInput.value);
   clientName = usernameInput.value
   socket.emit('nameCheck', { roomID, clientName });
 }
@@ -77,22 +77,22 @@ usernameInput.addEventListener("input", nameCheck);
 
 function nameFeedback() {
   if (usernameInput.value.trim() === '') {
-    console.log('Form is invalid', badNameNote);
+    // console.log('Form is invalid', badNameNote);
     badNameNote.innerHTML = "Form is invalid"
     badNameNote.classList.add('badname');
     startChattingButton.classList.remove('startChating');
 
   } else {
-    console.log('Form is valid', badNameNote);
+    // console.log('Form is valid', badNameNote);
     badNameNote.classList.remove('badname');
     startChattingButton.classList.add('startChating');
   }
 }
 
 socket.on('nameCheck', (data) => {
-  console.log("nameCheck data", data);
+  // console.log("nameCheck data", data);
   const room = messages.getAttribute("data-room");
-  console.log("currentRoomUsers", data);
+  // console.log("currentRoomUsers", data);
   if (data.currentRoomUsers) {
     const currentRoomUsers = data.currentRoomUsers;
 
@@ -100,7 +100,7 @@ socket.on('nameCheck', (data) => {
       badNameNote.innerHTML = `The username ${data.client} has been used`;
       usernameInput.classList.add('badName')
       usernameInput.classList.replace('goodName', 'badName')
-      console.log("check", usernameInput);
+      // console.log("check", usernameInput);
       startChattingButton.classList.remove('startChating');
     } else {
       badNameNote.innerHTML = ""
@@ -172,7 +172,7 @@ socket.on("joinRoom", (data) => {
 // Room admin ==========================================================================
 
 function roomAdmin(roomUsers) {
-  console.log("--------room admin", roomID);
+  // console.log("--------room admin", roomID);
   const room = roomUsers.find(room => room.ID === roomID);
 
   const currentAdmin = room.users[0];
@@ -182,8 +182,8 @@ function roomAdmin(roomUsers) {
 }
 
 socket.on("roomAdmin", (roomData) => {
-  console.log("----room admin:", roomData);
-  // console.log("roomData id", roomData.ID);
+  // console.log("----room admin:", roomData);
+  // // console.log("roomData id", roomData.ID);
 
   const room = messages.getAttribute("data-room");
 
@@ -213,7 +213,7 @@ roomLinkbutton.addEventListener("click", () => {
   }, 4000);
 
   // Alert the copied text
-  console.log("Copied the text: ", copyText);
+  // console.log("Copied the text: ", copyText);
 })
 
 
@@ -229,70 +229,77 @@ roomLinkbutton.addEventListener("click", () => {
 //  user connected ==========================================================================
 
 function checkConnection() {
+
   if (socket.connected) {
-    console.log('Socket is connected');
-    disconnectedChat.classList.remove("disconnected")
-    disconnectedChat.classList.add("connected")
+    console.log('Socket is connected 0');
+    // if (client && clientRoom) {
+    //   console.log('Socket is connected 1', client, clientRoom).;
+    // }
+    disconnectedNote.classList.remove("disconnected")
+    disconnectedNote.classList.add("connected")
     setTimeout(() => {
-      disconnectedChat.classList.remove("connected")
+      disconnectedNote.classList.remove("connected")
     }, 2000);
 
   } else {
     console.log('Socket is disconnected');
-    disconnectedChat.classList.add("disconnected")
-    disconnectedChat.classList.remove("connected")
-
+    disconnectedNote.classList.add("disconnected")
+    disconnectedNote.classList.remove("connected")
   }
 }
 
-function connected(roomID) {
-  const room = messages.getAttribute("data-room");
-
-  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li.myMessage>div:first-of-type")
-  console.log("connected user");
-  if (roomID === room) {
-    for (let i = 0; i < usersImg.length; i++) {
-      if (usersImg[i]) {
-        usersImg[i].classList.add('connected');
-      }
-    }
-  }
-
-  console.log(usernameInput.value, 'is online');
-}
 
 socket.on('connected', () => {
-  connected();
-  checkConnection();
-
-  setInterval(checkConnection, 1000);
+  console.log('connected');
 })
+
+
+socket.on("userConnected", (userData) => {
+  // console.log("hi", userData)
+  usersConnectionTest();
+  setInterval(usersConnectionTest, 1000)
+})
+
+function usersConnectionTest() {
+  // console.log("1");
+  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li.time>div:first-of-type")
+
+  for (let i = 0; i < usersImg.length; i++) {
+    if (usersImg[i]) {
+      usersImg[i].classList.add('connected');
+    }
+  }
+}
 
 
 function connectedtest(ChatMsg) {
   if (ChatMsg.firstElementChild.classList.contains("connected")) {
-    ChatMsg.firstElementChild.classList.remove('connected');
-    console.log("notconnected", ChatMsg);
+    ChatMsg.firstElementChild.classList.remove("connected");
+    // console.log("notconnected", ChatMsg);
   }
 }
 
 socket.on('notconnected', (data) => {
-  console.log(data);
+  // console.log(data);
 
   const roomid = messages.getAttribute("data-room");
   const usersData = data.users;
   const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
 
-  if (roomID === roomid){
-    for (let i = 0; i < chatMessages.length; i++) {
-      const dataset = chatMessages[i].dataset.client;
-  
-      if (dataset === data.userName) {
-        let ChatMsg = chatMessages[i];
-        connectedtest(ChatMsg);
+  // if (roomID === roomid) {
+  for (let i = 0; i < chatMessages.length; i++) {
+    console.log(chatMessages[i]);
+    const dataset = chatMessages[i].dataset.client;
+    if (dataset === data.userName) {
+      let ChatMsg = chatMessages[i];
+
+      if (ChatMsg.firstElementChild.classList.contains("connected")) {
+        ChatMsg.firstElementChild.classList.remove("connected");
+
+        // connectedtest(ChatMsg);
       }
       roomAdmin(usersData);
-  }
+    }
 
   }
 
@@ -306,7 +313,6 @@ socket.on('notconnected', (data) => {
 
   if (data.roomID === room) {
     messages.appendChild(liElement)
-    console.log(liElement);
   }
 })
 
@@ -320,15 +326,15 @@ socket.on('notconnected', (data) => {
 const writingNote = document.querySelector("main.room > p")
 socket.on("focus", (data) => {
   const room = messages.getAttribute("data-room");
-  // console.log("data Focus", data);
+  // // console.log("data Focus", data);
   if (data.roomID === room) {
-    console.log("HI 0");
+    // console.log("HI 0");
     if (data.hasFocus) {
-      console.log("HI 1");
+      // console.log("HI 1");
       writingNote.innerHTML = `<span>${data.userName}</span> is writing`;
       writingNote.classList.add("focus");
     } else {
-      console.log("HI 2");
+      // console.log("HI 2");
       writingNote.innerHTML = "";
       writingNote.classList.remove("focus");
     }
@@ -348,7 +354,7 @@ socket.on("focus", (data) => {
 // ===================
 messageInput.addEventListener("input", () => {
   const inputValue = messageInput.value;
-  console.log(inputValue);
+  // console.log(inputValue);
   chatScreen.classList.add("focus");
   const userName = usernameInput.value
   socket.emit("focus", { hasFocus: true, roomID: roomID, userName: userName });
@@ -363,7 +369,7 @@ sendMessage.addEventListener("click", (event) => {
     if (avatarsInput[i].checked) {
       let labelChecked = avatarsInput[i].nextElementSibling
       avatarsrc = labelChecked.dataset.avatar
-      console.log(avatarsrc, [i]);
+      // console.log(avatarsrc, [i]);
     }
   }
 
@@ -377,7 +383,7 @@ sendMessage.addEventListener("click", (event) => {
       time: currentTimeNL
     };
 
-    // console.log(chat);
+    // // console.log(chat);
 
     socket.emit("chatmessage", chat);
     messageInput.value = "";
@@ -403,11 +409,11 @@ socket.on("chatmessage", (msg) => {
   element.dataset.time = `${msg.time}`;
 
   if (msg.room === room) {
-    console.log("element", element);
+    // console.log("element", element);
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
     let roomid = msg.room;
-    connected(roomid)
+
   }
 
   if (msg.username === usernameInput.value) {
@@ -463,7 +469,7 @@ gifSearch.addEventListener('click', (event) => {
 
   searchKey = gifInput.value
 
-  console.log(searchKey);
+  // console.log(searchKey);
 
   // make a fetch request to Giphy API to get a random GIF
   fetch(`https://api.gfycat.com/v1/gfycats/search?search_text=${searchKey}`)
@@ -492,7 +498,7 @@ gifSearch.addEventListener('click', (event) => {
           if (avatarsInput[i].checked) {
             let labelChecked = avatarsInput[i].nextElementSibling
             avatarsrc = labelChecked.dataset.avatar
-            console.log(avatarsrc, [i]);
+            // console.log(avatarsrc, [i]);
           }
         }
 
@@ -511,17 +517,17 @@ gifSearch.addEventListener('click', (event) => {
             gifName: gifName
           };
 
-          console.log("ii", message);
+          // console.log("ii", message);
           socket.emit('gifmessage', message);
         });
       }
 
       if (searchKey === "") {
         gifList.classList.remove('search')
-        console.log("no", gifList);
+        // console.log("no", gifList);
       } else {
         gifList.classList.add('search')
-        console.log("yes", gifList);
+        // console.log("yes", gifList);
       }
 
     })
@@ -533,7 +539,7 @@ gifSearch.addEventListener('click', (event) => {
 
 // receive gif data via socket
 socket.on("gifmessage", (msg) => {
-  console.log("msg.gifMessage", msg.gifMessage);
+  // console.log("msg.gifMessage", msg.gifMessage);
   const room = messages.getAttribute("data-room");
   const li = document.createElement("li");
   li.dataset.client = `${msg.userName}`;
@@ -553,9 +559,9 @@ socket.on("gifmessage", (msg) => {
   if (msg.room === room) {
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
-    console.log("hi", messages);
+    // console.log("hi", messages);
     let roomid = msg.room;
-    connected(roomid)
+
   }
 
   if (msg.userName === usernameInput.value) {
@@ -593,16 +599,16 @@ document.addEventListener("DOMContentLoaded", function () {
   videoLinkInput.addEventListener('input', () => {
     // The value is a space or an empty string
     if (videoLinkInput.value.trim() === '') {
-      console.log("1");
+      // console.log("1");
       videoSendLinkbutton.classList.remove("admin");
     } else {
-      console.log("2");
+      // console.log("2");
       videoSendLinkbutton.classList.add("admin");
     }
   })
 
   function onYouTubeIframeAPIReady(videoUrl) {
-    console.log("onYouTubeIframeAPIReady:", videoUrl);
+    // console.log("onYouTubeIframeAPIReady:", videoUrl);
     const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
 
     if (youtubeUrlRegex.test(videoUrl)) {
@@ -611,12 +617,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // Check of de link is gewijzigd
       if (videoUrl !== ytlink) {
         if (player) {
-          console.log("HIIIOOOO");
+          // console.log("HIIIOOOO");
           player.destroy();
         }
       }
 
-      console.log("YT test", ytlink);
+      // console.log("YT test", ytlink);
 
       let newURL = new URL(videoUrl).pathname;
 
@@ -642,7 +648,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `
       messages.appendChild(liElement)
       messages.scrollTop = messages.scrollHeight;
-      console.log("Hi yt");
+      // console.log("Hi yt");
 
     } else {
       videoLinkInput.value = '';
@@ -654,7 +660,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `
       messages.appendChild(liElement)
       messages.scrollTop = messages.scrollHeight;
-      console.log("Ongeldige YouTube-video-URL");
+      // console.log("Ongeldige YouTube-video-URL");
     }
   }
 
@@ -672,16 +678,16 @@ document.addEventListener("DOMContentLoaded", function () {
       // onPlayerStateChange();
 
       socket.emit('streamLink', { link, roomID });
-      console.log("iframeSRC", { link, roomID });
+      // console.log("iframeSRC", { link, roomID });
     }
 
     else if (videoUrl.includes("https://www.youtube.com/")) {
-      console.log(videoUrl);
+      // console.log(videoUrl);
       let newURL = new URL(videoUrl);
-      console.log("newURL", newURL);
+      // console.log("newURL", newURL);
       let urlSearch = newURL.search;
       let searchID = urlSearch.substring(3);
-      console.log("newStr", searchID);
+      // console.log("newStr", searchID);
       let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
       link = iframeSRC
 
@@ -691,7 +697,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     else {
 
-      console.log("else searchID", videoUrl);
+      // console.log("else searchID", videoUrl);
       link = videoUrl;
 
       onYouTubeIframeAPIReady(videoUrl);
@@ -711,11 +717,11 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
   function onPlayerStateChange() {
-    console.log('Player state has changed');
+    // console.log('Player state has changed');
   }
 
   function onPlayerReady(event) {
-    console.log('player ready!');
+    // console.log('player ready!');
     player = event.target;
     streamStart.addEventListener('click', playYTVideo);
     streamStop.addEventListener('click', stopYTVideo);
@@ -725,7 +731,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function stopYTVideo() {
     streamStart.classList.add("admin")
     streamStop.classList.remove("admin")
-    console.log("Player is paused");
+    // console.log("Player is paused");
     socket.emit('stopStream', roomID);
   }
 
@@ -733,7 +739,7 @@ document.addEventListener("DOMContentLoaded", function () {
     streamStart.classList.remove("admin")
     streamStop.classList.add("admin")
 
-    console.log("Player is ready", player.videoTitle);
+    // console.log("Player is ready", player.videoTitle);
     socket.emit('startStream', roomID);
   }
 
@@ -744,7 +750,7 @@ document.addEventListener("DOMContentLoaded", function () {
       player.playVideo();
       player.seekTo(0);
 
-      console.log("play video");
+      // console.log("play video");
     };
   })
 
@@ -753,7 +759,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (roomID === room) {
       player.stopVideo();
 
-      console.log("stop video");
+      // console.log("stop video");
     };
   })
 
@@ -777,10 +783,10 @@ socket.on('chatHistory', (roomHistory) => {
   const room = messages.getAttribute("data-room");
 
   for (let t = 0; t < roomHistory.length; t++) {
-    console.log("roomHistory[i]", roomDataHistory);
+    // console.log("roomHistory[i]", roomDataHistory);
     if (roomHistory[t].roomID === room) {
       roomDataHistory = roomHistory[t].messages
-      console.log("his msg", roomDataHistory);
+      // console.log("his msg", roomDataHistory);
     }
 
     for (let i = 0; i < roomDataHistory.length; i++) {
@@ -790,7 +796,7 @@ socket.on('chatHistory', (roomHistory) => {
 
         // gifs history
         if (roomDataHistory[i].gifMessage) {
-          // console.log("is is gif", roomDataHistory[i].userName);
+          // // console.log("is is gif", roomDataHistory[i].userName);
           liElement.innerHTML = `
             <div>
               <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">

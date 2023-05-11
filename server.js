@@ -39,7 +39,8 @@ io.on("connection", (socket) => {
 
   if (socket.connected) {
     console.log("Lela");
-    io.emit('connected')
+    io.emit('connected');
+    io.emit('userConnected',{client, clientRoom})
   }
 
 
@@ -238,7 +239,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("focus", (data) => {
-    socket.emit("focus", data);
+    socket.broadcast.emit("focus", data);
   });
 
 });
