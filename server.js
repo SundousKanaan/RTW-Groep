@@ -175,20 +175,21 @@ io.on("connection", (socket) => {
     const userName = message.userName;
     const avatar = message.avatar;
     const time = message.time;
+    const gifName = message.gifName;
 
-    io.emit("gifmessage", { gifMessage, room, userName, avatar,time });
+    io.emit("gifmessage", { gifMessage, room, userName, avatar,time,gifName });
 
     // Zoek de index van de kamer in de roomHistory array
     const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
 
     if (roomIndex !== -1) {
       // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
-      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar,time });
+      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar,time,gifName });
     } else {
       // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
       roomHistory.push({
         roomID: room,
-        messages: [{ userName, gifMessage, avatar,time }],
+        messages: [{ userName, gifMessage, avatar,time,gifName }],
       });
     }
 

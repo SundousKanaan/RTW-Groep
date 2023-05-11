@@ -53,13 +53,6 @@ messages.dataset.room = new URLSearchParams(new URL(window.location).search).get
 const room = messages.getAttribute("data-room");
 const socket = io();
 
-
-let url = new URL(window.location).origin
-const ENDbutton = document.querySelector("header section > a")
-// ENDbutton.href = url;
-
-console.log("url", ENDbutton);
-
 let myname;
 
 // username check  ==========================================================================
@@ -177,6 +170,7 @@ socket.on("joinRoom", (data) => {
 // Room admin ==========================================================================
 
 function roomAdmin(roomUsers) {
+  console.log("--------room admin", roomID);
   const room = roomUsers.find(room => room.ID === roomID);
 
   const currentAdmin = room.users[0];
@@ -186,7 +180,7 @@ function roomAdmin(roomUsers) {
 }
 
 socket.on("roomAdmin", (roomData) => {
-  console.log("room admin:", roomData);
+  console.log("----room admin:", roomData);
   // console.log("roomData id", roomData.ID);
 
   const room = messages.getAttribute("data-room");
@@ -195,7 +189,6 @@ socket.on("roomAdmin", (roomData) => {
     if (roomData.users[0] === usernameInput.value) {
       videoForm.classList.add("admin");
       span.classList.add("admin");
-      // streamStart.classList.add("admin");
     }
   }
 })
@@ -235,27 +228,31 @@ roomLinkbutton.addEventListener("click", () => {
 
 function checkConnection() {
   if (socket.connected) {
-      console.log('Socket is connected');
-      // chatScreen.classList.remove('socket-disconnected');
+    console.log('Socket is connected');
+    // chatScreen.classList.remove('socket-disconnected');
   } else {
-      console.log('Socket is disconnected');
-      // chatScreen.classList.add('socket-disconnected');
-      // setTimeout(() => {
-      //     if (!socket.connected) {
-      //         const error = document.querySelector('#error');
-      //         error.textContent = 'You are disconnected';
-      //         error.classList.add('show');
-      //     }
-      // }, 5000);
+    console.log('Socket is disconnected');
+    // chatScreen.classList.add('socket-disconnected');
+    // setTimeout(() => {
+    //     if (!socket.connected) {
+    //         const error = document.querySelector('#error');
+    //         error.textContent = 'You are disconnected';
+    //         error.classList.add('show');
+    //     }
+    // }, 5000);
   }
 }
 
-function connected() {
-  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li>div:first-of-type")
+function connected(roomID) {
+  const room = messages.getAttribute("data-room");
+
+  const usersImg = document.querySelectorAll(".room section:last-of-type>ul li.myMessage>div:first-of-type")
   console.log("connected user");
-  for (let i = 0; i < usersImg.length; i++) {
-    if (usersImg[i]) {
-      usersImg[i].classList.add('connected');
+  if (roomID === room) {
+    for (let i = 0; i < usersImg.length; i++) {
+      if (usersImg[i]) {
+        usersImg[i].classList.add('connected');
+      }
     }
   }
 
@@ -278,20 +275,24 @@ function connectedtest(ChatMsg) {
 }
 
 socket.on('notconnected', (data) => {
-  console.log(data.users);
+  console.log(data);
 
+  const roomid = messages.getAttribute("data-room");
   const usersData = data.users;
   const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
 
-  for (let i = 0; i < chatMessages.length; i++) {
-    const dataset = chatMessages[i].dataset.client;
-    // console.log("dataset 2", dataset);
+  if (roomID === roomid){
+    for (let i = 0; i < chatMessages.length; i++) {
+      const dataset = chatMessages[i].dataset.client;
+      // console.log("dataset 2", dataset);
+  
+      if (dataset === data.userName) {
+        let ChatMsg = chatMessages[i];
+        connectedtest(ChatMsg);
+      }
+      roomAdmin(usersData);
+  }
 
-    if (dataset === data.userName) {
-      let ChatMsg = chatMessages[i];
-      connectedtest(ChatMsg);
-    }
-    roomAdmin(data.users);
   }
 
 
@@ -404,11 +405,12 @@ socket.on("chatmessage", (msg) => {
     console.log("element", element);
     messages.appendChild(element);
     messages.scrollTop = messages.scrollHeight;
-    connected(messages)
+    let roomid = msg.room;
+    connected(roomid)
   }
 
   if (msg.username === usernameInput.value) {
-    element.classList.add("message");
+    element.classList.add("myMessage");
   }
 });
 
@@ -471,13 +473,14 @@ gifSearch.addEventListener('click', (event) => {
 
       for (let i = 0; i < urlData.length; i++) {
         const Gifs = data.gfycats[i].max2mbGif;
+        const gifName = data.gfycats[i].title;
 
         const li = document.createElement("li")
         const button = document.createElement("button")
         const img = document.createElement("img")
 
         img.src = Gifs;
-        img.alt = searchKey, "gif image";
+        img.alt = gifName + " GIF foto";
 
         button.appendChild(img)
         li.appendChild(button)
@@ -495,7 +498,6 @@ gifSearch.addEventListener('click', (event) => {
         button.addEventListener('click', (event) => {
           event.preventDefault();
           let currentTimeNL = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
-          console.log('Image clicked', Gifs);
 
           // send gif data via socket
           const message = {
@@ -504,7 +506,8 @@ gifSearch.addEventListener('click', (event) => {
             userName: usernameInput.value,
             searchKey: searchKey,
             avatar: avatarsrc,
-            time: currentTimeNL
+            time: currentTimeNL,
+            gifName: gifName
           };
 
           console.log("ii", message);
@@ -529,16 +532,17 @@ gifSearch.addEventListener('click', (event) => {
 
 // receive gif data via socket
 socket.on("gifmessage", (msg) => {
+  console.log("msg.gifMessage", msg.gifMessage);
   const room = messages.getAttribute("data-room");
   const li = document.createElement("li");
   li.dataset.client = `${msg.userName}`;
 
   li.innerHTML = `
   <div>
-    <img src="${msg.avatar}" alt="">
+    <img src="${msg.avatar}" alt="${msg.avatar}">
   </div>
   <div data-username="${msg.userName}">
-  <img src="${msg.gifMessage}" alt="">
+  <img src="${msg.gifMessage}" alt="${msg.gifName} GIF foto">
   </div>
   `
 
@@ -549,6 +553,8 @@ socket.on("gifmessage", (msg) => {
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
     console.log("hi", messages);
+    let roomid = msg.room;
+    connected(roomid)
   }
 
   if (msg.userName === usernameInput.value) {
@@ -779,11 +785,7 @@ socket.on('chatHistory', (roomHistory) => {
     for (let i = 0; i < roomDataHistory.length; i++) {
       const liElement = document.createElement("li");
 
-      // console.log("roomDataHistory", roomDataHistory);
-
       if (roomDataHistory.length !== roomChatlist.length) {
-
-        // console.log("hi history", roomDataHistory.length, roomChatlist.length);
 
         // gifs history
         if (roomDataHistory[i].gifMessage) {
@@ -793,12 +795,12 @@ socket.on('chatHistory', (roomHistory) => {
               <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">
             </div>
             <div data-username="${roomDataHistory[i].userName}">
-            <img src="${roomDataHistory[i].gifMessage}" alt="${roomDataHistory[i].gifMessage} GIF foto">
+            <img src="${roomDataHistory[i].gifMessage}" alt="${roomDataHistory[i].gifName} GIF foto">
             </div>
             `
-            if (roomDataHistory[i].username === myname ) {  
-              liElement.classList.add("message");
-            }
+          if (roomDataHistory[i].username === myname) {
+            liElement.classList.add("myMessage");
+          }
 
           messages.appendChild(liElement);
           messages.scrollTop = messages.scrollHeight;
@@ -817,9 +819,9 @@ socket.on('chatHistory', (roomHistory) => {
 
           liElement.classList.add("time");
           liElement.dataset.time = `${roomDataHistory[i].time}`;
-          
-          if (roomDataHistory[i].username === myname ) {
-            liElement.classList.add("message");
+
+          if (roomDataHistory[i].username === myname) {
+            liElement.classList.add("myMessage");
           }
 
           messages.appendChild(liElement);

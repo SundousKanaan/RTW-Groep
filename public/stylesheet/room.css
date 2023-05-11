@@ -375,7 +375,7 @@ main.room section:last-of-type > ul li.time::after{
     color: var(--text-color);
 }
 
-main.room section:last-of-type > ul li.message.time::after{
+main.room section:last-of-type > ul li.myMessage.time::after{
     right: auto;
     left: 5%;
 }
@@ -394,17 +394,17 @@ main.room section:last-of-type > ul li p::before {
     color: var(--text-color);
 }
 
-main.room section:last-of-type > ul li.message {
+main.room section:last-of-type > ul li.myMessage {
     flex-direction: row-reverse;
     align-self: end;
 }
 
-main.room section:last-of-type > ul li.message p {
+main.room section:last-of-type > ul li.myMessage p {
     background-color: var(--pink);
 }
 
-main.room section:last-of-type > ul li.message div:nth-of-type(2)::before,
-main.room section:last-of-type > ul li.message p::before {
+main.room section:last-of-type > ul li.myMessage div:nth-of-type(2)::before,
+main.room section:last-of-type > ul li.myMessage p::before {
     right: 0;
     left: auto;
 }
