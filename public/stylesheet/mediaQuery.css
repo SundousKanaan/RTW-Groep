@@ -16,6 +16,11 @@
         height: 5em;
     }
 
+    main.room > div{
+        height: 4vw;
+        width: 15vw;
+    }
+    
     main.loggin section,
     main.room section:first-of-type {
         width: 100vw;

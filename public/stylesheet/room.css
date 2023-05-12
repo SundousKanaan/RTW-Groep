@@ -290,9 +290,6 @@ main.room > div.connectedNote{
     left: 1em;
     background-image: url(../images/connected.png);
     background-size: 90%;
-
-
-
 }
 
 @keyframes disconnectNoteIn {
