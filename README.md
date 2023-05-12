@@ -220,7 +220,6 @@ I drew the main pages and the link between them in a simple way, and how it will
 <details>
 
 1. YouTube Iframe API
-
 **Features**
 - Making a special frame for the player through the id of the YouTube link
 - Start the player via a separate button using "play Video() & stopVideo()"
@@ -228,7 +227,6 @@ I drew the main pages and the link between them in a simple way, and how it will
 It also provides data about the video, such as the title of the video and others, but what matters to me is the id of the video.
 
 2. Gfycat API
-
 - Search in a few different languages
 - jive address
 - GIF image in several different qualities
@@ -237,7 +235,6 @@ Classification of carrion
 I used the highest quality gif available and also the gif title
 
 </details>
-
 
 ## MOSCOW methode
 
@@ -264,6 +261,9 @@ sa
 </details>
 
 ## Real time events
+
+<details>
+</details>
 
 ## UI Stack
 
