@@ -172,19 +172,16 @@ socket.on("joinRoom", (data) => {
 // Room admin ==========================================================================
 
 function roomAdmin(roomUsers) {
-  // console.log("--------room admin", roomID);
   const room = roomUsers.find(room => room.ID === roomID);
 
-  const currentAdmin = room.users[0];
-  h1.textContent = `Admin ${currentAdmin}`;
-
-  socket.emit("roomAdmin", { currentAdmin, roomID });
+  if (room.users.length >= 0) {
+    const currentAdmin = room.users[0];
+    h1.textContent = `Admin ${currentAdmin}`;
+    socket.emit("roomAdmin", { currentAdmin, roomID });
+  }
 }
 
 socket.on("roomAdmin", (roomData) => {
-  // console.log("----room admin:", roomData);
-  // // console.log("roomData id", roomData.ID);
-
   const room = messages.getAttribute("data-room");
 
   if (roomData.ID === room) {
@@ -211,9 +208,6 @@ roomLinkbutton.addEventListener("click", () => {
   setTimeout(() => {
     roomLinkbutton.textContent = "🔗"
   }, 4000);
-
-  // Alert the copied text
-  // console.log("Copied the text: ", copyText);
 })
 
 
@@ -230,17 +224,17 @@ roomLinkbutton.addEventListener("click", () => {
 
 function checkConnection() {
   if (socket.connected) {
-    console.log('Socket is connected');
-    disconnectedNote.classList.remove("disconnected")
-    disconnectedNote.classList.add("connected")
+    // console.log('Socket is connected');
+    disconnectedNote.classList.remove("disconnectedNote")
+    disconnectedNote.classList.add("connectedNote")
     setTimeout(() => {
-      disconnectedNote.classList.remove("connected")
+      disconnectedNote.classList.remove("connectedNote")
     }, 2000);
 
   } else {
     console.log('Socket is disconnected');
-    disconnectedNote.classList.add("disconnected")
-    disconnectedNote.classList.remove("connected")
+    disconnectedNote.classList.add("disconnectedNote")
+    disconnectedNote.classList.remove("connectedNote")
   }
 }
 
@@ -257,53 +251,54 @@ socket.on("userConnected", (userData) => {
 
   checkConnection()
   setInterval(checkConnection, 1000)
-
 })
 
 function usersConnectionTest() {
-  console.log("1");
   const usersImg = document.querySelectorAll(".room section:last-of-type>ul li.time>div:first-of-type")
   for (let i = 0; i < usersImg.length; i++) {
     if (usersImg[i]) {
       usersImg[i].classList.add('connected');
-    }
 
-    if (!usersImg[i].classList.contains('connected')) {
-      usersImg[i].classList.add('connected');
+      console.log("uou");
+      const disconnected = usersImg[i].querySelectorAll("li[data-disconnected]>div:first-of-type");
+      
+      if (disconnected.length > 0) {
+        usersImg[i].classList.remove('connected');
+        console.log("---nuo",usersImg[i]);
+      }
     }
-
   }
 }
 
 
-function connectedtest(ChatMsg) {
+// function connectedtest(ChatMsg) {
 
   // if (ChatMsg.firstElementChild.classList.contains("connected")) {
-    ChatMsg.firstElementChild.classList.remove("connected");
+    // ChatMsg.firstElementChild.classList.remove("connected");
     // console.log("notconnected", ChatMsg);
-  }
+  // }
 // }
 
 
 
 socket.on('notconnected', (data) => {
-  console.log("90");
-
   const roomid = messages.getAttribute("data-room");
   const usersData = data.users;
   const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
 
-  // if (roomID === roomid) {
+  if (roomID === roomid) {
   for (let i = 0; i < chatMessages.length; i++) {
-    console.log(chatMessages[i]);
+    // console.log(chatMessages[i]);
     const dataset = chatMessages[i].dataset.client;
     if (dataset === data.userName) {
       let ChatMsg = chatMessages[i];
-
-      connectedtest(ChatMsg);
+      ChatMsg.dataset.disconnected = "disconnectedUser";
+      ChatMsg.firstElementChild.classList.remove("connected");
+      // connectedtest(ChatMsg);
     }
     roomAdmin(usersData);
   }
+}
 
 
   const liElement = document.createElement("li")
@@ -449,10 +444,49 @@ gifInput.addEventListener("keydown", (event) => {
   }
 });
 
+gifInput.addEventListener('input' , () => {
+  gifList.classList.add("loadingSearch");
+
+  gifList.innerHTML = `
+  <li>
+      <button>
+          <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
+      </button>
+  </li>
+  <li>
+      <button>
+          <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
+      </button>
+  </li>
+  <li>
+      <button>
+          <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
+      </button>
+  </li>`
+})
+
 gifButton.addEventListener("click", () => {
   if (gifList.classList.contains("search")) {
-
     gifList.classList.remove('search')
+  }
+  if (gifList.classList.contains("loadingSearch")) {
+    gifList.classList.remove('loadingSearch')
+    gifList.innerHTML = `
+<li>
+    <button>
+        <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
+    </button>
+</li>
+<li>
+    <button>
+        <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
+    </button>
+</li>
+<li>
+    <button>
+        <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
+    </button>
+</li>`
   }
   gifForm.classList.toggle('search')
 
@@ -471,13 +505,11 @@ gifSearch.addEventListener('click', (event) => {
 
   searchKey = gifInput.value
 
-  // console.log(searchKey);
-
   // make a fetch request to Giphy API to get a random GIF
   fetch(`https://api.gfycat.com/v1/gfycats/search?search_text=${searchKey}`)
     .then(response => response.json())
     .then(data => {
-      // const gifUrl = data.data.image_url;
+      // gifList.classList.remove("loadingSearch");
       const urlData = data.gfycats
 
       for (let i = 0; i < urlData.length; i++) {
@@ -494,13 +526,11 @@ gifSearch.addEventListener('click', (event) => {
         button.appendChild(img)
         li.appendChild(button)
         gifList.appendChild(li)
-        // add event listener to button
         let avatarsrc;
         for (let i = 0; i < avatarsInput.length; i++) {
           if (avatarsInput[i].checked) {
             let labelChecked = avatarsInput[i].nextElementSibling
             avatarsrc = labelChecked.dataset.avatar
-            // console.log(avatarsrc, [i]);
           }
         }
 
@@ -519,17 +549,16 @@ gifSearch.addEventListener('click', (event) => {
             gifName: gifName
           };
 
-          // console.log("ii", message);
           socket.emit('gifmessage', message);
         });
       }
 
       if (searchKey === "") {
         gifList.classList.remove('search')
-        // console.log("no", gifList);
-      } else {
+        gifList.classList.remove("loadingSearch");
+      } 
+      else {
         gifList.classList.add('search')
-        // console.log("yes", gifList);
       }
 
     })
@@ -541,7 +570,6 @@ gifSearch.addEventListener('click', (event) => {
 
 // receive gif data via socket
 socket.on("gifmessage", (msg) => {
-  // console.log("msg.gifMessage", msg.gifMessage);
   const room = messages.getAttribute("data-room");
   const li = document.createElement("li");
   li.dataset.client = `${msg.userName}`;
@@ -561,9 +589,6 @@ socket.on("gifmessage", (msg) => {
   if (msg.room === room) {
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
-    // console.log("hi", messages);
-    let roomid = msg.room;
-
   }
 
   if (msg.userName === usernameInput.value) {
@@ -599,32 +624,24 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   videoLinkInput.addEventListener('input', () => {
-    // The value is a space or an empty string
     if (videoLinkInput.value.trim() === '') {
-      // console.log("1");
       videoSendLinkbutton.classList.remove("admin");
     } else {
-      // console.log("2");
       videoSendLinkbutton.classList.add("admin");
     }
   })
 
   function onYouTubeIframeAPIReady(videoUrl) {
-    // console.log("onYouTubeIframeAPIReady:", videoUrl);
     const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
 
     if (youtubeUrlRegex.test(videoUrl)) {
       const ytlink = videoUrl.match(/(\?v=|\/embed\/|\/\d\/|\/vi\/|\/v\/|youtu\.be\/|\/e\/|\/watch\?v=|\/watch\?feature=player_embedded&v=|\/watch\?v%3D|^v\=|\/embed\/|youtu\.be\/|\/e\/|watch\?v=|v%3D|youtu\.be\/|embed\/|watch\?v%3D|youtube.com\/user\/[^#]*#([^\/]*\/)*)?([^#\&\?\/]*)/)[3];
 
-      // Check of de link is gewijzigd
       if (videoUrl !== ytlink) {
         if (player) {
-          // console.log("HIIIOOOO");
           player.destroy();
         }
       }
-
-      // console.log("YT test", ytlink);
 
       let newURL = new URL(videoUrl).pathname;
 
@@ -650,7 +667,6 @@ document.addEventListener("DOMContentLoaded", function () {
       `
       messages.appendChild(liElement)
       messages.scrollTop = messages.scrollHeight;
-      // console.log("Hi yt");
 
     } else {
       videoLinkInput.value = '';
@@ -662,7 +678,6 @@ document.addEventListener("DOMContentLoaded", function () {
       `
       messages.appendChild(liElement)
       messages.scrollTop = messages.scrollHeight;
-      // console.log("Ongeldige YouTube-video-URL");
     }
   }
 
@@ -677,19 +692,14 @@ document.addEventListener("DOMContentLoaded", function () {
       link = videoUrl + "?controls=0";
 
       onYouTubeIframeAPIReady(link);
-      // onPlayerStateChange();
 
       socket.emit('streamLink', { link, roomID });
-      // console.log("iframeSRC", { link, roomID });
     }
 
     else if (videoUrl.includes("https://www.youtube.com/")) {
-      // console.log(videoUrl);
       let newURL = new URL(videoUrl);
-      // console.log("newURL", newURL);
       let urlSearch = newURL.search;
       let searchID = urlSearch.substring(3);
-      // console.log("newStr", searchID);
       let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
       link = iframeSRC
 
@@ -698,8 +708,6 @@ document.addEventListener("DOMContentLoaded", function () {
       socket.emit('streamLink', { link, roomID });
     }
     else {
-
-      // console.log("else searchID", videoUrl);
       link = videoUrl;
 
       onYouTubeIframeAPIReady(videoUrl);
@@ -719,11 +727,10 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
   function onPlayerStateChange() {
-    // console.log('Player state has changed');
+    console.log('Player state has changed');
   }
 
   function onPlayerReady(event) {
-    // console.log('player ready!');
     player = event.target;
     streamStart.addEventListener('click', playYTVideo);
     streamStop.addEventListener('click', stopYTVideo);
@@ -733,15 +740,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function stopYTVideo() {
     streamStart.classList.add("admin")
     streamStop.classList.remove("admin")
-    // console.log("Player is paused");
     socket.emit('stopStream', roomID);
   }
 
   function playYTVideo() {
     streamStart.classList.remove("admin")
     streamStop.classList.add("admin")
-
-    // console.log("Player is ready", player.videoTitle);
     socket.emit('startStream', roomID);
   }
 
@@ -751,8 +755,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       player.playVideo();
       player.seekTo(0);
-
-      // console.log("play video");
     };
   })
 
@@ -760,8 +762,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const room = messages.getAttribute("data-room");
     if (roomID === room) {
       player.stopVideo();
-
-      // console.log("stop video");
     };
   })
 

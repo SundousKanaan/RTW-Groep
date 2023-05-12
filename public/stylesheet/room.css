@@ -283,12 +283,12 @@ main.room > div{
     transition: 1s;
 }
 
-main.room > div.disconnected{
+main.room > div.disconnectedNote{
     animation: disconnectNoteIn .8s .5s 1 linear both,
     writingEffect .5s 1.5s infinite linear alternate backwards;
 }
 
-main.room > div.connected{
+main.room > div.connectedNote{
     left: 1em;
     background-image: url(../images/connected.png);
     background-size: 90%;
@@ -670,6 +670,10 @@ main.room section:last-of-type form:last-of-type ul {
 }
 
 main.room section:last-of-type form:last-of-type ul.search {
+    visibility: visible;
+}
+
+main.room section:last-of-type form:last-of-type ul.loadingSearch {
     visibility: visible;
 }
 
