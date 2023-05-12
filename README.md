@@ -578,6 +578,7 @@ socket.on("gifmessage", (msg) => {
 
 My data lifecycle diagram contains the events that occur during the use of the application and the types of exchanges that occur between users, the server and the associated API's.
 
+
 ### Real time events
 
 
@@ -1040,11 +1041,15 @@ socket.on("roomAdmin", (roomData) => {
 <img src="./readme-images/darkmode-mob.png" alt="darkmode-mob foto" width="50%">
 
 <img src="./readme-images/lightmode-mob.png" alt="lightmode-mob foto" width="50%">
-
-
 </details>
 
-
+### peereview feedbacks
+I got some problems such as:
+- When playing the video by clicking on the video and not the play button, it only works for the admin.  `repaired by activating the separator between the video and the play button `
+- The "Loading" screen buttons in the GIFs menu cause a malfunction in the page link. `So I removed them as an emergency measure`
+- GIF messages appear in the wrong direction for the sender.  ` There was an error in the class name .. Fixed `
+- Automatically disconnecting from the server `problem from the upload site`
+,
 ## Sources
 * https://www.npmjs.com/package/nodemon 
 * https://fonts.adobe.com/fonts/interstate 
