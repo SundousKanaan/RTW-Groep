@@ -258,6 +258,7 @@ I used the highest quality gif available and also the gif title
 - responsive app ✅
 - light/dark mode (system check) ✅
 - Newly joined users can see the chat history ✅ (Hosting probleem so it may not work properly in the online version now )
+- Choose an avatar image ✅
 
 ### Could have
 - Users can get a message when the link of the video is good  ✅
@@ -273,6 +274,7 @@ I used the highest quality gif available and also the gif title
 - video calls
 - snel reactions
 - dark/light mode door een knop
+- Upload an avatar image from the user's device
 
 </details>
 
