@@ -90,7 +90,6 @@ function nameFeedback() {
 }
 
 socket.on('nameCheck', (data) => {
-  // console.log("nameCheck data", data);
   const room = messages.getAttribute("data-room");
   // console.log("currentRoomUsers", data);
   if (data.currentRoomUsers) {
@@ -401,10 +400,11 @@ socket.on("chatmessage", (msg) => {
 
   }
 
-  if (msg.username === usernameInput.value) {
+  if (msg.username === clientName) {
     element.classList.add("myMessage");
   }
 });
+
 
 
 
@@ -418,12 +418,22 @@ socket.on("chatmessage", (msg) => {
 //     Gifs messages
 // ***********************
 
+// const 
 const gifInput = document.querySelector("#gifsearch");
 const gifSearch = document.querySelector("#gif-button");
 const gifList = document.querySelector(".room section:last-of-type > form ul");
 const gifButton = document.querySelector(".room section:last-of-type > span > button");
 const gifForm = document.querySelector(".room section:last-of-type > form")
 let searchKey = "";
+const gifLoadingButtons = document.querySelectorAll("main.room section:last-of-type form:last-of-type ul li button")
+
+console.log("1");
+for (let i = 0; i < gifLoadingButtons.length; i++) {
+    gifLoadingButtons[i].addEventListener("click", (event) => {
+      event.preventDefault();
+      console.log("3");
+    })
+}
 
 gifInput.addEventListener("keydown", (event) => {
   if (event.keyCode === 13) {
@@ -432,49 +442,9 @@ gifInput.addEventListener("keydown", (event) => {
   }
 });
 
-gifInput.addEventListener('input', () => {
-  gifList.classList.add("loadingSearch");
-
-  gifList.innerHTML = `
-  <li>
-      <button>
-          <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
-      </button>
-  </li>
-  <li>
-      <button>
-          <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
-      </button>
-  </li>
-  <li>
-      <button>
-          <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
-      </button>
-  </li>`
-})
-
 gifButton.addEventListener("click", () => {
   if (gifList.classList.contains("search")) {
     gifList.classList.remove('search')
-  }
-  if (gifList.classList.contains("loadingSearch")) {
-    gifList.classList.remove('loadingSearch')
-    gifList.innerHTML = `
-<li>
-    <button>
-        <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
-    </button>
-</li>
-<li>
-    <button>
-        <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
-    </button>
-</li>
-<li>
-    <button>
-        <img src="https://i.gifer.com/YlWC.gif" alt="loading gif">
-    </button>
-</li>`
   }
   gifForm.classList.toggle('search')
 
@@ -489,7 +459,6 @@ gifButton.addEventListener("click", () => {
 // handle form submit event
 gifSearch.addEventListener('click', (event) => {
   event.preventDefault(); // prevent page from reloading
-  gifList.innerHTML = '';
 
   searchKey = gifInput.value
 
@@ -580,8 +549,9 @@ socket.on("gifmessage", (msg) => {
   }
 
   if (msg.userName === usernameInput.value) {
-    li.classList.add("message");
+    li.classList.add("myMessage");
   }
+
 });
 
 

@@ -1,40 +1,43 @@
 # Real time web
 During this course we will learn how to build a real-time application. We will learn techniques to setup an open connection between the client and the server. This will enable us to send data in real-time both ways, at the same time.
 
-## 👁️ Demo Link! 👁️
+## 👁️ Demo Link! 
  
 * live demo door [railway.app](https://rtw-groep-production.up.railway.app/)
 <!-- * live demo door [aptable.io](https://streamy-chan.adaptable.app) -->
 
 ---
 
-## 💻 Participants 💻 
+## 💻 Participants  
 * Sundous Kanaan
 
 ---
 
-## 🖊 Concept 🖊
+## 🖊 Concept 
 Streamy-Chan is an app where the users can open their own room and chat with their friends and watch something on youtube or websites by forming a link.
+
+
+<img src="./readme-images/Streamy-Chan.png" alt="Streamy-Chan app view">
 
 ---
 
-## 📖 Job Story 📖
+## 📖 Job Story 
 As a social media user, I want to connect with my faraway friends and family through a secure chatting app, so that I can easily communicate with them and watch videos or listen to music while chatting together.
 
 ---
 
 - [Real time web](#real-time-web)
-  - [👁️ Demo Link! 👁️](#️-demo-link-️)
-  - [💻 Participants 💻](#-participants-)
-  - [🖊 Concept 🖊](#-concept-)
-  - [📖 Job Story 📖](#-job-story-)
-  - [💻 Intallation Guide 💻](#-intallation-guide-)
+  - [👁️ Demo Link!](#️-demo-link)
+  - [💻 Participants](#-participants)
+  - [🖊 Concept](#-concept)
+  - [📖 Job Story](#-job-story)
+  - [💻 Intallation Guide](#-intallation-guide)
     - [Install nvm](#install-nvm)
     - [Clone repo](#clone-repo)
     - [NPM install](#npm-install)
     - [Start server](#start-server)
-  - [🛠️ Features Combined 🛠️](#️-features-combined-️)
-  - [💾 Used Technologies 💾](#-used-technologies-)
+  - [🛠️ Features Combined](#️-features-combined)
+  - [💾 Used Technologies](#-used-technologies)
   - [Process](#process)
     - [Getting started with socket.io](#getting-started-with-socketio)
   - [Process](#process-1)
@@ -51,7 +54,7 @@ As a social media user, I want to connect with my faraway friends and family thr
 
 ---
 
-## 💻 Intallation Guide 💻
+## 💻 Intallation Guide 
 ### Install nvm
 1. To install the server you need node and express. You can do that with nvm. Nvm is package installer where you can install different packages. With this code you can install the latest versions of npm and node in your terminal:
 ```
@@ -78,7 +81,7 @@ node app.js
 
 ---
 
-## 🛠️ Features Combined 🛠️
+## 🛠️ Features Combined 
 * Make your own room for your group ✅
 * Users can chat together online ✅
 * See who joined the room ✅
@@ -91,7 +94,7 @@ node app.js
 
 ---
 
-## 💾 Used Technologies 💾
+## 💾 Used Technologies 
 * EJS templating engine
 * Express
 * Socket.io
@@ -175,12 +178,24 @@ io.on('connection', (socket) => {
 ## Process
 
 <details>
+I started thinking about my concept that I would build and I had 3 ideas:
+- Use a free Pokemon API to build the game "Who is this Pokemon?"
+- Use a free Harry Potter series API to build a game of guessing the name of the spell by its caption.
+- A room to watch videos collectively and chat together
 
+The stream room was the most exciting for me, because I watch anime with my friends at the same time, but not collectively in one place, and we have to make a note that we started the episode to start almost together, and this is sometimes bad because we miss direct interactive chat while watching.
+
+### Sketching
+
+I drew the main pages and the link between them in a simple way, and how it will look between the admin and the regular member
+
+<img src="./readme-images/Sketching1.png" alt="Sketching">
+<img src="./readme-images/Sketching2.png" alt="Sketching">
 
 </details>
 
-
 <details>
+
 </details>
 ---
 
