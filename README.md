@@ -3,7 +3,12 @@ During this course we will learn how to build a real-time application. We will l
 
 ## Streamy-Chan
 
-<img src="./readme-images/Streamy-Chan.png" alt="Streamy-Chan app foto">
+
+**big screens**
+<img src="./readme-images/streamy-chan-lap.png" alt="streamy-chan bid screens app foto">
+
+**small screens**
+<img src="./readme-images/streamy-chan-mob.png" alt="streamy-chan small screens size app foto">
 
 ## 🛠️ Features Combined 
 
@@ -73,13 +78,17 @@ As a social media user, I want to connect with my faraway friends and family thr
     - [Would have but not right now](#would-have-but-not-right-now)
   - [Data modeling](#data-modeling)
     - [Real time events](#real-time-events)
-  - [UI Stack](#ui-stack)
+  - [UI Stack \& views](#ui-stack--views)
     - [Online](#online)
     - [Online (error)](#online-error)
     - [Room check loading](#room-check-loading)
+    - [Room doesn't exist](#room-doesnt-exist)
     - [Room is open (error)](#room-is-open-error)
     - [Username check (error if the username is not available)](#username-check-error-if-the-username-is-not-available)
+    - [Username check (the username is available)](#username-check-the-username-is-available)
     - [start chat loading](#start-chat-loading)
+    - [admin view VS client view](#admin-view-vs-client-view)
+    - [darck \& light mode](#darck--light-mode)
   - [Sources](#sources)
 
 
@@ -698,6 +707,11 @@ socket.on("roomAdmin", (roomData) => {
   }
 })
 ```
+**the admin left the chat**
+<img src="./readme-images/admin-change1.png" alt="admin-change1 foto">
+
+<img src="./readme-images/admin-change2.png" alt="admin-change2 foto">
+
 </details>
 
 ---
@@ -741,6 +755,9 @@ socket.on("roomAdmin", (roomData) => {
   });
 
 ```
+
+**join room note**
+<img src="./readme-images/newuser-note.png" alt="newuser-note foto">
 </details>
 
 ---
@@ -815,6 +832,9 @@ socket.on("roomAdmin", (roomData) => {
     console.log("roomHistory:", roomHistory);
   });
 ```
+
+**chat history**
+<img src="./readme-images/chathistory.png" alt="chathistory foto">
 </details>
 
 ---
@@ -923,6 +943,9 @@ socket.on("roomAdmin", (roomData) => {
     socket.broadcast.emit("focus", data);
   });
 ```
+
+**join room note**
+<img src="./readme-images/ntyping.png" alt="typing foto">
 </details>
 
 ---
@@ -961,22 +984,60 @@ socket.on("roomAdmin", (roomData) => {
 
 </details>
 
-## UI Stack
+## UI Stack & views
 
 <details>
 
 ### Online
-صورة
+
+<img src="./readme-images/connected.png" alt="connected foto">
+
 ### Online (error)
-صورة
+
+<img src="./readme-images/disconnected.png" alt="disconnected foto">
+
+
 ### Room check loading
-صورة
+
+<img src="./readme-images/room-name-check.png" alt="room-name-check foto">
+
+### Room doesn't exist
+
+<img src="./readme-images/room-name-check-good.png" alt="room-name-check-good foto">
+
 ### Room is open (error)
-صورة
+
+<img src="./readme-images/room-name-check-bad.png" alt="room-name-check-bad foto">
+
 ### Username check (error if the username is not available)
-صورة
+
+<img src="./readme-images/username-check-bad.png" alt="username-check-bad foto">
+
+### Username check (the username is available)
+
+<img src="./readme-images/username-check-good.png" alt="username-check-good foto">
+
 ### start chat loading
-صورة
+
+<img src="./readme-images/chat-loading.png" alt="chat-loading foto">
+
+
+### admin view VS client view
+
+<img src="./readme-images/admin-view.png" alt="admin-view foto">
+
+<img src="./readme-images/aclient-view.png" alt="client-view foto">
+
+### darck & light mode
+
+<img src="./readme-images/darkmode-lap.png" alt="darkmode-lap foto">
+
+<img src="./readme-images/lightmode-lap.png" alt="lightmode-lap foto">
+
+<img src="./readme-images/darkmode-mob.png" alt="darkmode-mob foto" width="50%">
+
+<img src="./readme-images/lightmode-mob.png" alt="lightmode-mob foto" width="50%">
+
 
 </details>
 

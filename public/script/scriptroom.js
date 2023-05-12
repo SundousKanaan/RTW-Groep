@@ -742,10 +742,8 @@ socket.on('chatHistory', (roomHistory) => {
   const room = messages.getAttribute("data-room");
 
   for (let t = 0; t < roomHistory.length; t++) {
-    // console.log("roomHistory[i]", roomDataHistory);
     if (roomHistory[t].roomID === room) {
       roomDataHistory = roomHistory[t].messages
-      // console.log("his msg", roomDataHistory);
     }
 
     for (let i = 0; i < roomDataHistory.length; i++) {
@@ -755,7 +753,6 @@ socket.on('chatHistory', (roomHistory) => {
 
         // gifs history
         if (roomDataHistory[i].gifMessage) {
-          // // console.log("is is gif", roomDataHistory[i].userName);
           liElement.innerHTML = `
             <div>
               <img src="${roomDataHistory[i].avatar}" alt="${roomDataHistory[i].avatar}">
@@ -764,6 +761,9 @@ socket.on('chatHistory', (roomHistory) => {
             <img src="${roomDataHistory[i].gifMessage}" alt="${roomDataHistory[i].gifName} GIF foto">
             </div>
             `
+            liElement.classList.add("time");
+            liElement.dataset.time = `${roomDataHistory[i].time}`;
+            
           if (roomDataHistory[i].username === myname) {
             liElement.classList.add("myMessage");
           }
