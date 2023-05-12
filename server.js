@@ -38,7 +38,8 @@ io.on("connection", (socket) => {
   if (socket.connected) {
     console.log("Lela");
     io.emit('connected');
-    socket.emit('userConnected', { client, clientRoom })
+    console.log("__", client, clientRoom);
+    socket.emit('userConnected')
   }
 
 

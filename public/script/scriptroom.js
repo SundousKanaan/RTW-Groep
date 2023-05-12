@@ -174,11 +174,11 @@ socket.on("joinRoom", (data) => {
 function roomAdmin(roomUsers) {
   const room = roomUsers.find(room => room.ID === roomID);
 
-  if (room.users.length >= 0) {
+  // if (room.users.length >= 0) {
     const currentAdmin = room.users[0];
     h1.textContent = `Admin ${currentAdmin}`;
     socket.emit("roomAdmin", { currentAdmin, roomID });
-  }
+  // }
 }
 
 socket.on("roomAdmin", (roomData) => {
@@ -244,8 +244,8 @@ socket.on('connected', () => {
 })
 
 
-socket.on("userConnected", (userData) => {
-  console.log("hi", userData)
+socket.on("userConnected", () => {
+  console.log("hi")
   usersConnectionTest();
   setInterval(usersConnectionTest, 1000)
 
