@@ -3,11 +3,14 @@ During this course we will learn how to build a real-time application. We will l
 
 ## Streamy-Chan
 
+Experience a unique online platform where you can create your own chat rooms and enjoy group activities with friends. This website lets you start rooms to chat, watch YouTube videos together, and share GIFs to make conversations more enjoyable. Customize your virtual space, engage in lively discussions, and create memorable moments with friends. Join the fun and start your own room today!
 
-**big screens**
+**Big screens**
+
 <img src="./readme-images/streamy-chan-lap.png" alt="streamy-chan bid screens app foto">
 
-**small screens**
+**Small screens**
+
 <img src="./readme-images/streamy-chan-mob.png" alt="streamy-chan small screens size app foto">
 
 ## 🛠️ Features Combined 
