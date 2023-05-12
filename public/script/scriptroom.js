@@ -42,7 +42,7 @@ const h1 = document.querySelector("header section h1")
 let videoForm = document.querySelector("header section form")
 let videoLinkInput = document.querySelector("header section form input");
 const videoSendLinkbutton = document.querySelector("header section form button");
-const span = document.querySelector("header div span");
+// const span = document.querySelector("header div span");
 const streamStart = document.querySelector("header div button");
 const streamStop = document.querySelector("header section > button:first-of-type");
 const roomLinkbutton = document.querySelector("header section > button:last-of-type");
@@ -185,7 +185,7 @@ socket.on("roomAdmin", (roomData) => {
   if (roomData.data.roomID === room) {
     if (roomData.room.users[0] === usernameInput.value) {
       videoForm.classList.add("admin");
-      span.classList.add("admin");
+      // span.classList.add("admin");
     }
   }
 })
@@ -692,7 +692,6 @@ document.addEventListener("DOMContentLoaded", function () {
     player = event.target;
     streamStart.addEventListener('click', playYTVideo);
     streamStop.addEventListener('click', stopYTVideo);
-
   }
 
   function stopYTVideo() {

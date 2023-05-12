@@ -226,6 +226,7 @@ header div button {
 
 header div button.admin {
   display: block;
+  z-index: 1;
 }
 
 header div button:hover {
@@ -246,6 +247,6 @@ header div span {
   position: absolute;
 }
 
-header div span.admin {
-  display: none;
-}
+/* header div span.admin {
+display: none;
+} */

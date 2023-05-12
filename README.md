@@ -213,14 +213,22 @@ I drew the main pages and the link between them in a simple way, and how it will
 <img src="./readme-images/Sketching1.png" alt="Sketching">
 <img src="./readme-images/Sketching2.png" alt="Sketching">
 
+- **App notes**
+  * Room state check
+  * Admin view is with stream controles
+  * Chat users view without stream controles
+  * send gif's 
+  * mobile view is column but big screens row
+
 </details>
 
 ### API's
 
+**API's Features**
+
 <details>
 
 1. YouTube Iframe API
-**Features**
 - Making a special frame for the player through the id of the YouTube link
 - Start the player via a separate button using "play Video() & stopVideo()"
 
@@ -250,15 +258,16 @@ I used the highest quality gif available and also the gif title
 - Gebruikers kunnen samen youtube video kijken ✅
 - Berichten worden opgeslagen ✅
 - Data life cycle diagram ✅
-
+  
 ### Should have
 - Instruction how to use the app (zero state)
 - Must be working on mobile ✅
 - Offline support ✅
 - responsive app ✅
 - light/dark mode (system check) ✅
-- Newly joined users can see the chat history ✅ (Hosting probleem so it may not work properly in the online version now )
+- Newly joined users can see the chat history ✅ (Hosting probleem so it may not work properly in the online version now)
 - Choose an avatar image ✅
+- Notification of the validity of the video link ✅
 
 ### Could have
 - Users can get a message when the link of the video is good  ✅
@@ -283,11 +292,10 @@ I used the highest quality gif available and also the gif title
 شرح الدائرة عن طريق شرع استخدام التطبيق
 
 <details>
-</details>
 
 ## Real time events
 
-<details>
+
 </details>
 
 ## UI Stack
