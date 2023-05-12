@@ -241,15 +241,38 @@ I used the highest quality gif available and also the gif title
 <details>
 
 ### Must have
-as
+- Gebruikers kunnen prive rooms maken voor hun groep ✅
+- Gebruikers kunnen gebruikersnaam maken ✅
+- Gerbruikers komen op een gebruikerslijst komen te staan ✅
+- Admin voor elke room en hij heeft de controls of the streaming. ✅
+- Je kan zien wie online is. ✅
+- Gebruikers kunnen met elkaar communiceren in een groupchat. ✅
+- Gebruikers kunnen samen youtube video kijken ✅
+- Berichten worden opgeslagen ✅
+- Data life cycle diagram ✅
 
 ### Should have
-sa
+- Instruction how to use the app (zero state)
+- Must be working on mobile ✅
+- Offline support ✅
+- responsive app ✅
+- light/dark mode (system check) ✅
+- Newly joined users can see the chat history ✅ (Hosting probleem so it may not work properly in the online version now )
 
 ### Could have
-sa
+- Users can get a message when the link of the video is good  ✅
+- Users can get a message when the link of the video is not good ✅
+- Users are notified that someone has been involved ✅
+- Users can share GIFs ✅
+- 
 ### Would have but not right now
-sa
+- wachtwoord de room maken
+- Gebruikers kunnen stickers delen
+- Streaming websites door hun link
+- geluid calls
+- video calls
+- snel reactions
+- dark/light mode door een knop
 
 </details>
 
