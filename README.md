@@ -4,7 +4,7 @@ During this course we will learn how to build a real-time application. We will l
 ## 👁️ Demo Link! 👁️
  
 * live demo door [railway.app](https://rtw-groep-production.up.railway.app/)
-* live demo door [aptable.io](https://streamy-chan.adaptable.app)
+<!-- * live demo door [aptable.io](https://streamy-chan.adaptable.app) -->
 
 ---
 
@@ -22,6 +22,33 @@ Streamy-Chan is an app where the users can open their own room and chat with the
 As a social media user, I want to connect with my faraway friends and family through a secure chatting app, so that I can easily communicate with them and watch videos or listen to music while chatting together.
 
 ---
+
+- [Real time web](#real-time-web)
+  - [👁️ Demo Link! 👁️](#️-demo-link-️)
+  - [💻 Participants 💻](#-participants-)
+  - [🖊 Concept 🖊](#-concept-)
+  - [📖 Job Story 📖](#-job-story-)
+  - [💻 Intallation Guide 💻](#-intallation-guide-)
+    - [Install nvm](#install-nvm)
+    - [Clone repo](#clone-repo)
+    - [NPM install](#npm-install)
+    - [Start server](#start-server)
+  - [🛠️ Features Combined 🛠️](#️-features-combined-️)
+  - [💾 Used Technologies 💾](#-used-technologies-)
+  - [Process](#process)
+    - [Getting started with socket.io](#getting-started-with-socketio)
+  - [Process](#process-1)
+  - [](#)
+  - [Server Side Code](#server-side-code)
+    - [Breakdown of the code:](#breakdown-of-the-code)
+  - [Client Side Code](#client-side-code)
+    - [Breakdown of the code:](#breakdown-of-the-code-1)
+  - [Prototype](#prototype)
+    - [Log in page](#log-in-page)
+    - [Chat area](#chat-area)
+  - [Sources](#sources)
+
+
 ---
 
 ## 💻 Intallation Guide 💻
@@ -74,6 +101,8 @@ node app.js
 
 ## Process
 ### Getting started with socket.io
+<details>
+
 1. The first goal is to set up a simple HTML webpage that serves out a form and a list of messages. We’re going to use the Node.JS web framework express to this end. Make sure Node.JS is installed.
 
 ```
@@ -128,7 +157,7 @@ server.listen(3000, () => {
 <script src="/socket.io/socket.io.js"></script>
 ```
 
-6. To see connections and disconnections add this code to your server.js
+7. To see connections and disconnections add this code to your server.js
 ```js 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -136,80 +165,23 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
 ``` 
 
-7. Make it so that when the user types in a message, the server gets it as a chat message event. The client side js file should now look like this:
-```js
-  var socket = io();
-
-  var form = document.getElementById('form');
-  var input = document.getElementById('input');
-
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (input.value) {
-      socket.emit('chat message', input.value);
-      input.value = '';
-    }
-  });
-```
-
-And in the server side js we now add the following code:
-```js
-io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-  });
-});
-```
+</details>
 
 ---
 
 ## Process
-### Trying to display a username
-One of our features is that the user can choose a username and this gets displayed with each message.
 
-#### Attempt 1
-This was our first attempt and it was a good start since it was quite complex. The thing here was that each user only saw their own username displayed. So Sundous only saw the name Sundous being displayed and Hilal only saw the name Hilal being displayed. 
+<details>
 
-![attempt1](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten.png)
 
-#### Attempt 2
-After many tries we still had the same issue. 
+</details>
 
-![attempt2](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-2.png)
 
-#### Attempt 3
-Okay, improvement! It is working! The next step here was to put the username input field in another section and make a "log in" type of page.
-
-![attempt3](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-3.png)
-
-#### Attempt 4
-After doing that the user gets in this chat environment where they only see the messages being displayed together with the usernames. So cool!
-
-![attempt4](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-4.png)
-
---- 
-
-### Is typing feature
-We thought it would be cool if the user would get information about when someone is typing, so we added this feature!
-
-![is-typing](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-5.png)
-
----
-
-### Different colors for each user
-When there are many people in the chatting area, it is hard to seperate each user. So we added different colors to each user.
-
-![colors](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-6.png)
-
----
-
-### Position of each user
-We thought it was important to display yourself on the right, and all the other users on the left, to fit the chatroom User Experience (UX). This really improved the chatting experience. 
-
-![location](https://github.com/SundousKanaan/RTW-Groep/blob/hilal/readme-images/samen-chatten-7.png)
-
+<details>
+</details>
 ---
 
 ## Server Side Code
