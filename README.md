@@ -234,6 +234,172 @@ I drew the main pages and the link between them in a simple way, and how it will
 
   It also provides data about the video, such as the title of the video and others, but what matters to me is the id of the video.
 
+<details>
+
+```js
+//scriptroom.js
+const videoFrame = document.getElementById("videoFrame");
+
+let link = '';
+let player;
+let videoId = '';
+let playerLink = videoLinkInput.value;
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  videoLinkInput.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      videoSendLinkbutton.click();
+    }
+  });
+
+  videoLinkInput.addEventListener('input', () => {
+    if (videoLinkInput.value.trim() === '') {
+      videoSendLinkbutton.classList.remove("admin");
+    } else {
+      videoSendLinkbutton.classList.add("admin");
+    }
+  })
+
+  function onYouTubeIframeAPIReady(videoUrl) {
+    const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
+
+    if (youtubeUrlRegex.test(videoUrl)) {
+      const ytlink = videoUrl.match(/(\?v=|\/embed\/|\/\d\/|\/vi\/|\/v\/|youtu\.be\/|\/e\/|\/watch\?v=|\/watch\?feature=player_embedded&v=|\/watch\?v%3D|^v\=|\/embed\/|youtu\.be\/|\/e\/|watch\?v=|v%3D|youtu\.be\/|embed\/|watch\?v%3D|youtube.com\/user\/[^#]*#([^\/]*\/)*)?([^#\&\?\/]*)/)[3];
+
+      if (videoUrl !== ytlink) {
+        if (player) {
+          player.destroy();
+        }
+      }
+
+      let newURL = new URL(videoUrl).pathname;
+
+      const parts = newURL.split("/");
+      const videoId = parts[parts.length - 1];
+
+      player = new YT.Player(videoFrame, {
+        videoId: videoId,
+        playerVars: {
+          'playsinline': 1,
+          'controls': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+
+      const liElement = document.createElement("li")
+      liElement.classList.add("note")
+      liElement.innerHTML = `
+      <p><a href="${videoUrl}" target ="blank">Open current video on YouTube ↗️</a></p>
+      `
+      messages.appendChild(liElement)
+      messages.scrollTop = messages.scrollHeight;
+
+    } else {
+      videoLinkInput.value = '';
+      videoLinkInput.placeholder = "Invalid YouTube URL"
+      const liElement = document.createElement("li")
+      liElement.classList.add("note")
+      liElement.innerHTML = `
+      <p><a>Invalid link 💔</a></p>
+      `
+      messages.appendChild(liElement)
+      messages.scrollTop = messages.scrollHeight;
+    }
+  }
+
+  videoSendLinkbutton.addEventListener("click", () => {
+    streamStart.classList.add("admin")
+    streamStop.classList.remove('admin')
+    videoSendLinkbutton.textContent = "🔁"
+
+    const videoUrl = videoLinkInput.value;
+
+    if (videoUrl.includes("embed")) {
+      link = videoUrl + "?controls=0";
+
+      onYouTubeIframeAPIReady(link);
+
+      socket.emit('streamLink', { link, roomID });
+    }
+
+    else if (videoUrl.includes("https://www.youtube.com/")) {
+      let newURL = new URL(videoUrl);
+      let urlSearch = newURL.search;
+      let searchID = urlSearch.substring(3);
+      let iframeSRC = newURL.origin + "/embed/" + searchID + "?controls=0";
+      link = iframeSRC
+
+      onYouTubeIframeAPIReady(link);
+
+      socket.emit('streamLink', { link, roomID });
+    }
+    else {
+      link = videoUrl;
+
+      onYouTubeIframeAPIReady(videoUrl);
+      socket.emit('streamLink', { link, roomID });
+    }
+
+    onPlayerStateChange(videoUrl);
+
+    socket.emit('stopVideo')
+  });
+
+  socket.on("streamLink", (data) => {
+    const room = messages.getAttribute("data-room");
+    if (data.roomID === room) {
+      onYouTubeIframeAPIReady(data.link)
+    };
+  })
+
+  function onPlayerStateChange() {
+    console.log('Player state has changed');
+  }
+
+  function onPlayerReady(event) {
+    player = event.target;
+    streamStart.addEventListener('click', playYTVideo);
+    streamStop.addEventListener('click', stopYTVideo);
+  }
+
+  function stopYTVideo() {
+    streamStart.classList.add("admin")
+    streamStop.classList.remove("admin")
+    socket.emit('stopStream', roomID);
+  }
+
+  function playYTVideo() {
+    streamStart.classList.remove("admin")
+    streamStop.classList.add("admin")
+    socket.emit('startStream', roomID);
+  }
+
+  socket.on('startStream', (roomID) => {
+    const room = messages.getAttribute("data-room");
+    if (roomID === room) {
+
+      player.playVideo();
+      player.seekTo(0);
+    };
+  })
+
+  socket.on('stopStream', (roomID) => {
+    const room = messages.getAttribute("data-room");
+    if (roomID === room) {
+      player.stopVideo();
+    };
+  })
+
+})
+```
+  </details>
+
+
 2. Gfycat API
    - Search in a few different languages
    - jive address
@@ -241,6 +407,111 @@ I drew the main pages and the link between them in a simple way, and how it will
    Classification of carrion
    - And other data related to carrion
    I used the highest quality gif available and also the gif title
+
+  <details>
+
+```js
+// scriptroom.js
+gifSearch.addEventListener('click', (event) => {
+  event.preventDefault(); // prevent page from reloading
+
+  searchKey = gifInput.value
+
+  // make a fetch request to Giphy API to get a random GIF
+  fetch(`https://api.gfycat.com/v1/gfycats/search?search_text=${searchKey}`)
+    .then(response => response.json())
+    .then(data => {
+      // gifList.classList.remove("loadingSearch");
+      const urlData = data.gfycats
+
+      for (let i = 0; i < urlData.length; i++) {
+        const Gifs = data.gfycats[i].max2mbGif;
+        const gifName = data.gfycats[i].title;
+
+        const li = document.createElement("li")
+        const button = document.createElement("button")
+        const img = document.createElement("img")
+
+        img.src = Gifs;
+        img.alt = gifName + " GIF foto";
+
+        button.appendChild(img)
+        li.appendChild(button)
+        gifList.appendChild(li)
+        let avatarsrc;
+        for (let i = 0; i < avatarsInput.length; i++) {
+          if (avatarsInput[i].checked) {
+            let labelChecked = avatarsInput[i].nextElementSibling
+            avatarsrc = labelChecked.dataset.avatar
+          }
+        }
+
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          let currentTimeNL = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+          // send gif data via socket
+          const message = {
+            gifUrl: Gifs,
+            room: roomID,
+            userName: usernameInput.value,
+            searchKey: searchKey,
+            avatar: avatarsrc,
+            time: currentTimeNL,
+            gifName: gifName
+          };
+
+          socket.emit('gifmessage', message);
+        });
+      }
+
+      if (searchKey === "") {
+        gifList.classList.remove('search')
+        gifList.classList.remove("loadingSearch");
+      }
+      else {
+        gifList.classList.add('search')
+      }
+
+    })
+    .catch(error => {
+      console.error(error);
+    });
+});
+
+
+// receive gif data via socket
+socket.on("gifmessage", (msg) => {
+  const room = messages.getAttribute("data-room");
+  const li = document.createElement("li");
+  li.dataset.client = `${msg.userName}`;
+
+  li.innerHTML = `
+  <div>
+    <img src="${msg.avatar}" alt="${msg.avatar}">
+  </div>
+  <div data-username="${msg.userName}">
+  <img src="${msg.gifMessage}" alt="${msg.gifName} GIF foto">
+  </div>
+  `
+
+  li.classList.add("time");
+  li.dataset.time = `${msg.time}`;
+
+  if (msg.room === room) {
+    messages.appendChild(li);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  if (msg.userName === usernameInput.value) {
+    li.classList.add("myMessage");
+  }
+
+});
+
+```
+</details>
+
 
 </details>
 
@@ -301,6 +572,7 @@ My data lifecycle diagram contains the events that occur during the use of the a
 <details>
 
 `Connection`
+
 <details>
 
 - Event is executed when the user connects to the server.
@@ -321,7 +593,10 @@ io.on('connection', (socket) => {
 ```
 </details>
 
+---
+
 `New room`
+
 <details>
 
 - Event is executed when the check room button is pressed.
@@ -344,7 +619,10 @@ io.on('connection', (socket) => {
 ```
 </details>
 
+---
+
 `username check`
+
 <details>
 
 - Event is executed when the user is filling in their username
@@ -372,8 +650,10 @@ io.on('connection', (socket) => {
 ```
 </details>
 
+---
 
 ⚠️`Room admin`
+
 ⚠️ A special event to determine the chat admin
 <details>
 
@@ -420,8 +700,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
 
 `join Room`
+
 <details>
 
 - Event is executed when it is verified that the user name does not exist in the room, so that it goes directly to the band, and the user is added to the room data inside the server
@@ -461,7 +743,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 `chat message`
+
 <details>
 
 - The event is executed when a message is sent from the chat via the send message button
@@ -484,7 +769,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 `Chat History`
+
 <details>
 
 - The event is executed when a message or GIF is sent from the chat via the Send Messages button
@@ -529,7 +817,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 `chat GIF message`
+
 <details>
 
 - The event is executed when a gif message is sent from the chat via the send gif button.
@@ -575,7 +866,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 ⚠️`share stream Link`
+
 ⚠️ A special event for the chat admin
 <details>
 
@@ -592,8 +886,12 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 ⚠️`start and stop the stream video`
+
 ⚠️ A special events for the chat admin
+
 <details>
 
 - The event is executed when the YouTube video link is sent to the server to be shared with other chat members
@@ -611,7 +909,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 `someone writing`
+
 <details>
 
 - The event is executed when a member is writing his message so that all members are notified of his name
@@ -624,7 +925,10 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
+---
+
 `disconnect`
+
 <details>
 
 - The event is executed when the connection with the server is interrupted, such as exiting the page or interrupting the Internet.
@@ -655,8 +959,6 @@ socket.on("roomAdmin", (roomData) => {
 ```
 </details>
 
-
-
 </details>
 
 ## UI Stack
@@ -664,11 +966,17 @@ socket.on("roomAdmin", (roomData) => {
 <details>
 
 ### Online
+صورة
 ### Online (error)
+صورة
 ### Room check loading
+صورة
 ### Room is open (error)
+صورة
 ### Username check (error if the username is not available)
+صورة
 ### start chat loading
+صورة
 
 </details>
 
