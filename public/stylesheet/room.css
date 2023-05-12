@@ -501,7 +501,11 @@ main.room section:last-of-type > ul li > div:first-of-type {
 
 /* online user */
 main.room section:last-of-type > ul li > div:first-of-type.connected {
-    box-shadow: 0 0 0 0.3em var(--online-user)
+    box-shadow: 0 0 0 0.3em var(--online-user);
+}
+
+main.room section:last-of-type > ul li[data-disconnected] > div:first-of-type.connected {
+    box-shadow:0 0 0 0.3em transparent;
 }
 
 main.room section:last-of-type > ul li > div:first-of-type img {

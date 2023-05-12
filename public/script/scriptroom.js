@@ -271,30 +271,19 @@ function usersConnectionTest() {
 }
 
 
-// function connectedtest(ChatMsg) {
-
-  // if (ChatMsg.firstElementChild.classList.contains("connected")) {
-    // ChatMsg.firstElementChild.classList.remove("connected");
-    // console.log("notconnected", ChatMsg);
-  // }
-// }
-
-
-
 socket.on('notconnected', (data) => {
   const roomid = messages.getAttribute("data-room");
   const usersData = data.users;
+
   const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
 
   if (roomID === roomid) {
   for (let i = 0; i < chatMessages.length; i++) {
-    // console.log(chatMessages[i]);
     const dataset = chatMessages[i].dataset.client;
     if (dataset === data.userName) {
       let ChatMsg = chatMessages[i];
       ChatMsg.dataset.disconnected = "disconnectedUser";
       ChatMsg.firstElementChild.classList.remove("connected");
-      // connectedtest(ChatMsg);
     }
     roomAdmin(usersData);
   }
