@@ -210,8 +210,6 @@ main.room section:last-of-type > div:first-of-type span div:first-of-type {
     width: 40%;
     aspect-ratio: 1/1;
 
-    background-color: #95BDFF;
-
     display: grid;
     place-items: center;
 
@@ -223,7 +221,7 @@ main.room section:last-of-type > div:first-of-type span div:first-of-type {
 main.room section:last-of-type > div:first-of-type span div:first-of-type img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
 }
 

@@ -48,6 +48,10 @@
     main.room section:last-of-type > ul li div:nth-of-type(2) img {
         width: 10rem;
     }
+
+    main.room section:last-of-type > div:first-of-type span {
+        width: 50%;
+    }
 }
 
 @media (min-width: 1600px) {

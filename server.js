@@ -22,7 +22,6 @@ app.get("/", async (req, res) => {
 let roomUsers = [];
 const historySize = 50;
 let roomHistory = [];
-// let client;
 
 // room path
 app.get("/:room", (req, res) => {
@@ -33,14 +32,13 @@ app.get("/:room", (req, res) => {
 io.on("connection", (socket) => {
   console.log("connected");
 
-  // let roomCode;
   let client;
   let clientRoom;
 
   if (socket.connected) {
     console.log("Lela");
     io.emit('connected');
-    socket.emit('userConnected',{client, clientRoom})
+    socket.emit('userConnected', { client, clientRoom })
   }
 
 
@@ -73,36 +71,6 @@ io.on("connection", (socket) => {
   })
 
   // Join room script.js
-  socket.on('joinRoom', (data) => {
-    socket.join(data.room);
-    socket.room = data.room;
-
-    clientRoom = data.room;
-    client = data.user;
-
-    const Room = data.room;
-    const roomUser = data.user;
-    // const avatar = data.avatar
-
-    let roomIndex = roomUsers.findIndex(room => room.ID === Room);
-
-    if (roomIndex !== -1) {
-      // Voeg de nieuwe gebruiker toe aan de users array in het gevonden object
-      if (!roomUsers[roomIndex].users.includes(roomUser)) {
-        roomUsers[roomIndex].users.push(roomUser);
-      }
-    }
-    else {
-      // Als het kamer-ID niet werd gevonden, voeg dan een nieuw object toe aan de array
-      roomUsers.push({ ID: Room, users: [roomUser] });
-    }
-
-    io.emit('joinRoom', { Room, roomUser, roomUsers });
-
-    socket.emit('chatHistory', roomHistory);
-    console.log("rooms DATA:", roomUsers);
-  });
-
   socket.on('nameCheck', (data) => {
     console.log("nameCheck:", data);
     const client = data.clientName
@@ -120,6 +88,36 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on('joinRoom', (data) => {
+    socket.join(data.room);
+    socket.room = data.room;
+
+    clientRoom = data.room;
+    client = data.user;
+
+    const Room = data.room;
+    const roomUser = data.user;
+
+    let roomIndex = roomUsers.findIndex(room => room.ID === Room);
+
+    if (roomIndex !== -1) {
+      // Add the new user to the users array in the found object
+      if (!roomUsers[roomIndex].users.includes(roomUser)) {
+        roomUsers[roomIndex].users.push(roomUser);
+      }
+    }
+    else {
+      // If the room ID was not found, add a new object to the array
+      roomUsers.push({ ID: Room, users: [roomUser] });
+    }
+
+    io.emit('joinRoom', { Room, roomUser, roomUsers });
+
+    socket.emit('chatHistory', roomHistory);
+    console.log("rooms DATA:", roomUsers);
+  });
+
+
   socket.on("chatmessage", (chat) => {
     const room = chat.room;
     const message = chat.message;
@@ -129,7 +127,7 @@ io.on("connection", (socket) => {
     console.log("chat message |", time);
 
     // send the message to all sockets in the room
-    io.emit("chatmessage", { username, message, room, avatar,time });
+    io.emit("chatmessage", { username, message, room, avatar, time });
 
 
     // Zoek de index van de kamer in de roomHistory array
@@ -137,12 +135,12 @@ io.on("connection", (socket) => {
 
     if (roomIndex !== -1) {
       // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
-      roomHistory[roomIndex].messages.push({ username, message, avatar,time });
+      roomHistory[roomIndex].messages.push({ username, message, avatar, time });
     } else {
       // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
       roomHistory.push({
         roomID: room,
-        messages: [{ username, message, avatar,time }],
+        messages: [{ username, message, avatar, time }],
       });
     }
 
@@ -178,19 +176,19 @@ io.on("connection", (socket) => {
     const time = message.time;
     const gifName = message.gifName;
 
-    io.emit("gifmessage", { gifMessage, room, userName, avatar,time,gifName });
+    io.emit("gifmessage", { gifMessage, room, userName, avatar, time, gifName });
 
     // Zoek de index van de kamer in de roomHistory array
     const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
 
     if (roomIndex !== -1) {
       // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
-      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar,time,gifName });
+      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar, time, gifName });
     } else {
       // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
       roomHistory.push({
         roomID: room,
-        messages: [{ userName, gifMessage, avatar,time,gifName }],
+        messages: [{ userName, gifMessage, avatar, time, gifName }],
       });
     }
 
@@ -220,19 +218,19 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("user disconnected", client, clientRoom);
-    if(client && clientRoom) {
+    if (client && clientRoom) {
       const roomIndex = roomUsers.findIndex(room => room.ID == clientRoom);
       const userIndex = roomUsers[roomIndex].users.findIndex(user => user == client);
-      console.log("disconnect",roomUsers)
+      console.log("disconnect", roomUsers)
 
       roomUsers[roomIndex].users.splice(userIndex, 1);
-      if(roomUsers[roomIndex].users.length == 0) {
+      if (roomUsers[roomIndex].users.length == 0) {
         roomUsers.splice(roomIndex, 1);
         console.log(clientRoom, "closed")
       }
 
-      console.log("disconnect 2",roomUsers);
-      io.emit('notconnected', { userName: client, roomID: clientRoom, users:roomUsers })
+      console.log("disconnect 2", roomUsers);
+      io.emit('notconnected', { userName: client, roomID: clientRoom, users: roomUsers })
       socket.emit('connected')
     }
 
