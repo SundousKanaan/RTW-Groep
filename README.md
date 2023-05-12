@@ -92,6 +92,7 @@ As a social media user, I want to connect with my faraway friends and family thr
     - [start chat loading](#start-chat-loading)
     - [admin view VS client view](#admin-view-vs-client-view)
     - [darck \& light mode](#darck--light-mode)
+  - [peereview feedbacks](#peereview-feedbacks)
   - [Sources](#sources)
 
 
@@ -1043,7 +1044,7 @@ socket.on("roomAdmin", (roomData) => {
 <img src="./readme-images/lightmode-mob.png" alt="lightmode-mob foto" width="50%">
 </details>
 
-### peereview feedbacks
+## peereview feedbacks
 I got some problems such as:
 - When playing the video by clicking on the video and not the play button, it only works for the admin.  `repaired by activating the separator between the video and the play button `
 - The "Loading" screen buttons in the GIFs menu cause a malfunction in the page link. `So I removed them as an emergency measure`
