@@ -301,7 +301,11 @@ My data lifecycle diagram contains the events that occur during the use of the a
 <details>
 
 `Connection`
-When the user connects to the server, the connection event is triggered. The server sends a message to the client confirming that the user is successfully connected to the server.
+<details>
+
+- Event is executed when the user connects to the server.
+
+- When the user connects to the server, the connection event is triggered. The server sends a message to the client confirming that the user is successfully connected to the server.
 
 ```JavaScript
 //server.js
@@ -315,9 +319,14 @@ io.on('connection', (socket) => {
     });
 });
 ```
+</details>
 
 `New room`
-When checking that the room name is not in the server's memory, the name is added to the memory and the room is opened.
+<details>
+
+- Event is executed when the check room button is pressed.
+
+- When checking that the room name is not in the server's memory, the name is added to the memory and the room is opened.
 
 ```JavaScript
 // server.js
@@ -333,6 +342,319 @@ When checking that the room name is not in the server's memory, the name is adde
       }
     }
 ```
+</details>
+
+`username check`
+<details>
+
+- Event is executed when the user is filling in their username
+  
+- It is checked directly whether the username is reserved for another person in the room or not, so that the user gets a direct feedback
+
+```js
+// server.js
+  socket.on('nameCheck', (data) => {
+    console.log("nameCheck:", data);
+    const client = data.clientName
+    const roomId = data.roomID;
+
+    const roomData = roomUsers.find(room => room.ID === roomId);
+    if (roomData) {
+      const currentRoomUsers = roomData.users
+      // console.log("roomData.users",room_users);
+      //   console.log("roomData",roomData);
+      socket.emit('nameCheck', { client, roomId, currentRoomUsers });
+    } else {
+      socket.emit('nameCheck', { client, roomId });
+      console.log('ID niet gevonden in de array');
+    }
+  })
+```
+</details>
+
+
+⚠️`Room admin`
+⚠️ A special event to determine the chat admin
+<details>
+
+- The event is executed when a new member joins the room and in the offline state.
+
+1. Verification is done when joining the room because the first person to join (in the matrix of room members) is the admin responsible for controlling the video
+2. Verification is done in the absence of communication in order to become the next member of the matrix in the admin (since the main admin is considered to have left the chat)
+   
+```js 
+// server.js
+  socket.on('roomAdmin', (data) => {
+    console.log("roomAdmin", data.roomID);
+
+    const room = roomUsers.find(room => room.ID === data.roomID);
+    if (room) {
+      // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
+      io.emit('roomAdmin', {data,room})
+    } else {
+      console.log("Kamer niet gevonden");
+    }
+
+  })
+
+// scriptroom.js
+function roomAdmin(roomUsers) {
+  const room = roomUsers.find(room => room.ID === roomID);
+
+  const currentAdmin = room.users[0];
+  h1.textContent = `Admin ${currentAdmin}`;
+  socket.emit("roomAdmin", { currentAdmin, roomID });
+}
+
+socket.on("roomAdmin", (roomData) => {
+  console.log("roomData", roomData);
+  const room = messages.getAttribute("data-room");
+
+  if (roomData.data.roomID === room) {
+    if (roomData.room.users[0] === usernameInput.value) {
+      videoForm.classList.add("admin");
+      // span.classList.add("admin");
+    }
+  }
+})
+```
+</details>
+
+
+`join Room`
+<details>
+
+- Event is executed when it is verified that the user name does not exist in the room, so that it goes directly to the band, and the user is added to the room data inside the server
+
+```js
+// server.js
+ socket.on('joinRoom', (data) => {
+    socket.join(data.room);
+    socket.room = data.room;
+
+    // Save username and room for offline event
+    clientRoom = data.room;
+    client = data.user;
+
+    const Room = data.room;
+    const roomUser = data.user;
+
+    let roomIndex = roomUsers.findIndex(room => room.ID === Room);
+
+    if (roomIndex !== -1) {
+      // Add the new user to the users array in the found object
+      if (!roomUsers[roomIndex].users.includes(roomUser)) {
+        roomUsers[roomIndex].users.push(roomUser);
+      }
+    }
+    else {
+      // If the room ID was not found, add a new object to the array
+      roomUsers.push({ ID: Room, users: [roomUser] });
+    }
+
+    io.emit('joinRoom', { Room, roomUser, roomUsers });
+
+    socket.emit('chatHistory', roomHistory);
+    console.log("rooms DATA:", roomUsers);
+  });
+
+```
+</details>
+
+`chat message`
+<details>
+
+- The event is executed when a message is sent from the chat via the send message button
+- The room data, the text of the message, the time of sending, the user name and the user picture are transferred to the server to be transmitted to all members of the chat.
+  
+```js
+// server.js
+  socket.on("chatmessage", (chat) => {
+    const room = chat.room;
+    const message = chat.message;
+    const username = chat.username;
+    const avatar = chat.avatar
+    const time = chat.time
+    console.log("chat message |", time);
+
+    // send the message to all sockets in the room
+    io.emit("chatmessage", { username, message, room, avatar, time });
+  });
+
+```
+</details>
+
+`Chat History`
+<details>
+
+- The event is executed when a message or GIF is sent from the chat via the Send Messages button
+  
+- The presence of the room name is checked in chat history or not. If it is found, the message data will be added to the room data, and if it is not, a new element will be created containing the name of the new room and its data
+  
+```js
+// server.js
+  socket.on("chatmessage", (chat) => {
+    const room = chat.room;
+    const message = chat.message;
+    const username = chat.username;
+    const avatar = chat.avatar
+    const time = chat.time
+    console.log("chat message |", time);
+
+    // send the message to all sockets in the room
+    io.emit("chatmessage", { username, message, room, avatar, time });
+
+
+    // Zoek de index van de kamer in de roomHistory array
+    const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
+
+    if (roomIndex !== -1) {
+      // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
+      roomHistory[roomIndex].messages.push({ username, message, avatar, time });
+    } else {
+      // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
+      roomHistory.push({
+        roomID: room,
+        messages: [{ username, message, avatar, time }],
+      });
+    }
+
+    // Optioneel: beperk de grootte van de geschiedenis per kamer
+    const roomMessages = roomHistory.find((item) => item.roomID === room).messages;
+    if (roomMessages.length > historySize) {
+      roomMessages.shift(); // Verwijder het oudste bericht
+    }
+    console.log("roomHistory:", roomHistory);
+  });
+```
+</details>
+
+`chat GIF message`
+<details>
+
+- The event is executed when a gif message is sent from the chat via the send gif button.
+  
+- The addition to the chat history is also made
+
+```js 
+// server.js
+  socket.on('gifmessage', (message) => {
+    console.log("Hi:", message)
+
+    const room = message.room;
+    const gifMessage = message.gifUrl;
+    const searchKey = message.searchKey;
+    const userName = message.userName;
+    const avatar = message.avatar;
+    const time = message.time;
+    const gifName = message.gifName;
+
+    io.emit("gifmessage", { gifMessage, room, userName, avatar, time, gifName });
+
+    // Zoek de index van de kamer in de roomHistory array
+    const roomIndex = roomHistory.findIndex((item) => item.roomID === room);
+
+    if (roomIndex !== -1) {
+      // Kamer bestaat al, voeg het bericht toe aan de bestaande kamer
+      roomHistory[roomIndex].messages.push({ userName, gifMessage, avatar, time, gifName });
+    } else {
+      // Kamer bestaat nog niet, voeg een nieuw kamerobject toe aan roomHistory
+      roomHistory.push({
+        roomID: room,
+        messages: [{ userName, gifMessage, avatar, time, gifName }],
+      });
+    }
+
+    // Optioneel: beperk de grootte van de geschiedenis per kamer
+    const roomMessages = roomHistory.find((item) => item.roomID === room).messages;
+    if (roomMessages.length > historySize) {
+      roomMessages.shift(); // Verwijder het oudste bericht
+    }
+    console.log("roomHistory:", roomHistory);
+  });
+```
+</details>
+
+⚠️`share stream Link`
+⚠️ A special event for the chat admin
+<details>
+
+- The event is executed when the YouTube video link is sent to the server to be shared with other chat members
+
+```js
+// server.js
+  socket.on('streamLink', (data) => {
+    const link = data.link;
+    const roomID = data.roomID;
+    console.log("link", data);
+    socket.broadcast.emit('streamLink', { link, roomID });
+  })
+```
+</details>
+
+⚠️`start and stop the stream video`
+⚠️ A special events for the chat admin
+<details>
+
+- The event is executed when the YouTube video link is sent to the server to be shared with other chat members
+
+```js
+// server.js
+  socket.on('startStream', (roomID) => {
+    console.log("startStream", roomID);
+    io.emit('startStream', roomID);
+  })
+
+  socket.on('stopStream', (data) => {
+    io.emit('stopStream', data);
+  })
+```
+</details>
+
+`someone writing`
+<details>
+
+- The event is executed when a member is writing his message so that all members are notified of his name
+
+```js
+// server.js
+  socket.on("focus", (data) => {
+    socket.broadcast.emit("focus", data);
+  });
+```
+</details>
+
+`disconnect`
+<details>
+
+- The event is executed when the connection with the server is interrupted, such as exiting the page or interrupting the Internet.
+
+- The custom event is called on the client side to check its connection, to show the connection status note, and to display the chat history when connected to the server.
+
+```js
+// server.js
+  socket.on("disconnect", () => {
+    console.log("user disconnected", client, clientRoom);
+    if (client && clientRoom) {
+      const roomIndex = roomUsers.findIndex(room => room.ID == clientRoom);
+      const userIndex = roomUsers[roomIndex].users.findIndex(user => user == client);
+      console.log("disconnect", roomUsers)
+
+      roomUsers[roomIndex].users.splice(userIndex, 1);
+      if (roomUsers[roomIndex].users.length == 0) {
+        roomUsers.splice(roomIndex, 1);
+        console.log(clientRoom, "closed")
+      }
+
+      console.log("disconnect 2", roomUsers);
+      io.emit('notconnected', { userName: client, roomID: clientRoom, users: roomUsers })
+      socket.emit('connected')
+    }
+
+  });
+```
+</details>
+
 
 
 </details>

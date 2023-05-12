@@ -87,10 +87,24 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on('roomAdmin', (data) => {
+    console.log("roomAdmin", data.roomID);
+
+    const room = roomUsers.find(room => room.ID === data.roomID);
+    if (room) {
+      // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
+      io.emit('roomAdmin', {data,room})
+    } else {
+      console.log("Kamer niet gevonden");
+    }
+
+  })
+
   socket.on('joinRoom', (data) => {
     socket.join(data.room);
     socket.room = data.room;
 
+    // Save username and room for offline event
     clientRoom = data.room;
     client = data.user;
 
@@ -151,19 +165,6 @@ io.on("connection", (socket) => {
     console.log("roomHistory:", roomHistory);
   });
 
-  socket.on('roomAdmin', (data) => {
-    console.log("roomAdmin", data.roomID);
-
-    const room = roomUsers.find(room => room.ID === data.roomID);
-    if (room) {
-      // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
-      io.emit('roomAdmin', {data,room})
-    } else {
-      console.log("Kamer niet gevonden");
-    }
-
-  })
-
   socket.on('gifmessage', (message) => {
     console.log("Hi:", message)
 
@@ -215,6 +216,11 @@ io.on("connection", (socket) => {
     io.emit('stopStream', data);
   })
 
+  
+  socket.on("focus", (data) => {
+    socket.broadcast.emit("focus", data);
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected", client, clientRoom);
     if (client && clientRoom) {
@@ -233,10 +239,6 @@ io.on("connection", (socket) => {
       socket.emit('connected')
     }
 
-  });
-
-  socket.on("focus", (data) => {
-    socket.broadcast.emit("focus", data);
   });
 
 });
