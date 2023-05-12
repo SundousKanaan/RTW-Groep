@@ -72,7 +72,7 @@ As a social media user, I want to connect with my faraway friends and family thr
     - [Could have](#could-have)
     - [Would have but not right now](#would-have-but-not-right-now)
   - [Data modeling](#data-modeling)
-  - [Real time events](#real-time-events)
+    - [Real time events](#real-time-events)
   - [UI Stack](#ui-stack)
     - [Online](#online)
     - [Online (error)](#online-error)
@@ -229,10 +229,10 @@ I drew the main pages and the link between them in a simple way, and how it will
 <details>
 
 1. YouTube Iframe API
-- Making a special frame for the player through the id of the YouTube link
-- Start the player via a separate button using "play Video() & stopVideo()"
+   - Making a special frame for the player through the id of the YouTube link
+   - Start the player via a separate button using "play Video() & stopVideo()"
 
-It also provides data about the video, such as the title of the video and others, but what matters to me is the id of the video.
+  It also provides data about the video, such as the title of the video and others, but what matters to me is the id of the video.
 
 2. Gfycat API
 - Search in a few different languages
@@ -249,14 +249,14 @@ I used the highest quality gif available and also the gif title
 <details>
 
 ### Must have
-- Gebruikers kunnen prive rooms maken voor hun groep ✅
-- Gebruikers kunnen gebruikersnaam maken ✅
-- Gerbruikers komen op een gebruikerslijst komen te staan ✅
-- Admin voor elke room en hij heeft de controls of the streaming. ✅
-- Je kan zien wie online is. ✅
-- Gebruikers kunnen met elkaar communiceren in een groupchat. ✅
-- Gebruikers kunnen samen youtube video kijken ✅
-- Berichten worden opgeslagen ✅
+- Users can create private rooms for their group ✅
+- Users can create username ✅
+- Users will be placed on a user list ✅
+- Admin for each room and he has the controls of the streaming. ✅
+- You can see who is online. ✅
+- Users can communicate with each other in a group chat. ✅
+- Users can watch youtube video together ✅
+- Messages are saved ✅
 - Data life cycle diagram ✅
   
 ### Should have
@@ -291,11 +291,12 @@ I used the highest quality gif available and also the gif title
 
 <img src="./readme-images/Data-Lifecycle-Diagram.png" alt="Data Lifecycle Diagram">
 
-شرح الدائرة عن طريق شرع استخدام التطبيق
+My data lifecycle diagram contains the events that occur during the use of the application and the types of exchanges that occur between users, the server and the associated API's.
+
+### Real time events
 
 <details>
 
-## Real time events
 
 
 </details>
