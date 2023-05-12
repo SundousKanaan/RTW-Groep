@@ -235,12 +235,12 @@ I drew the main pages and the link between them in a simple way, and how it will
   It also provides data about the video, such as the title of the video and others, but what matters to me is the id of the video.
 
 2. Gfycat API
-- Search in a few different languages
-- jive address
-- GIF image in several different qualities
-Classification of carrion
-- And other data related to carrion
-I used the highest quality gif available and also the gif title
+   - Search in a few different languages
+   - jive address
+   - GIF image in several different qualities
+   Classification of carrion
+   - And other data related to carrion
+   I used the highest quality gif available and also the gif title
 
 </details>
 
@@ -261,11 +261,13 @@ I used the highest quality gif available and also the gif title
   
 ### Should have
 - Instruction how to use the app (zero state)
+  - paper sketch ✅
 - Must be working on mobile ✅
 - Offline support ✅
 - responsive app ✅
 - light/dark mode (system check) ✅
-- Newly joined users can see the chat history ✅ (Hosting probleem so it may not work properly in the online version now)
+- Newly joined users can see the chat history ✅ 
+  - (Hosting probleem so it may not work properly in the online version now)
 - Choose an avatar image ✅
 - Notification of the validity of the video link ✅
 
@@ -295,8 +297,42 @@ My data lifecycle diagram contains the events that occur during the use of the a
 
 ### Real time events
 
+
 <details>
 
+`Connection`
+When the user connects to the server, the connection event is triggered. The server sends a message to the client confirming that the user is successfully connected to the server.
+
+```JavaScript
+//server.js
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.emit('connection', 'You are connected to the server');
+
+    // Meerder socket events
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+```
+
+`New room`
+When checking that the room name is not in the server's memory, the name is added to the memory and the room is opened.
+
+```JavaScript
+// server.js
+  socket.on('checkRoom', (roomname) => {
+    console.log("openRoomName", roomname);
+
+    let roomIndex = roomUsers.findIndex(room => room.ID === roomname);
+
+    for (const [index, room] of Object.entries(roomUsers)) {
+      if (room.ID === roomname) {
+        roomIndex = index;
+        break;
+      }
+    }
+```
 
 
 </details>

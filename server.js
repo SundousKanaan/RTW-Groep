@@ -55,8 +55,6 @@ io.on("connection", (socket) => {
       }
     }
 
-    // let roomIndex = -1;
-
     if (roomIndex === -1) {
       // Als het kamer-ID niet werd gevonden, voeg dan een nieuw object toe aan de array
       roomUsers.push({ ID: roomname, users: [] });
