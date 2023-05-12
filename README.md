@@ -1050,7 +1050,8 @@ I got some problems such as:
 - The "Loading" screen buttons in the GIFs menu cause a malfunction in the page link. `So I removed them as an emergency measure`
 - GIF messages appear in the wrong direction for the sender.  ` There was an error in the class name .. Fixed `
 - Automatically disconnecting from the server `problem from the upload site`
-,
+- Chat history is not displayed properly (works as it should on the local server). `problem from the upload site`
+
 ## Sources
 * https://www.npmjs.com/package/nodemon 
 * https://fonts.adobe.com/fonts/interstate 
