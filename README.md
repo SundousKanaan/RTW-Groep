@@ -289,6 +289,8 @@ I used the highest quality gif available and also the gif title
 
 ## Data modeling
 
+<img src="./readme-images/Data-Lifecycle-Diagram.png" alt="Data Lifecycle Diagram">
+
 شرح الدائرة عن طريق شرع استخدام التطبيق
 
 <details>
