@@ -174,18 +174,17 @@ socket.on("joinRoom", (data) => {
 function roomAdmin(roomUsers) {
   const room = roomUsers.find(room => room.ID === roomID);
 
-  // if (room.users.length >= 0) {
-    const currentAdmin = room.users[0];
-    h1.textContent = `Admin ${currentAdmin}`;
-    socket.emit("roomAdmin", { currentAdmin, roomID });
-  // }
+  const currentAdmin = room.users[0];
+  h1.textContent = `Admin ${currentAdmin}`;
+  socket.emit("roomAdmin", { currentAdmin, roomID });
 }
 
 socket.on("roomAdmin", (roomData) => {
+  console.log("roomData", roomData);
   const room = messages.getAttribute("data-room");
 
-  if (roomData.ID === room) {
-    if (roomData.users[0] === usernameInput.value) {
+  if (roomData.data.roomID === room) {
+    if (roomData.room.users[0] === usernameInput.value) {
       videoForm.classList.add("admin");
       span.classList.add("admin");
     }
@@ -261,10 +260,10 @@ function usersConnectionTest() {
 
       console.log("uou");
       const disconnected = usersImg[i].querySelectorAll("li[data-disconnected]>div:first-of-type");
-      
+
       if (disconnected.length > 0) {
         usersImg[i].classList.remove('connected');
-        console.log("---nuo",usersImg[i]);
+        console.log("---nuo", usersImg[i]);
       }
     }
   }
@@ -278,16 +277,16 @@ socket.on('notconnected', (data) => {
   const chatMessages = document.querySelectorAll('main.room section:last-of-type>ul li')
 
   if (roomID === roomid) {
-  for (let i = 0; i < chatMessages.length; i++) {
-    const dataset = chatMessages[i].dataset.client;
-    if (dataset === data.userName) {
-      let ChatMsg = chatMessages[i];
-      ChatMsg.dataset.disconnected = "disconnectedUser";
-      ChatMsg.firstElementChild.classList.remove("connected");
+    for (let i = 0; i < chatMessages.length; i++) {
+      const dataset = chatMessages[i].dataset.client;
+      if (dataset === data.userName) {
+        let ChatMsg = chatMessages[i];
+        ChatMsg.dataset.disconnected = "disconnectedUser";
+        ChatMsg.firstElementChild.classList.remove("connected");
+      }
+      roomAdmin(usersData);
     }
-    roomAdmin(usersData);
   }
-}
 
 
   const liElement = document.createElement("li")
@@ -433,7 +432,7 @@ gifInput.addEventListener("keydown", (event) => {
   }
 });
 
-gifInput.addEventListener('input' , () => {
+gifInput.addEventListener('input', () => {
   gifList.classList.add("loadingSearch");
 
   gifList.innerHTML = `
@@ -545,7 +544,7 @@ gifSearch.addEventListener('click', (event) => {
       if (searchKey === "") {
         gifList.classList.remove('search')
         gifList.classList.remove("loadingSearch");
-      } 
+      }
       else {
         gifList.classList.add('search')
       }

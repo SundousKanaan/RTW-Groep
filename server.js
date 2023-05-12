@@ -153,13 +153,13 @@ io.on("connection", (socket) => {
     console.log("roomHistory:", roomHistory);
   });
 
-  socket.on('roomAdmin', (roomID) => {
-    console.log("roomAdmin", roomID);
+  socket.on('roomAdmin', (data) => {
+    console.log("roomAdmin", data.roomID);
 
-    const room = roomUsers.find(room => room.ID === roomID);
+    const room = roomUsers.find(room => room.ID === data.roomID);
     if (room) {
       // console.log("86 LOL", room); // Geeft een array terug met de gebruikers van de kamer
-      io.emit('roomAdmin', room)
+      io.emit('roomAdmin', {data,room})
     } else {
       console.log("Kamer niet gevonden");
     }
