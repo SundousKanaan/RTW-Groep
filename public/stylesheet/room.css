@@ -168,7 +168,7 @@ main.room section:last-of-type {
     width: 100%;
     height: 100%;
 
-    background-color: rgba(0, 0, 0, 0.500);
+    background-color: var(--bg-filter);
     position: relative;
 
     display: flex;
@@ -397,7 +397,7 @@ main.room section:last-of-type > ul li.note p {
     background-color: transparent;
     font-size: .8em;
     max-width: fit-content;
-    color: var(--text-color);
+    color: var(--secondary-text-color);
 }
 
 main.room section:last-of-type > ul li.note p span {
@@ -406,11 +406,11 @@ main.room section:last-of-type > ul li.note p span {
 
 main.room section:last-of-type > ul li.note p a {
     text-decoration: none;
-    background-color: var(--white);
+    background-color: var(--bg);
     padding: 1em;
     border-radius: 2em;
     box-shadow: -0.2em 0.3em 0 0.1em var(--thema-color);
-    color: var(--bg);
+    color: var(--text-color);
 }
 
 main.room section:last-of-type > ul li.note p a:hover,
@@ -447,7 +447,7 @@ main.room section:last-of-type > ul li.time::after{
     bottom: -1.5em;
     right: 5%;
 
-    color: var(--text-color);
+    color: var(--secondary-text-color);
 }
 
 main.room section:last-of-type > ul li.myMessage.time::after{
@@ -466,7 +466,7 @@ main.room section:last-of-type > ul li p::before {
     top: -1.5em;
     left: 0;
 
-    color: var(--text-color);
+    color: var(--secondary-text-color);
 }
 
 main.room section:last-of-type > ul li.myMessage {

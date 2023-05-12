@@ -16,6 +16,9 @@ html {
 :root {
   --bg: #292929;
   --text-color: #f2f2f2;
+  --secondary-text-color:#f2f2f2;
+  --bg-img:url(https://wallpapers.com/images/featured/8k436w42fxqrt0xb.jpg);
+  --bg-filter:rgba(0, 0, 0, 0.500);
   --thema-color: #d80459;
   --error-color: #D27685;
   --good-effect: #9df38a;
@@ -26,10 +29,22 @@ html {
   --pink: #f184bd;
 
   --bg-login: #292929;
-  --white: #f2f2f2;
-  /* --rosy: #ff4f81; */
-  --light-blue: #B4E4FF;
 
+  --white: #f2f2f2;
+  --light-blue: #B4E4FF;
+}
+
+@media (prefers-color-scheme: light){
+  :root{
+    --bg: #dadada;
+    --text-color: #292929;
+    --secondary-text-color:#f2f2f2;
+    --bg-img:url(https://wallpaperaccess.com/full/6335489.jpg);
+    --bg-filter:rgb(0 0 0 / 30%);
+    --thema-color: #f04299;
+    --secondary-color:#d184e9;
+    --bg-login: #dadada;
+  }
 }
 
 body,
@@ -83,7 +98,7 @@ header section h1 {
   align-items: center;
   justify-content: center;
 
-  color: var(--text-color);
+  color: var(--secondary-text-color);
 }
 
 header section form {

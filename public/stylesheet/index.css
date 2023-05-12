@@ -6,7 +6,7 @@ main {
     /* height: 100%; */
     position: relative;
     flex-grow: 1;
-    background-image: url(https://wallpapers.com/images/featured/8k436w42fxqrt0xb.jpg);
+    background-image: var(--bg-img);
     background-size: cover;
     background-position: center 30%;
     background-repeat: no-repeat;
