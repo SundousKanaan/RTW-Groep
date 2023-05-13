@@ -1031,7 +1031,7 @@ socket.on("roomAdmin", (roomData) => {
 
 <img src="./readme-images/admin-view.png" alt="admin-view foto">
 
-<img src="./readme-images/aclient-view.png" alt="client-view foto">
+<img src="./readme-images/client-view.png" alt="client-view foto">
 
 ### darck & light mode
 
